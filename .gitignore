@@ -13,6 +13,9 @@
 *.a
 
 # LaTeX Stuff
-*.pdf
+# *.pdf
 *.log
 *.aux
+
+# Mac OSX
+*.DS_Store
