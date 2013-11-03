@@ -11,3 +11,8 @@
 *.lai
 *.la
 *.a
+
+# LaTeX Stuff
+*.pdf
+*.log
+*.aux
