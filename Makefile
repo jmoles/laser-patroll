@@ -1,4 +1,5 @@
-CXXFLAGS+=-Wall -std=c++11
+CXXFLAGS+=-Wall 
+LDLIBS = -lboost_program_options
 
 .PHONY: all
 all: doc/report.pdf bin/laser-patroll
@@ -8,10 +9,10 @@ doc/report.pdf: doc/report.tex
 
 bin/laser-patroll: src/laser-patroll.cpp src/BasicSort.o
 	mkdir -p bin
-	cd src; $(CXX) $(CXXFLAGS) -o ../bin/laser-patroll laser-patroll.cpp BasicSort.o
+	cd src; $(CXX) $(CXXFLAGS) $(LDLIBS) -o ../bin/laser-patroll laser-patroll.cpp BasicSort.o
 
-BasicSort.o: src/BasicSort.cpp src/BasicSort.hpp
-	cd src; $(CXX) $(CXXFLAGS) src/BasicSort.cpp src/BasicSort.hpp
+BasicSort.o: src/BasicSort.cpp src/BasicSort.hpp src/NumGen.cpp
+	cd src; $(CXX) $(CXXFLAGS) $(LDLIBS) src/BasicSort.cpp src/BasicSort.hpp src/NumGen.cpp
 
 clean:
 	rm -rf bin/*

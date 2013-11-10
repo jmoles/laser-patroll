@@ -2,7 +2,6 @@
 
 
 BasicSort::BasicSort() {
-	nextNumVal = 0;
 }
 
 
@@ -11,10 +10,29 @@ void BasicSort::Sort(DataType &data_in) {
 }
 
 
+double BasicSort::BenchmarkSort(const DataType &data_in) {
+	time_t start, stop;
+	double seconds;
+
+	// Create a copy of object to sort here.
+	DataType my_data (data_in);
+
+	// Get current time and run the sort.
+	time(&start);
+	Sort(my_data);
+	time(&stop);
+	seconds = difftime(stop, start);
+
+	if(CheckSort(my_data))
+		return seconds;
+	else
+		return (-1.0) * seconds;
+}
+
 BasicSort::DataType BasicSort::NewData(size_t size) {
 	DataType retdata(size);
 
-	std::generate(retdata.begin(), retdata.end(), [&] { return nextNumVal++; });
+	std::generate(retdata.begin(), retdata.end(), NumGen(0));
 	std::random_shuffle(retdata.begin(), retdata.end());
 
 	return retdata;
