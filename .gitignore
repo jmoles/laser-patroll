@@ -22,4 +22,7 @@
 *.gch
 
 # Custom Items
+laser-patroll
 bin/
+doc/report.pdf
+doc/include/

@@ -1,3 +1,7 @@
+#ifndef NUM_GEN_H
+
+#define NUM_GEN_H
+
 class NumGen 
 {
 	public:
@@ -6,3 +10,5 @@ class NumGen
 	private:
 	  int current;
 };
+
+#endif

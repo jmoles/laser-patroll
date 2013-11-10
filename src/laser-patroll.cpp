@@ -4,6 +4,8 @@
 #include <boost/program_options.hpp>
 
 #include "BasicSort.hpp"
+#include "BiotonicSort.hpp"
+#include "ImprovedBiotonic.hpp"
 
 // Potential return values.
 const int SUCCESS                   = 0;
@@ -46,15 +48,21 @@ int main(int argc, char * argv[])
 		}
 
 		// Input parameters were good. Now actually run the program.
-		BasicSort::DataType orig_data;
 
-		// Instaniate a basic sort class.
-		BasicSort basic_sort;
+		// The original data that should not get touched.
+		BasicSort::DataType 	orig_data;
+
+		// Instaniate the three sort classes.
+		BasicSort 				basic_sort;
+		BiotonicSort 			bio_sort;
+		ImprovedBiotonic	 	bio_improved_sort;
 
 		// Use basic sort to build a vector of data.
 		orig_data = basic_sort.NewData(vm["size"].as<size_t>());
 
-		std::cout << "Basic Sort Time: " << basic_sort.BenchmarkSort(orig_data) << std::endl;
+		std::cout << "Basic Sort Time:             " << basic_sort.BenchmarkSort(orig_data) << std::endl;
+		std::cout << "Biotonic Sort Time:          " << bio_sort.BenchmarkSort(orig_data) << std::endl;
+		std::cout << "Biotonic Improved Sort Time: " << bio_improved_sort.BenchmarkSort(orig_data) << std::endl;
 
 		return SUCCESS;
 
