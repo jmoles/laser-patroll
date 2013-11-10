@@ -21,8 +21,12 @@
 *.DS_Store
 *.gch
 
+# Editor Files
+sftp-config.json
+
 # Custom Items
 laser-patroll
 bin/
 doc/report.pdf
 doc/include/
+doc/doxygen/

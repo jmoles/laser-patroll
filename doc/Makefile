@@ -7,6 +7,11 @@ report.pdf: include/IEEEtran report.tex
 include/IEEEtran:
 	$(MAKE) -C include
 
+doxygen/html/index.html: Doxyfile
+	mkdir -p doxygen
+	doxygen Doxyfile
+
+
 
 clean:
 	rm -rf *.log
