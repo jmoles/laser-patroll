@@ -19,3 +19,7 @@
 
 # Mac OSX
 *.DS_Store
+*.gch
+
+# Custom Items
+bin/
