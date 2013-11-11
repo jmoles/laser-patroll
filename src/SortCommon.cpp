@@ -42,9 +42,10 @@ bool SortCommon::CheckSort(const DataType &data_in) {
 
 	for(DataType::const_iterator it = data_in.begin(); it != data_in.end(); ++it) {
 		if(prevValue > *it) {
-			return false;
 			std::cout << "CheckSort is returning true because " <<  prevValue << 
 				" is greater than " << *it << "." << std::endl;
+			return false;
+
 
 		}
 		prevValue = *it;
