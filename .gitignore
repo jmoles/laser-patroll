@@ -28,5 +28,5 @@ sftp-config.json
 laser-patroll
 bin/
 doc/report.pdf
-doc/include/
+doc/include/IEEEtran
 doc/doxygen/

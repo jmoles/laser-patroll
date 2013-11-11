@@ -1,4 +1,4 @@
-TEXINPUTSPATHS=.:$TEXINPUTS:include/IEEEtran
+TEXINPUTSPATHS=.:$(TEXINPUTS):include/IEEEtran
 
 report.pdf: include/IEEEtran report.tex
 	TEXINPUTS=$(TEXINPUTSPATHS) pdflatex report.tex
