@@ -1,15 +1,15 @@
-#include "BiotonicSort.hpp"
+#include "BitonicSort.hpp"
 
-BiotonicSort::BiotonicSort() {
-
-}
-
-BiotonicSort::~BiotonicSort() {
+BitonicSort::BitonicSort() {
 
 }
 
+BitonicSort::~BitonicSort() {
+
+}
 
 
-void BiotonicSort::Sort(DataType &data_in) {
+
+void BitonicSort::Sort(DataType &data_in) {
 	std::sort(data_in.begin(), data_in.end());
 }

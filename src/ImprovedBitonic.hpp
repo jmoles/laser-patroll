@@ -1,15 +1,15 @@
-#ifndef IMPROVED_BIOTONIC_H
+#ifndef IMPROVED_BITONIC_H
 
-#define IMPROVED_BIOTONIC_H
+#define IMPROVED_BITONIC_H
 
 #include "SortCommon.hpp"
 
-class ImprovedBiotonic : public SortCommon {
+class ImprovedBitonic : public SortCommon {
 
 public:
-	ImprovedBiotonic();
+	ImprovedBitonic();
 
-	~ImprovedBiotonic();
+	~ImprovedBitonic();
 
 	//*! Runs std::sort directly modifying the passed argument.
 	/*!

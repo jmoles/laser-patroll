@@ -1,7 +1,7 @@
 CXXFLAGS+=-Wall 
 
 .PHONY: all
-all: QuickSort.o BasicSort.o SortCommon.o BiotonicSort.o ImprovedBiotonic.o NumGen.o
+all: QuickSort.o BasicSort.o SortCommon.o BitonicSort.o ImprovedBitonic.o NumGen.o
 
 QuickSort.o: QuickSort.cpp QuickSort.hpp
 	$(CXX) $(CXXFLAGS) -c QuickSort.cpp
@@ -12,11 +12,11 @@ BasicSort.o: BasicSort.cpp BasicSort.hpp
 SortCommon.o: SortCommon.cpp SortCommon.hpp
 	$(CXX) $(CXXFLAGS) -c SortCommon.cpp
 
-BiotonicSort.o: BiotonicSort.hpp BiotonicSort.cpp
-	$(CXX) $(CXXFLAGS) -c BiotonicSort.cpp 
+BitonicSort.o: BitonicSort.hpp BitonicSort.cpp
+	$(CXX) $(CXXFLAGS) -c BitonicSort.cpp 
 
-ImprovedBiotonic.o: ImprovedBiotonic.hpp ImprovedBiotonic.cpp
-	$(CXX) $(CXXFLAGS) -c ImprovedBiotonic.cpp
+ImprovedBitonic.o: ImprovedBitonic.hpp ImprovedBitonic.cpp
+	$(CXX) $(CXXFLAGS) -c ImprovedBitonic.cpp
 
 NumGen.o:
 	$(CXX) $(CXXFLAGS) -c NumGen.cpp

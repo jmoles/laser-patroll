@@ -1,15 +1,15 @@
-#ifndef BIOTONIC_SORT_H
+#ifndef BITONIC_SORT_H
 
-#define BIOTONIC_SORT_H
+#define BITONIC_SORT_H
 
 #include "SortCommon.hpp"
 
-class BiotonicSort : public SortCommon {
+class BitonicSort : public SortCommon {
 
 public:
-	BiotonicSort();
+	BitonicSort();
 
-	~BiotonicSort();
+	~BitonicSort();
 
 	//*! Runs std::sort directly modifying the passed argument.
 	/*!

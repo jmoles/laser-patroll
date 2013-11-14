@@ -4,8 +4,8 @@
 #include <boost/program_options.hpp>
 
 #include "BasicSort.hpp"
-#include "BiotonicSort.hpp"
-#include "ImprovedBiotonic.hpp"
+#include "BitonicSort.hpp"
+#include "ImprovedBitonic.hpp"
 #include "QuickSort.hpp"
 
 // Potential return values.
@@ -56,16 +56,16 @@ int main(int argc, char * argv[])
 		// Instaniate the three sort classes.
         QuickSort				quick_sort;
 		BasicSort 		        basic_sort;
-		BiotonicSort 			bio_sort;
-		ImprovedBiotonic	 	bio_improved_sort;
+		BitonicSort 			bio_sort;
+		ImprovedBitonic	 	bio_improved_sort;
 
 		// Use basic sort to build a vector of data.
 		orig_data = basic_sort.NewData(vm["size"].as<size_t>());
                 
 		std::cout << "QuickSort Sort Time:         " << quick_sort.BenchmarkSort(orig_data) << std::endl;
 		std::cout << "Basic Sort Time:             " << basic_sort.BenchmarkSort(orig_data) << std::endl;
-		std::cout << "Biotonic Sort Time:          " << bio_sort.BenchmarkSort(orig_data) << std::endl;
-		std::cout << "Biotonic Improved Sort Time: " << bio_improved_sort.BenchmarkSort(orig_data) << std::endl;
+		std::cout << "Bitonic Sort Time:          " << bio_sort.BenchmarkSort(orig_data) << std::endl;
+		std::cout << "Bitonic Improved Sort Time: " << bio_improved_sort.BenchmarkSort(orig_data) << std::endl;
                 
 		return SUCCESS;
 

@@ -1,13 +1,13 @@
-#include "ImprovedBiotonic.hpp"
+#include "ImprovedBitonic.hpp"
 
-ImprovedBiotonic::ImprovedBiotonic() {
-
-}
-
-ImprovedBiotonic::~ImprovedBiotonic() {
+ImprovedBitonic::ImprovedBitonic() {
 
 }
 
-void ImprovedBiotonic::Sort(DataType &data_in) {
+ImprovedBitonic::~ImprovedBitonic() {
+
+}
+
+void ImprovedBitonic::Sort(DataType &data_in) {
 	std::sort(data_in.begin(), data_in.end());
 }
