@@ -33,12 +33,12 @@ void QuickSort::Sort(DataType &data_in, int left, int right) {
       i++;
       j--;
     }
-  };
+  }
  
   /* recursion */
   if (left < j)
-    quickSort(data_in, left, j);
+    Sort(data_in, left, j);
   
   if (i < right)
-    quickSort(data_in, i, right);
+    Sort(data_in, i, right);
 }

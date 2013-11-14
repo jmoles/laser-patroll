@@ -1,6 +1,6 @@
-#ifndef BASIC_SORT_H
+#ifndef QUICK_SORT_H
 
-#define BASIC_SORT_H
+#define QUICK_SORT_H
 
 #include <algorithm>
 #include <ctime>
@@ -16,7 +16,7 @@
 /*! Basic sorting class providing the framework for benchmarking the sorting algorithms
  *  as well as the basic histogram sort.
  */
-class BasicSort : public SortCommon {
+class QuickSort : public SortCommon {
 
 public:
 
@@ -30,7 +30,7 @@ public:
           \param left leftmost index of region to sort (0 on first call)
           \param right rightmost index of region to sort (ARRAYSIZE on first call)
 	 */
-	void  Sort(DataType &data_in int left, int right);
+	void  Sort(DataType &data_in, int left, int right);
 
 private:
 
