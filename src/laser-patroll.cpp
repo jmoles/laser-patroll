@@ -54,7 +54,7 @@ int main(int argc, char * argv[])
 		BasicSort::DataType 	orig_data;
 
 		// Instaniate the three sort classes.
-                // QuickSort                       quick_sort;
+        QuickSort				quick_sort;
 		BasicSort 		        basic_sort;
 		BiotonicSort 			bio_sort;
 		ImprovedBiotonic	 	bio_improved_sort;
@@ -62,7 +62,7 @@ int main(int argc, char * argv[])
 		// Use basic sort to build a vector of data.
 		orig_data = basic_sort.NewData(vm["size"].as<size_t>());
                 
-		// std::cout << "QuickSort Sort Time:         " << quick_sort.BenchmarkSort(orig_data) << std::endl;
+		std::cout << "QuickSort Sort Time:         " << quick_sort.BenchmarkSort(orig_data) << std::endl;
 		std::cout << "Basic Sort Time:             " << basic_sort.BenchmarkSort(orig_data) << std::endl;
 		std::cout << "Biotonic Sort Time:          " << bio_sort.BenchmarkSort(orig_data) << std::endl;
 		std::cout << "Biotonic Improved Sort Time: " << bio_improved_sort.BenchmarkSort(orig_data) << std::endl;

@@ -10,7 +10,12 @@ QuickSort::~QuickSort() {
 }
 
 
-void QuickSort::Sort(DataType &data_in, int left, int right) {
+void QuickSort::Sort(DataType &data_in) {
+  // Call sort on the entire array (0 to size)
+  RecursiveSort(data_in, 0, data_in.size());
+}
+
+void QuickSort::RecursiveSort(DataType &data_in, int left, int right) {
 
   int i = left, j = right;
   int tmp;
@@ -37,8 +42,8 @@ void QuickSort::Sort(DataType &data_in, int left, int right) {
  
   /* recursion */
   if (left < j)
-    Sort(data_in, left, j);
+    RecursiveSort(data_in, left, j);
   
   if (i < right)
-    Sort(data_in, i, right);
+    RecursiveSort(data_in, i, right);
 }

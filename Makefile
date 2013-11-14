@@ -10,6 +10,7 @@ endif
 CXXFLAGS+=-Wall 
 LDLIBS = -lboost_program_options
 
+OBJS=src/BasicSort.o src/BiotonicSort.o src/ImprovedBiotonic.o src/NumGen.o src/SortCommon.o src/QuickSort.o
 SOURCES=$(wildcard src/*.cpp)
 HEADERS=$(wildcard src/*.hpp)
 DOC=doc/report.tex
@@ -20,8 +21,8 @@ all: doc/report.pdf laser-patroll
 doc/report.pdf: $(DOC)
 	$(MAKE) -C doc
 
-laser-patroll: src/laser-patroll.cpp src/BasicSort.o src/BiotonicSort.o src/ImprovedBiotonic.o src/NumGen.o src/SortCommon.o $(SOURCES) $(HEADERS)
-	$(CXX) $(CXXFLAGS) $(INC) $(LDFLAGS) $(LDLIBS) -o laser-patroll src/laser-patroll.cpp src/SortCommon.o src/BasicSort.o src/BiotonicSort.o src/ImprovedBiotonic.o src/NumGen.o
+laser-patroll: src/laser-patroll.cpp $(OBJS) $(SOURCES) $(HEADERS)
+	$(CXX) $(CXXFLAGS) $(INC) $(LDFLAGS) $(LDLIBS) -o laser-patroll src/laser-patroll.cpp $(OBJS)
 
 src/BasicSort.o src/SortCommon.o src/BiotonicSort.o src/ImprovedBiotonic.o src/NumGen.o:
 	$(MAKE) -C src CXX=$(CXX) INC=$(INC) LDFLAGS=$(LDFLAGS) LDLIBS=$(LDLIBS)
