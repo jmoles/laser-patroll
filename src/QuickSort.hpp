@@ -35,7 +35,7 @@ private:
 	  \param left leftmost index of the region to sort.
 	  \param right rightmost index of the region to sort.
 	 */
-	void RecursiveSort(DataType &data_in, int left, int right);
+	void RecursiveSort(DataType &data_in, size_t left, size_t right);
 
 
 

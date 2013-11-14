@@ -15,11 +15,11 @@ void QuickSort::Sort(DataType &data_in) {
   RecursiveSort(data_in, 0, data_in.size());
 }
 
-void QuickSort::RecursiveSort(DataType &data_in, int left, int right) {
+void QuickSort::RecursiveSort(DataType &data_in, size_t left, size_t right) {
 
-  int i = left, j = right;
-  int tmp;
-  int pivot = data_in[(left + right) / 2];
+  size_t i = left, j = right;
+  size_t tmp;
+  size_t pivot = data_in[(left + right) / 2];
  
   /* partition */
   while (i <= j) 
