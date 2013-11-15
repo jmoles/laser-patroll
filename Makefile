@@ -22,10 +22,8 @@ doc/report.pdf: $(DOC)
 	$(MAKE) -C doc
 
 laser-patroll: src/laser-patroll.cpp $(OBJS) $(SOURCES) $(HEADERS)
+	$(MAKE) -C src CXX=$(CXX) INC=$(INC) LDFLAGS=$(LDFLAGS) LDLIBS=$(LDLIBS)	
 	$(CXX) $(CXXFLAGS) $(INC) $(LDFLAGS) $(LDLIBS) -o laser-patroll src/laser-patroll.cpp $(OBJS)
-
-src/BasicSort.o src/SortCommon.o src/BitonicSort.o src/ImprovedBitonic.o src/NumGen.o:
-	$(MAKE) -C src CXX=$(CXX) INC=$(INC) LDFLAGS=$(LDFLAGS) LDLIBS=$(LDLIBS)
 
 clean:
 	rm -rf laser-patroll
