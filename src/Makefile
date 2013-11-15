@@ -1,7 +1,10 @@
 CXXFLAGS+=-Wall 
 
 .PHONY: all
-all: QuickSort.o BasicSort.o SortCommon.o BitonicSort.o ImprovedBitonic.o NumGen.o
+all: MergeSort.o QuickSort.o BasicSort.o SortCommon.o BitonicSort.o ImprovedBitonic.o NumGen.o
+
+MergeSort.o: MergeSort.cpp MergeSort.hpp
+	$(CXX) $(CXXFLAGS) -c MergeSort.cpp
 
 QuickSort.o: QuickSort.cpp QuickSort.hpp
 	$(CXX) $(CXXFLAGS) -c QuickSort.cpp
