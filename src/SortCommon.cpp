@@ -1,12 +1,12 @@
 #include "SortCommon.hpp"
 
 
-SortCommon::SortCommon() {
-  kNumThreads = 1;
+SortCommon::SortCommon() : kNumThreads(1) {
+
 }
 
-SortCommon::SortCommon(unsigned int NumThreads) {
-  kNumThreads = NumThreads;
+SortCommon::SortCommon(const unsigned int NumThreads) : kNumThreads(NumThreads) {
+
 }
 
 SortCommon::~SortCommon() {

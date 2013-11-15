@@ -6,6 +6,7 @@
 #include <ctime>
 #include <iostream>
 #include <vector>
+#include <pthread.h>
 
 #include <cstdlib>
 
@@ -31,7 +32,7 @@ public:
 	  This constuctor is generally the one used and sets the number of threads to NumThreads.
           \param NumThreads the number of threads to use
         */
-	SortCommon(unsigned int NumThreads);
+	SortCommon(const unsigned int NumThreads);
 
 	//*! Default destructor.
 	virtual ~SortCommon();
@@ -67,8 +68,10 @@ public:
 	bool		CheckSort(const DataType &data_in);
 
 
+protected:
+		const unsigned int kNumThreads;
+
 private:
-        const unsigned int kNumThreads;
 
 
 };
