@@ -22,10 +22,16 @@ public:
 
 	//*! Default constructor.
 	/*!
-	  This constuctor is generally the one used and prepares the necessary initial values
-	  for the class.
-	 */
+	  This default constuctor sets the number of threads to a safe value (one)	 
+        */
 	SortCommon();
+
+        //*! Constructor with number of threads specified
+	/*!
+	  This constuctor is generally the one used and sets the number of threads to NumThreads.
+          \param NumThreads the number of threads to use
+        */
+	SortCommon(unsigned int NumThreads);
 
 	//*! Default destructor.
 	virtual ~SortCommon();
@@ -62,7 +68,7 @@ public:
 
 
 private:
-
+        const unsigned int kNumThreads;
 
 
 };

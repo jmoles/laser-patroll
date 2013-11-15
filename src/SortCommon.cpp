@@ -2,6 +2,11 @@
 
 
 SortCommon::SortCommon() {
+  kNumThreads = 1;
+}
+
+SortCommon::SortCommon(unsigned int NumThreads) {
+  kNumThreads = NumThreads;
 }
 
 SortCommon::~SortCommon() {
