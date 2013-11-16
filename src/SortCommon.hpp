@@ -3,6 +3,7 @@
 #define SORT_COMMON_H
 
 #include <algorithm>
+#include <complex>
 #include <ctime>
 #include <iostream>
 #include <vector>
@@ -67,9 +68,10 @@ public:
 	 */
 	bool		CheckSort(const DataType &data_in);
 
-
 protected:
-		const unsigned int kNumThreads;
+	const unsigned int kNumThreads;
+
+	DataType	subVector(const DataType &, size_t, size_t);
 
 private:
 

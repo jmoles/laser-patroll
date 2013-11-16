@@ -7,7 +7,7 @@ else
 	INC= 
 endif
 
-CXXFLAGS+=-Wall 
+CXXFLAGS+=-Wall -g
 LDLIBS = -lboost_program_options
 
 OBJS=src/BasicSort.o src/BitonicSort.o src/ImprovedBitonic.o src/NumGen.o src/SortCommon.o src/QuickSort.o

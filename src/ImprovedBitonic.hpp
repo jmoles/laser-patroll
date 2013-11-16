@@ -7,6 +7,9 @@
 class ImprovedBitonic : public SortCommon {
 
 public:
+
+	typedef std::vector<size_t> KeyType;
+
 	ImprovedBitonic();
 
 	~ImprovedBitonic();
@@ -18,6 +21,11 @@ public:
 	void 		Sort(DataType &data_in);
 
 private:
+	DataType	IBRSort(bool up, DataType &data_in);
+
+	DataType	IBRMerge(bool up, DataType &data_in);
+
+	void		IBRCompare(bool up, DataType &data_in);
 
 };
 
