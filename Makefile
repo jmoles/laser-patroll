@@ -16,14 +16,17 @@ HEADERS=$(wildcard src/*.hpp)
 DOC=doc/report.tex
 
 .PHONY: all
-all: doc/report.pdf laser-patroll
+all: laser-patroll doc/report.pdf 
 
 doc/report.pdf: $(DOC)
 	$(MAKE) -C doc
 
-laser-patroll: src/laser-patroll.cpp $(OBJS) $(SOURCES) $(HEADERS)
-	$(MAKE) -C src CXX=$(CXX) INC=$(INC) LDFLAGS=$(LDFLAGS) LDLIBS=$(LDLIBS)	
+laser-patroll: src/laser-patroll.cpp $(OBJS)
+		
 	$(CXX) $(CXXFLAGS) $(INC) $(LDFLAGS) $(LDLIBS) -o laser-patroll src/laser-patroll.cpp $(OBJS)
+
+$(OBJS): $(SOURCES) $(HEADERS)
+	$(MAKE) -C src CXX=$(CXX) INC=$(INC) LDFLAGS=$(LDFLAGS) LDLIBS=$(LDLIBS) all
 
 clean:
 	rm -rf laser-patroll

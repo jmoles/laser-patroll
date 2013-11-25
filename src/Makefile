@@ -1,4 +1,4 @@
-CXXFLAGS+=-Wall 
+CXXFLAGS+=-Wall
 
 .PHONY: all
 all: MergeSort.o QuickSort.o BasicSort.o SortCommon.o BitonicSort.o ImprovedBitonic.o NumGen.o
