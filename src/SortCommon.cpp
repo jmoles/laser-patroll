@@ -63,8 +63,6 @@ bool SortCommon::CheckSort(const DataType &data_in) {
 
 SortCommon::DataType SortCommon::subVector(const DataType &data_in, size_t begin, size_t end)
 {
-	DataType::const_iterator first = data_in.begin() + begin;
-	DataType::const_iterator last  = data_in.begin() + end;
 	DataType retVec(begin, end);
 	return retVec;
 }
