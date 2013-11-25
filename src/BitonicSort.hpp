@@ -18,6 +18,11 @@ public:
 	void 		Sort(DataType &data_in);
 
 private:
+	DataType	BSort(bool up, DataType &data_in);
+
+	DataType	BMerge(bool up, DataType &data_in);
+
+	void		BCompare(bool up, DataType &data_in);
 
 };
 

@@ -10,7 +10,7 @@ endif
 CXXFLAGS+=-Wall -g
 LDLIBS = -lboost_program_options
 
-OBJS=src/BasicSort.o src/BitonicSort.o src/ImprovedBitonic.o src/NumGen.o src/SortCommon.o src/QuickSort.o
+OBJS=src/BasicSort.o src/BitonicSort.o src/NumGen.o src/SortCommon.o src/QuickSort.o
 SOURCES=$(wildcard src/*.cpp)
 HEADERS=$(wildcard src/*.hpp)
 DOC=doc/report.tex
