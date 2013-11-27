@@ -9,16 +9,15 @@ MergeSort::~MergeSort() {
 
 }
 
-void* MergeSort::Thread_MSort(void * args){
+void MergeSort::Thread_MSort(void * args){
   thread_args * a = (thread_args *) args;
 
-  MSort(a->threads_remaining, a->low, a->high);
+  MSort(a->data_in, a->threads_remaining, a->low, a->high);
 
 }
 
 
-void MergeSort::MSort(size_t threads_remaining, size_t low, size_t high){
-    
+void MergeSort::MSort(DataType &data_in, size_t threads_remaining, size_t low, size_t high){
     
     if(low<high)
     {
@@ -28,10 +27,10 @@ void MergeSort::MSort(size_t threads_remaining, size_t low, size_t high){
         {
             if(low<high)
             {
-                MSort(0,low,pivot);
-                MSort(0,pivot+1,high);
+                MSort(data_in, 0,low,pivot);
+                MSort(data_in, 0,pivot+1,high);
               
-                Merge(low,pivot,high);
+                Merge(data_in, low,pivot,high);
             }
         }
 
@@ -50,21 +49,22 @@ void MergeSort::MSort(size_t threads_remaining, size_t low, size_t high){
             rt += (threads_remaining-1)%2; // remainder has to go somewhere!
             
             // set up args struct to pass to new thread
-            thread_args a;
+            struct thread_args a;
+            a.data_in = data_in;
             a.threads_remaining = lt;
             a.low = low;
             a.high = pivot;
             
             // new thread does left, current thread does right, current waits on left, then merges
             pthread_create(&thread, &attr, &MergeSort::Thread_MSort, (void *) &a);
-            MSort(rt, pivot+1, high); 
+            MSort(data_in, rt, pivot+1, high); 
             pthread_join(thread, NULL);
-            Merge(low,pivot,high);
+            Merge(data_in, low,pivot,high);
         }
     }
 }
 
-void MergeSort::Merge(size_t low, size_t pivot, size_t high){
+void MergeSort::Merge(DataType &src, size_t low, size_t pivot, size_t high){
     
     size_t h,i,j,k;
     h=low;
@@ -111,8 +111,7 @@ void MergeSort::Merge(size_t low, size_t pivot, size_t high){
 }
 
 void MergeSort::Sort(DataType &data_in){
-    src = data_in;
-    MSort(kNumThreads, src[0], src.end());
+    MSort(data_in, kNumThreads, data_in[0], data_in.end());
     data_in.swap(dst);    
 }
 

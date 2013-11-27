@@ -17,7 +17,6 @@
  *  as well as the basic histogram sort.
  */
 
-typedef struct { size_t threads_remaining; size_t low; size_t high; } thread_args;
 
 class MergeSort : public SortCommon {
 
@@ -34,11 +33,11 @@ public:
 	void  Sort(DataType &data_in);
 
 private:
-        DataType * src;
+        struct thread_args { thread_args(); DataType &data_in; size_t threads_remaining; size_t low; size_t high; };
         DataType dst;
-        void  *Thread_MSort(void * args);
-        void  Merge(size_t low, size_t pivot, size_t high);
-        void  MSort(size_t threads_remaining, size_t low, size_t high);
+        void  Thread_MSort(void * args);
+        void  Merge(DataType &src, size_t low, size_t pivot, size_t high);
+        void  MSort(DataType &data_in, size_t threads_remaining, size_t low, size_t high);
 };
 
 #endif
