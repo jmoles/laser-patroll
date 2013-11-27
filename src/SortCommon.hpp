@@ -71,6 +71,7 @@ public:
 protected:
 	const unsigned int kNumThreads;
 
+        DataType        Merge(DataType &, Datatype &);
 	DataType	subVector(const DataType &, size_t, size_t);
 
 private:
