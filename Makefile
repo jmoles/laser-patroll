@@ -7,8 +7,8 @@ else
 	INC= 
 endif
 
-CXXFLAGS+=-Wall -g
-LDLIBS = -lboost_program_options
+CXXFLAGS=-Wall -g
+LDLIBS=-lboost_program_options -lpthread
 
 OBJS=src/BasicSort.o src/BitonicSort.o src/NumGen.o src/SortCommon.o src/QuickSort.o
 SOURCES=$(wildcard src/*.cpp)
@@ -22,11 +22,10 @@ doc/report.pdf: $(DOC)
 	$(MAKE) -C doc
 
 laser-patroll: src/laser-patroll.cpp $(OBJS)
-		
 	$(CXX) $(CXXFLAGS) $(INC) $(LDFLAGS) $(LDLIBS) -o laser-patroll src/laser-patroll.cpp $(OBJS)
 
 $(OBJS): $(SOURCES) $(HEADERS)
-	$(MAKE) -C src CXX=$(CXX) INC=$(INC) LDFLAGS=$(LDFLAGS) LDLIBS=$(LDLIBS) all
+	$(MAKE) -C src CXXFLAGS='$(CXXFLAGS)' CXX='$(CXX)' INC='$(INC)' LDFLAGS='$(LDFLAGS)' LDLIBS='$(LDLIBS)' all
 
 clean:
 	rm -rf laser-patroll
