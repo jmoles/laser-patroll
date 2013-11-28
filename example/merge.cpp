@@ -4,9 +4,9 @@
 using namespace std;
  
 
-void merge(std::vector<int> &a, std::vector<int> &b, int low, int pivot, int high)
+void merge(std::vector<size_t> &a, std::vector<size_t> &b, size_t low, size_t pivot, size_t high)
 {
-    int h,i,j,k;
+    size_t h,i,j,k;
     h=low;
     i=low;
     j=pivot+1;
@@ -44,9 +44,9 @@ void merge(std::vector<int> &a, std::vector<int> &b, int low, int pivot, int hig
     for(k=low; k<=high; k++) a[k]=b[k];
 }
 
-void mergesort(std::vector<int> &a, std::vector<int> &b, int low, int high)
+void mergesort(std::vector<size_t> &a, std::vector<size_t> &b, size_t low, size_t high)
 {
-    int pivot;
+    size_t pivot;
     if(low<high)
     {
         pivot=(low+high)/2;
@@ -59,18 +59,18 @@ void mergesort(std::vector<int> &a, std::vector<int> &b, int low, int high)
 int main(int argc, char* argv[])
 {    
     // get length of array to generate from command line
-    int length = (argc>1) ? atoi(argv[1]) : 10;
+    size_t length = (argc>1) ? atoi(argv[1]) : 10;
 
     // create the arrays
-    std::vector<int> inputarray (length);
-    std::vector<int> outputarray (length);
+    std::vector<size_t> inputarray (length);
+    std::vector<size_t> outputarray (length);
 
     // seed the random
     srand(time(NULL));
 
     // fill up input array with randoms, echo back unsorted input
     cout<<"input:\t[";
-    for (int i = 0; i < length; i++) {
+    for (size_t i = 0; i < length; i++) {
         inputarray[i] = rand()%100;
         cout<<setw(2)<< inputarray[i]<<" ";
     }
@@ -81,14 +81,14 @@ int main(int argc, char* argv[])
 
     // display output array
     cout<<"output:\t[";
-    for(int i=0; i<length; i++)
+    for(size_t i=0; i<length; i++)
        cout<<setw(2)<<outputarray[i]<<" ";
     cout<<"]\n";
     
     // basic accuracy check
-    int prev = 0;
-    int unsorted = 0;
-    for (int i = 0; i<length; i++){
+    size_t prev = 0;
+    size_t unsorted = 0;
+    for (size_t i = 0; i<length; i++){
         if (outputarray[i]<prev) unsorted = 1;
         prev = outputarray[i];
     }
