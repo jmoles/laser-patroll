@@ -33,10 +33,9 @@ public:
 	void		Sort(DataType &data_in, const TheadCount num_threads);
 
 private:
-        struct thread_args { thread_args(); DataType &data_in; DataType &dst; size_t threads_remaining; size_t low; size_t high; };
         static void*  Thread_MSort(void*);
         static void  Merge(DataType &src, DataType &dst, size_t low, size_t pivot, size_t high);
-        static void  MSort(DataType &data_in, DataType &dst, const size_t threads_remaining, size_t low, size_t high);
+        static void  MSort(DataType &data_in, DataType &dst, const unsigned int threads_remaining, size_t low, size_t high);
 };
 
 #endif

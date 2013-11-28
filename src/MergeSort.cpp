@@ -19,13 +19,13 @@ void * MergeSort::Thread_MSort(void * args){
 }
 
 
-void MergeSort::MSort(DataType &data_in, DataType &dst, const size_t threads_remaining, size_t low, size_t high){
+void MergeSort::MSort(DataType &data_in, DataType &dst, const unsigned int threads_remaining, size_t low, size_t high){
     
     if(low<high)
     {
         size_t pivot= (low+high)/2;
         
-        if (true) //(threads_remaining == 0)
+        if (threads_remaining == 0)
         {
             if(low<high)
             {
@@ -49,7 +49,6 @@ void MergeSort::MSort(DataType &data_in, DataType &dst, const size_t threads_rem
             rt += (threads_remaining-1)%2; // remainder has to go somewhere!
             
             // set up args struct to pass to new thread
-            struct thread_args a;
             ThreadInfo curr_thread_info(low, pivot, &data_in, &dst, lt);
             
             // new thread does left, current thread does right, current waits on left, then merges
