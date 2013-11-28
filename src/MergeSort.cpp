@@ -9,7 +9,7 @@ MergeSort::~MergeSort() {
 
 }
 
-void MergeSort::Thread_MSort(void * args){
+void * MergeSort::Thread_MSort(void * args){
   thread_args * a = (thread_args *) args;
 
   MSort(a->data_in, a->threads_remaining, a->low, a->high);
@@ -23,7 +23,7 @@ void MergeSort::MSort(DataType &data_in, size_t threads_remaining, size_t low, s
     {
         size_t pivot= (low+high)/2;
         
-        if (threads_remaining == 0)
+        if (true) //(threads_remaining == 0)
         {
             if(low<high)
             {
@@ -56,9 +56,9 @@ void MergeSort::MSort(DataType &data_in, size_t threads_remaining, size_t low, s
             a.high = pivot;
             
             // new thread does left, current thread does right, current waits on left, then merges
-            pthread_create(&thread, &attr, &MergeSort::Thread_MSort, (void *) &a);
+            //pthread_create(&thread, &attr, (void *) &Thread_MSort, (void *) &a);
             MSort(data_in, rt, pivot+1, high); 
-            pthread_join(thread, NULL);
+            //pthread_join(thread, NULL);
             Merge(data_in, low,pivot,high);
         }
     }
@@ -111,7 +111,7 @@ void MergeSort::Merge(DataType &src, size_t low, size_t pivot, size_t high){
 }
 
 void MergeSort::Sort(DataType &data_in, const TheadCount num_threads){
-    MSort(data_in, kNumThreads, data_in[0], data_in.end());
+    MSort(data_in, (size_t) num_threads, data_in[0], data_in.back());
     data_in.swap(dst);    
 }
 
