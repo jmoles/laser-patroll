@@ -102,7 +102,7 @@ SortCommon::DataType SortCommon::Merge(DataType &src, size_t low, size_t pivot, 
 
 size_t i = j = 0;
 size_t k = pivot + 1;
-size_t ret_data;
+DataType ret_data, data1, data2;
 
 	while (i <= pivot)
 	{
