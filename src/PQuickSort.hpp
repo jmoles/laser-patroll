@@ -6,7 +6,7 @@
 #include <ctime>
 #include <iostream>
 #include <vector>
-
+#include <time.h>
 #include <cstdlib>
 
 #include "SortCommon.hpp"

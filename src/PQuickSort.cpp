@@ -19,39 +19,41 @@ void PQuickSort::RecursiveSort(DataType &data_in, size_t left, size_t right) {
 
   size_t i = left, j = right;
   size_t tmp;
-  size_t pivot = data_in[(left + right) / 2];
+  size_t pivot = (left + right) / 2;
   size_t thread_Lside, thread_Rside;
+  srand(time(NULL));
 
-
-  /* partition */
   while (i <= j) 
   {
-    if(!kNumThreads)
+    if(!num_threads)
     {
     // last sort, put in data and merge
-    //merge();)
+    RecursiveSort(&data_in, left, pivot);
+    RecursiveSort(&data_in, pivot, right);
+    
+    Merge(&data_in, left, pivot, right);
     
     }
   
     else
     {
-      kNumThreads -= 1;
+      num_threads -= 1;
       pthread_t thread;
-      thread_Lside = thread_Rside = kNumThreads/2;
-      if (knumthreads % 2)  //if odd # of threads, randomly assign to side
+      thread_Lside = thread_Rside = num_threads/2;
+      if (num_threads % 2) 
+      //if odd # of threads, randomly assign to side
       {
-      //do srand()
-        if (rand) thread_Lside += 1;
+        if ((rand)%2) thread_Lside += 1;
         else thread_Rside += 1;
       }
-      //call sort again, with what args?
-      
-      //get necessary thread info for create
-      //put correct args in the following:
-      pthread_create(args);
+      //setup dst
+      ThreadInfo curr_thread_info(left, pivot, &data_in, &dst, thread_Lside);
+
+      pthread_create(&thread, NULL, &Thread_QSort, &curr_thread_info);
       RecursiveSort(args);
-      pthread_join(args);
-      Merge(vector1, vector2);
+      pthread_join(thread, NULL);
+
+      Merge(&data_in, left, pivot, right);
 
       //actual work, put in function
       while (data_in[i] < pivot)
@@ -71,10 +73,22 @@ void PQuickSort::RecursiveSort(DataType &data_in, size_t left, size_t right) {
     }
   }
  
-  /* recursion */
   if (left < j)
     RecursiveSort(data_in, left, j);
   
   if (i < right)
     RecursiveSort(data_in, i, right);
 }
+
+//Setup Thread info
+void * PQuickSort::Thread_Work(void * args)
+{
+  ThreadInfo* info = (ThreadInfo*)args;
+
+  RecursiveSort(*(info->data_), *(info->dst_), info->remain_threads_, info->min_, info->max_;)
+
+  return NULL;
+
+}
+
+
