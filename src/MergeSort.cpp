@@ -17,7 +17,7 @@ void * MergeSort::Thread_MSort(void * args){
 }
 
 
-void MergeSort::MSort(DataType &data_in, size_t threads_remaining, size_t low, size_t high){
+void MergeSort::MSort(DataType &data_in, const size_t threads_remaining, size_t low, size_t high){
     
     if(low<high)
     {
@@ -34,6 +34,7 @@ void MergeSort::MSort(DataType &data_in, size_t threads_remaining, size_t low, s
             }
         }
 
+        // will never run... 
         else // threads_remaining > 1
         {
             // set up pthreads stuff
@@ -65,6 +66,7 @@ void MergeSort::MSort(DataType &data_in, size_t threads_remaining, size_t low, s
 }
 
 void MergeSort::Merge(DataType &src, size_t low, size_t pivot, size_t high){
+
     
     size_t h,i,j,k;
     h=low;

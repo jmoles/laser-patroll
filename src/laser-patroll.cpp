@@ -6,6 +6,7 @@
 #include "BasicSort.hpp"
 #include "BitonicSort.hpp"
 #include "QuickSort.hpp"
+#include "MergeSort.hpp"
 
 // Potential return values.
 const int SUCCESS                   = 0;
@@ -54,14 +55,14 @@ int main(int argc, char * argv[])
 		SortCommon::DataType 	orig_data;
 
 		// Instaniate the three sort classes.
-        //QuickSort				quick_sort;
+    MergeSort 				merge_sort;
 		BasicSort 		        basic_sort;
 		BitonicSort 			bio_sort;
 
 		// Use basic sort to build a vector of data.
 		orig_data = SortCommon::NewData(vm["size"].as<size_t>());
                 
-		//std::cout << "QuickSort Sort Time:         " << quick_sort.BenchmarkSort(orig_data, num_threads) << std::endl;
+		std::cout << "MergeSort Sort Time:         " << merge_sort.BenchmarkSort(orig_data, num_threads) << std::endl;
 		std::cout << "Basic Sort Time:             " << basic_sort.BenchmarkSort(orig_data, num_threads) << std::endl;
 		std::cout << "Bitonic Sort Time:          " << bio_sort.BenchmarkSort(orig_data, num_threads) << std::endl;
                 
