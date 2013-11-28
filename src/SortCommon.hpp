@@ -68,8 +68,6 @@ public:
 	bool		CheckSort(const DataType &data_in);
 
 protected:
-	static DataType		subVector(const DataType &, size_t, size_t);
-
 	static MinMaxVect	buildPairs(size_t num_threads, size_t min, size_t max);
 
 private:

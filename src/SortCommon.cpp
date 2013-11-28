@@ -55,12 +55,6 @@ bool SortCommon::CheckSort(const DataType &data_in) {
 
 }
 
-SortCommon::DataType SortCommon::subVector(const DataType &data_in, size_t begin, size_t end)
-{
-	DataType retVec(begin, end);
-	return retVec;
-}
-
 SortCommon::MinMaxVect SortCommon::buildPairs(size_t num_threads, size_t min, size_t max)
 {
 	unsigned int step_size = (max - min) / num_threads;
@@ -70,6 +64,16 @@ SortCommon::MinMaxVect SortCommon::buildPairs(size_t num_threads, size_t min, si
 	size_t curr_max;
 
 	MinMaxVect 	retVal;
+
+	// If the step size is 0, means we have more threads than data to sort.
+	if(step_size == 0)
+	{
+		// No need to parallelize so just return a single pair
+		MinMaxPairsType temp_pair(min, max);
+		retVal.push_back(temp_pair);
+
+		return retVal;
+	}
 
 	while(items_built < num_threads)
 	{
