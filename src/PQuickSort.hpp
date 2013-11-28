@@ -35,8 +35,8 @@ private:
 	  \param left leftmost index of the region to sort.
 	  \param right rightmost index of the region to sort.
 	 */
-	void RecursiveSort(DataType &data_in, size_t left, size_t right);
-
+	void QRSort(DataType &data_in, DataType &dst, const unsigned int num_threads, size_t left, size_t right);
+      void * PQuickSort::Thread_Work(void * args);
 
 
 };
