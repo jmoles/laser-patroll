@@ -108,8 +108,8 @@ void MergeSort::Merge(DataType &src, DataType &dst, size_t low, size_t pivot, si
 }
 
 void MergeSort::Sort(DataType &data_in, const TheadCount num_threads){
-    DataType dst(data_in.size());
-    MSort(data_in, dst, (size_t) num_threads, data_in[0], data_in.back());
+    DataType dst(data_in.size(), 0);
+    MSort(data_in, dst, (size_t) num_threads, 0, data_in.size() - 1);
     data_in.swap(dst);    
 }
 

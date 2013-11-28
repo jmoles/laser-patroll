@@ -63,8 +63,8 @@ int main(int argc, char * argv[])
 		orig_data = SortCommon::NewData(vm["size"].as<size_t>());
                 
 		std::cout << "MergeSort Sort Time:         " << merge_sort.BenchmarkSort(orig_data, num_threads) << std::endl;
-		std::cout << "Basic Sort Time:             " << basic_sort.BenchmarkSort(orig_data, num_threads) << std::endl;
-		std::cout << "Bitonic Sort Time:          " << bio_sort.BenchmarkSort(orig_data, num_threads) << std::endl;
+		//std::cout << "Basic Sort Time:             " << basic_sort.BenchmarkSort(orig_data, num_threads) << std::endl;
+		//std::cout << "Bitonic Sort Time:          " << bio_sort.BenchmarkSort(orig_data, num_threads) << std::endl;
                 
 		return SUCCESS;
 
