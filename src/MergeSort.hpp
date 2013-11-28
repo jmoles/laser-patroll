@@ -9,9 +9,8 @@
 
 #include <cstdlib>
 
-//#include <boost/mpi.hpp>
-
 #include "SortCommon.hpp"
+#include "ThreadInfo.hpp"
 
 /*! Basic sorting class providing the framework for benchmarking the sorting algorithms
  *  as well as the basic histogram sort.
@@ -34,11 +33,10 @@ public:
 	void		Sort(DataType &data_in, const TheadCount num_threads);
 
 private:
-        static DataType dst;
-        struct thread_args { thread_args(); DataType &data_in; size_t threads_remaining; size_t low; size_t high; };
-        void*  Thread_MSort(void*);
-        void  Merge(DataType &src, size_t low, size_t pivot, size_t high);
-        void  MSort(DataType &data_in, const size_t threads_remaining, size_t low, size_t high);
+        struct thread_args { thread_args(); DataType &data_in; DataType &dst; size_t threads_remaining; size_t low; size_t high; };
+        static void*  Thread_MSort(void*);
+        static void  Merge(DataType &src, DataType &dst, size_t low, size_t pivot, size_t high);
+        static void  MSort(DataType &data_in, DataType &dst, const size_t threads_remaining, size_t low, size_t high);
 };
 
 #endif

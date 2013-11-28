@@ -10,14 +10,16 @@ MergeSort::~MergeSort() {
 }
 
 void * MergeSort::Thread_MSort(void * args){
-  thread_args * a = (thread_args *) args;
+    ThreadInfo* a = (ThreadInfo*)args;
 
-  MSort(a->data_in, a->threads_remaining, a->low, a->high);
+  MSort(*(a->data_), *(a->dst_), a->remain_threads_, a->min_, a->max_);
+
+  return NULL;
 
 }
 
 
-void MergeSort::MSort(DataType &data_in, const size_t threads_remaining, size_t low, size_t high){
+void MergeSort::MSort(DataType &data_in, DataType &dst, const size_t threads_remaining, size_t low, size_t high){
     
     if(low<high)
     {
@@ -27,10 +29,10 @@ void MergeSort::MSort(DataType &data_in, const size_t threads_remaining, size_t 
         {
             if(low<high)
             {
-                MSort(data_in, 0,low,pivot);
-                MSort(data_in, 0,pivot+1,high);
+                MSort(data_in, dst, 0, low, pivot);
+                MSort(data_in, dst, 0, pivot + 1, high);
               
-                Merge(data_in, low,pivot,high);
+                Merge(data_in, dst, low, pivot, high);
             }
         }
 
@@ -38,10 +40,7 @@ void MergeSort::MSort(DataType &data_in, const size_t threads_remaining, size_t 
         else // threads_remaining > 1
         {
             // set up pthreads stuff
-            pthread_attr_t attr;
             pthread_t thread;
-            pthread_attr_init (&attr);
-            pthread_attr_setscope (&attr,PTHREAD_SCOPE_SYSTEM);
            
             // subtract 1 from threads left (one will be allocated now)
             // then divide the remainder between "children"
@@ -51,21 +50,18 @@ void MergeSort::MSort(DataType &data_in, const size_t threads_remaining, size_t 
             
             // set up args struct to pass to new thread
             struct thread_args a;
-            a.data_in = data_in;
-            a.threads_remaining = lt;
-            a.low = low;
-            a.high = pivot;
+            ThreadInfo curr_thread_info(low, pivot, &data_in, &dst, lt);
             
             // new thread does left, current thread does right, current waits on left, then merges
-            //pthread_create(&thread, &attr, (void *) &Thread_MSort, (void *) &a);
-            MSort(data_in, rt, pivot+1, high); 
-            //pthread_join(thread, NULL);
-            Merge(data_in, low,pivot,high);
+            pthread_create(&thread, NULL, &Thread_MSort, &curr_thread_info);
+            MSort(data_in, dst, rt, pivot+1, high); 
+            pthread_join(thread, NULL);
+            Merge(data_in, dst, low, pivot, high);
         }
     }
 }
 
-void MergeSort::Merge(DataType &src, size_t low, size_t pivot, size_t high){
+void MergeSort::Merge(DataType &src, DataType &dst, size_t low, size_t pivot, size_t high){
 
     
     size_t h,i,j,k;
@@ -113,7 +109,8 @@ void MergeSort::Merge(DataType &src, size_t low, size_t pivot, size_t high){
 }
 
 void MergeSort::Sort(DataType &data_in, const TheadCount num_threads){
-    MSort(data_in, (size_t) num_threads, data_in[0], data_in.back());
+    DataType dst(data_in.size());
+    MSort(data_in, dst, (size_t) num_threads, data_in[0], data_in.back());
     data_in.swap(dst);    
 }
 
