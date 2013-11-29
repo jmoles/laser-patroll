@@ -67,11 +67,12 @@ SortCommon::DataType SortCommon::subVector(const DataType &data_in, size_t begin
 	return retVec;
 }
 
-SortCommon::DataType SortCommon::Merge(DataType &data1, Datatype &data2)
+SortCommon::DataType SortCommon::Merge(DataType &data1, DataType &data2)
 {
 
 DataType ret_data;
-size_t i = j = k = 0;
+size_t i,j,k;
+i = j = k = 0;
 				
 	while ( i < data1.size() && j < data2.size() ) 
 	{
@@ -93,15 +94,15 @@ size_t i = j = k = 0;
 		ret_data[k++] = data1[j++];
 	}	
 	
-	return ret_data;
+	return  ret_data;
 	
 }
 
 SortCommon::DataType SortCommon::Merge(DataType &src, size_t low, size_t pivot, size_t high)
 {
-
-size_t i = j = 0;
-size_t k = pivot + 1;
+size_t i,j,k;
+i = j = 0;
+k = pivot + 1;
 DataType ret_data, data1, data2;
 
 	while (i <= pivot)

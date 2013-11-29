@@ -70,8 +70,8 @@ public:
 
 protected:
 	const unsigned int kNumThreads;
-
-        DataType        Merge(DataType &, Datatype &);
+        DataType        Merge(DataType &, size_t, size_t,size_t);
+        DataType        Merge(DataType &, DataType &);
 	DataType	subVector(const DataType &, size_t, size_t);
 
 private:
