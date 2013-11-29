@@ -10,6 +10,7 @@ PQuickSort::~PQuickSort() {
 }
 
 
+
 void PQuickSort::Sort(DataType &data_in) {
 
   QRSort(data_in, &dst, num_threads, 0, data_in.size());

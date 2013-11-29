@@ -6,6 +6,7 @@
 #include <complex>
 #include <ctime>
 #include <iostream>
+#include <utility>
 #include <vector>
 #include <pthread.h>
 
@@ -22,18 +23,16 @@ public:
 	typedef unsigned int ContainType;
 	typedef std::vector<ContainType> DataType;
 
+	typedef std::pair<size_t, size_t>		MinMaxPairsType;
+	typedef std::vector<MinMaxPairsType> 	MinMaxVect;
+
+	typedef size_t							TheadCount;
+
 	//*! Default constructor.
 	/*!
 	  This default constuctor sets the number of threads to a safe value (one)	 
         */
 	SortCommon();
-
-        //*! Constructor with number of threads specified
-	/*!
-	  This constuctor is generally the one used and sets the number of threads to NumThreads.
-          \param NumThreads the number of threads to use
-        */
-	SortCommon(const unsigned int NumThreads);
 
 	//*! Default destructor.
 	virtual ~SortCommon();
@@ -42,14 +41,14 @@ public:
 	/*!
 	  \param data_in the object getting sorted.
 	 */
-	virtual void		Sort(DataType &data_in) = 0;
+	virtual void		Sort(DataType &data_in, const TheadCount num_threads) = 0;
 
 	//*! Benchmarks the sort returning the number of seconds required to run.
 	/*!
 	  \param data_in the object getting sorted. Is passed in as constant.
 	  \returns The number of seconds necessary to run sort. Returns negative value if sort failed.
 	 */
-	double		BenchmarkSort(const DataType &data_in);
+	double		BenchmarkSort(const DataType &data_in, const TheadCount num_threads);
 
 	//*! Creates new data object
 	/*!
@@ -58,7 +57,7 @@ public:
 	  \param size the number of elements to get created in the ranom data object.
 	  \returns A DataType object.
 	 */
-	DataType	NewData(size_t size);
+	static DataType		NewData(size_t size);
 
 	//*! Confirms that a DataType object is sorted and returns true or false.
 	/*!
@@ -69,10 +68,11 @@ public:
 	bool		CheckSort(const DataType &data_in);
 
 protected:
-	const unsigned int kNumThreads;
+//	const unsigned int kNumThreads;
         DataType        Merge(DataType &, size_t, size_t,size_t);
         DataType        Merge(DataType &, DataType &);
 	DataType	subVector(const DataType &, size_t, size_t);
+	static MinMaxVect	buildPairs(size_t num_threads, size_t min, size_t max);
 
 private:
 

@@ -10,7 +10,7 @@ QuickSort::~QuickSort() {
 }
 
 
-void QuickSort::Sort(DataType &data_in) {
+void QuickSort::Sort(DataType &data_in, const TheadCount num_threads) {
   // Call sort on the entire array (0 to size)
   RecursiveSort(data_in, 0, data_in.size());
 }

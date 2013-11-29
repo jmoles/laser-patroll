@@ -1,18 +1,13 @@
 #include "SortCommon.hpp"
 
 
-SortCommon::SortCommon() : kNumThreads(1) {
-
-}
-
-SortCommon::SortCommon(const unsigned int NumThreads) : kNumThreads(NumThreads) {
-
+SortCommon::SortCommon() {
 }
 
 SortCommon::~SortCommon() {
 }
 
-double SortCommon::BenchmarkSort(const DataType &data_in) {
+double SortCommon::BenchmarkSort(const DataType &data_in, const size_t num_threads) {
 	time_t start, stop;
 	double seconds;
 
@@ -21,7 +16,7 @@ double SortCommon::BenchmarkSort(const DataType &data_in) {
 
 	// Get current time and run the sort.
 	time(&start);
-	Sort(my_data);
+	Sort(my_data, num_threads);
 	time(&stop);
 	seconds = difftime(stop, start);
 
@@ -60,12 +55,49 @@ bool SortCommon::CheckSort(const DataType &data_in) {
 
 }
 
-
-SortCommon::DataType SortCommon::subVector(const DataType &data_in, size_t begin, size_t end)
+SortCommon::MinMaxVect SortCommon::buildPairs(size_t num_threads, size_t min, size_t max)
 {
-	DataType retVec(begin, end);
-	return retVec;
+	unsigned int step_size = (max - min) / num_threads;
+	unsigned int curr_count = min;
+	unsigned int items_built = 0;
+
+	size_t curr_max;
+
+	MinMaxVect 	retVal;
+
+	// If the step size is 0, means we have more threads than data to sort.
+	if(step_size == 0)
+	{
+		// No need to parallelize so just return a single pair
+		MinMaxPairsType temp_pair(min, max);
+		retVal.push_back(temp_pair);
+
+		return retVal;
+	}
+
+	while(items_built < num_threads)
+	{
+		if(items_built == num_threads) 
+		{
+			curr_max = max;
+		}
+		else
+		{
+			curr_max = curr_count + step_size - 1;
+		}
+
+		MinMaxPairsType temp_pair(curr_count, curr_max);
+
+		retVal.push_back(temp_pair);
+		curr_count += step_size;
+		items_built++;
+
+	}
+
+	return retVal;
+
 }
+
 
 SortCommon::DataType SortCommon::Merge(DataType &data1, DataType &data2)
 {
@@ -116,7 +148,8 @@ DataType ret_data, data1, data2;
 		k++;
 	}
 
-	ret_data = Merge(&data1, &data2);
+	ret_data = SortCommon::Merge(data1, data2);
 	return ret_data;
 
 }
+
