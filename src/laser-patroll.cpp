@@ -54,14 +54,14 @@ int main(int argc, char * argv[])
 		SortCommon::DataType 	orig_data;
 
 		// Instaniate the three sort classes.
-        QuickSort				quick_sort;
+      //  QuickSort				quick_sort;
 		BasicSort 		        basic_sort;
 		BitonicSort 			bio_sort;
 
 		// Use basic sort to build a vector of data.
 		orig_data = SortCommon::NewData(vm["size"].as<size_t>());
                 
-		std::cout << "QuickSort Sort Time:         " << quick_sort.BenchmarkSort(orig_data, num_threads) << std::endl;
+	//	std::cout << "QuickSort Sort Time:         " << quick_sort.BenchmarkSort(orig_data, num_threads) << std::endl;
 		std::cout << "Basic Sort Time:             " << basic_sort.BenchmarkSort(orig_data, num_threads) << std::endl;
 		std::cout << "Bitonic Sort Time:           " << bio_sort.BenchmarkSort(orig_data, num_threads) << std::endl;
                 
