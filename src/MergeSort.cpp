@@ -1,13 +1,9 @@
 #include "MergeSort.hpp"
-#include <math.h>       /* floor */
 
-MergeSort::MergeSort() {
-	
-}
+// default constructor/destructors
+MergeSort::MergeSort() {}
+MergeSort::~MergeSort() {}
 
-MergeSort::~MergeSort() {
-
-}
 
 void * MergeSort::Thread_MSort(void * args){
     ThreadInfo* a = (ThreadInfo*)args;
@@ -36,8 +32,7 @@ void MergeSort::MSort(DataType &data_in, DataType &dst, const unsigned int threa
             }
         }
 
-        // will never run... 
-        else // threads_remaining > 1
+        else // threads_remaining > 1... a new thread will handle one side of the split
         {
             // set up pthreads stuff
             pthread_t thread;
@@ -55,6 +50,7 @@ void MergeSort::MSort(DataType &data_in, DataType &dst, const unsigned int threa
             pthread_create(&thread, NULL, &Thread_MSort, &curr_thread_info);
             MSort(data_in, dst, rt, pivot+1, high); 
             pthread_join(thread, NULL);
+
             Merge(data_in, dst, low, pivot, high);
         }
     }
@@ -108,8 +104,14 @@ void MergeSort::Merge(DataType &src, DataType &dst, size_t low, size_t pivot, si
 }
 
 void MergeSort::Sort(DataType &data_in, const TheadCount num_threads){
+    
+    // set up the destination vector
     DataType dst(data_in.size(), 0);
+
+    // call MSort on the whole array, passing the total available threads
     MSort(data_in, dst, (size_t) num_threads, 0, data_in.size() - 1);
+
+    // data_in needs to have sorted data upon finish
     data_in.swap(dst);    
 }
 
