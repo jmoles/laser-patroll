@@ -68,9 +68,9 @@ public:
 	bool		CheckSort(const DataType &data_in);
 
 protected:
-//	const unsigned int kNumThreads;
-        DataType        Merge(DataType &, size_t, size_t,size_t);
-        DataType        Merge(DataType &, DataType &);
+//	const unsigned int num_threads;
+//        DataType        Merge(DataType &, size_t, size_t,size_t);
+  //      DataType        Merge(DataType &, DataType &);
 	DataType	subVector(const DataType &, size_t, size_t);
 	static MinMaxVect	buildPairs(size_t num_threads, size_t min, size_t max);
 

@@ -98,7 +98,7 @@ SortCommon::MinMaxVect SortCommon::buildPairs(size_t num_threads, size_t min, si
 
 }
 
-
+/*
 SortCommon::DataType SortCommon::Merge(DataType &data1, DataType &data2)
 {
 
@@ -152,4 +152,4 @@ DataType ret_data, data1, data2;
 	return ret_data;
 
 }
-
+*/
