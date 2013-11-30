@@ -11,9 +11,10 @@ PQuickSort::~PQuickSort() {
 
 
 
-void PQuickSort::Sort(DataType &data_in) {
-
+void PQuickSort::Sort(DataType &data_in, const unsigned int  num_threads, size_t left) {
+  DataType dst(data_in.size(), 0);
   QRSort(data_in, &dst, num_threads, 0, data_in.size());
+  data_in.swap(dst);
 
 }
 //TODO: separate sort function, swap data. verify correct args (could overload)

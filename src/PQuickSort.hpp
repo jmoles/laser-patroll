@@ -26,7 +26,7 @@ public:
 	/*!
 	  \param data_in the object getting sorted.
 	 */
-	void  Sort(DataType &data_in);
+	void  Sort(DataType &data_in, const unsigned int num_threads, size_t left);
 
 private:
 	//*! Recursive algorithm called by "Sort".
@@ -36,8 +36,7 @@ private:
 	  \param right rightmost index of the region to sort.
 	 */
 	void QRSort(DataType &data_in, DataType &dst, const unsigned int num_threads, size_t left, size_t right);
-      void * PQuickSort::Thread_Work(void * args);
-
+      void * Thread_Work(void * args);
 
 };
 
