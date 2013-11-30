@@ -30,7 +30,7 @@ public:
 	  \param data_in the object getting sorted.
 	  \param num_threads the number of threads to do the sort on.
 	 */
-	void		Sort(DataType &data_in, const TheadCount num_threads);
+	void		Sort(DataType &data_in, const threadCount num_threads);
 
 private:
         static void*  Thread_MSort(void*);

@@ -103,7 +103,7 @@ void MergeSort::Merge(DataType &src, DataType &dst, size_t low, size_t pivot, si
         src[k]=dst[k];
 }
 
-void MergeSort::Sort(DataType &data_in, const TheadCount num_threads){
+void MergeSort::Sort(DataType &data_in, const threadCount num_threads){
     
     // set up the destination vector
     DataType dst(data_in.size(), 0);

@@ -26,7 +26,7 @@ public:
 	typedef std::pair<size_t, size_t>		MinMaxPairsType;
 	typedef std::vector<MinMaxPairsType> 	MinMaxVect;
 
-	typedef size_t							TheadCount;
+	typedef size_t							threadCount;
 
 	//*! Default constructor.
 	/*!
@@ -41,14 +41,14 @@ public:
 	/*!
 	  \param data_in the object getting sorted.
 	 */
-	virtual void		Sort(DataType &data_in, const TheadCount num_threads) = 0;
+	virtual void		Sort(DataType &data_in, const threadCount num_threads) = 0;
 
 	//*! Benchmarks the sort returning the number of seconds required to run.
 	/*!
 	  \param data_in the object getting sorted. Is passed in as constant.
 	  \returns The number of seconds necessary to run sort. Returns negative value if sort failed.
 	 */
-	double		BenchmarkSort(const DataType &data_in, const TheadCount num_threads);
+	double		BenchmarkSort(const DataType &data_in, const threadCount num_threads);
 
 	//*! Creates new data object
 	/*!

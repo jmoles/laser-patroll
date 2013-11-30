@@ -26,7 +26,7 @@ public:
 	/*!
 	  \param data_in the object getting sorted.
 	 */
-	void  Sort(DataType &data_in, const TheadCount num_threads);
+	void  Sort(DataType &data_in, const threadCount num_threads);
 
 private:
 	//*! Recursive algorithm called by "Sort".

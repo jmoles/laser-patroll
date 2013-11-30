@@ -8,7 +8,7 @@ BitonicSort::~BitonicSort() {
 
 }
 
-void BitonicSort::Sort(DataType &data_in, const TheadCount num_threads)
+void BitonicSort::Sort(DataType &data_in, const threadCount num_threads)
 {
 
 	if(num_threads > 1)
