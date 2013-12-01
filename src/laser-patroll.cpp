@@ -68,7 +68,7 @@ int main(int argc, char * argv[])
 		std::cout << "Bitonic Sort Time:           " << bio_sort.BenchmarkSort(orig_data, num_threads) << std::endl;
 		std::cout << "MergeSort Sort Time:         " << merge_sort.BenchmarkSort(orig_data, num_threads) << std::endl;
                 
-        free(orig_data);
+        delete orig_data;
 		return SUCCESS;
 
 	}

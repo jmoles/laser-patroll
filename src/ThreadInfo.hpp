@@ -27,6 +27,9 @@ public:
 	ThreadInfo(size_t min, size_t max, DataType * data,
 		DataType * dst, unsigned int remain_threads);
 
+	ThreadInfo(size_t , size_t , DataType * ,
+		DataType * , unsigned int, pthread_mutex_t *);
+
 	//*! Default destructor.
 	virtual ~ThreadInfo();
 
@@ -38,6 +41,7 @@ public:
 	DataType * const		data_;
 	DataType * const		dst_;
 	const unsigned int		remain_threads_;
+	pthread_mutex_t * const mutex_;
 
 
 protected:
