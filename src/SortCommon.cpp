@@ -19,10 +19,12 @@ double SortCommon::BenchmarkSort(const DataType *data_in, const size_t num_threa
 	start	= GetTime();
 	Sort(my_data, num_threads);
 	stop	= GetTime();
-	free(my_data);
 	usec 	= stop - start; 
 
-	if(CheckSort(my_data, data_in->size()))
+	bool result = CheckSort(my_data, data_in->size());
+	delete my_data;
+
+	if(result)
 		return usec;
 	else
 		return (-1.0) * usec;
