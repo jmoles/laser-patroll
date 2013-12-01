@@ -41,6 +41,12 @@ void BitonicSort::Sort(DataType * data_in, const threadCount num_threads)
 
 		DataType retVal(data_in->size(), 0);
 
+		std::cout << "[";
+		for(DataType::iterator it = data_in->begin(); it != data_in->end(); it++){
+			std::cout << *it << ",";
+		}
+		std::cout << "]" << std::endl;
+
 		for(unsigned int i = 0; i < max_level; i++)
 		{
 			std::cout << "I IS " << i << std::endl;
@@ -63,8 +69,13 @@ void BitonicSort::Sort(DataType * data_in, const threadCount num_threads)
 
 				MinMaxVect::iterator high 	= it;
 				std::cout << "Sort on [" << low->first << ", " << (low->first + high->second + 1) / 2 << ", " << high->second << "]" << std::endl;
-				//MergeSort::Merge(data_in, data_in, low->first, (low->first + high->second + 1) / 2, high->second);
+				MergeSort::Merge(data_in, data_in, low->first, (low->first + high->second + 1) / 2, high->second);
 				//BMerge(true, data_in, low->first, high->second);
+				std::cout << "[";
+				for(DataType::iterator it = data_in->begin(); it != data_in->end(); it++){
+					std::cout << *it << ",";
+				}
+				std::cout << "]" << std::endl;
 			}
 		}
 
