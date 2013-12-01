@@ -171,7 +171,7 @@ void BitonicSort::BCompare(bool up, DataType * data_in)
 
 	for(size_t i = 0; i < dist; i++)
 	{
-		if(data_in[i] > data_in[i + dist])
+		if(data_in->at(i) > data_in->at(i + dist))
 		{
 			// Swap the elements
 			ContainType d1 = data_in->at(i);
