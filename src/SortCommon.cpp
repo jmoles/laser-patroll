@@ -22,7 +22,7 @@ double SortCommon::BenchmarkSort(const DataType *data_in, const size_t num_threa
 	free(my_data);
 	usec 	= stop - start; 
 
-	if(CheckSort(my_data))
+	if(CheckSort(my_data, data_in->size()))
 		return usec;
 	else
 		return (-1.0) * usec;
@@ -38,13 +38,23 @@ SortCommon::DataType * SortCommon::NewData(size_t size) {
 }
 
 
-bool SortCommon::CheckSort(const DataType * data_in) {
+bool SortCommon::CheckSort(const DataType * data_in, const size_t orig_size) {
 
 	ContainType prevValue = 0;
 
+	if(orig_size != data_in->size())
+	{
+		std::cout << std::endl << 
+		"Checksort is returning false because result is length " <<
+		data_in->size() << " and should be length " << orig_size << "." <<
+		std::endl;
+
+		return false;
+	}
+
 	for(DataType::const_iterator it = data_in->begin(); it != data_in->end(); ++it) {
 		if(prevValue > *it) {
-			std::cout << "CheckSort is returning true because " <<  prevValue << 
+			std::cout << std::endl << "CheckSort is returning false because " <<  prevValue << 
 				" is greater than " << *it << "." << std::endl;
 			return false;
 

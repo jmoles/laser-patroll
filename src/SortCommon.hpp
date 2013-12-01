@@ -67,7 +67,7 @@ public:
 	  \retval true If DataType object is sorted.
 	  \retval false If DataType object is not sorted.
 	 */
-	bool		CheckSort(const DataType * );
+	bool		CheckSort(const DataType * , const size_t);
 
 protected:
 	static MinMaxVect	buildPairs(size_t num_threads, size_t min, size_t max);
