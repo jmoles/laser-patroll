@@ -36,9 +36,40 @@ void BitonicSort::Sort(DataType &data_in, const threadCount num_threads)
 			pthread_join(threads[i], NULL);
 		}
 
+		unsigned int max_level 	= ((unsigned int) std::ceil(log2(min_max_pairs.size())));
+		std::cout << max_level << std::endl;
+
+		for(unsigned int i = 0; i < max_level; i++)
+		{
+			std::cout << "I IS " << i << std::endl;
+			for(MinMaxVect::iterator it = min_max_pairs.begin(); it != min_max_pairs.end(); it++)
+			{
+				MinMaxVect::iterator low 	= it;
+
+				size_t inc;
+				if(i == 0)
+					inc = 1;
+				else
+					inc = ( ( (size_t) pow(2,i + 1) ) - 1 );
+
+				for (size_t j = 0; j < inc; j++)
+				{
+					it++;
+					if(it == min_max_pairs.end())
+						it--;
+				}
+
+				MinMaxVect::iterator high 	= it;
+				std::cout << "Sort on [" << low->first << ", " << (low->first + high->second + 1) / 2 << ", " << high->second << "]" << std::endl;
+				MergeSort::Merge(data_in, data_in, low->first, (low->first + high->second + 1) / 2, high->second);
+			}
+		}
+
 		// TODO: Now, join it all back together. Right now, just doing std::sort to have something working.
 		// Need to do a more intelligible way to sort here.
-		std::sort(data_in.begin(), data_in.end());
+		//std::sort(data_in.begin(), data_in.end());
+
+		//MergeSort::Merge(data_in, data_in, <low>, <pivot - mid low/high>, <high>);
 
 	}
 	else

@@ -2,10 +2,12 @@
 
 #define BITONIC_SORT_H
 
+#include <cmath>
 #include <pthread.h>
 
 #include "SortCommon.hpp"
 #include "ThreadInfo.hpp"
+#include "MergeSort.hpp"
 
 #include <unistd.h>
 

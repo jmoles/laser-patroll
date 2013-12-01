@@ -57,7 +57,13 @@ bool SortCommon::CheckSort(const DataType &data_in) {
 
 SortCommon::MinMaxVect SortCommon::buildPairs(size_t num_threads, size_t min, size_t max)
 {
-	unsigned int step_size = (max - min) / num_threads;
+	unsigned int step_size;
+
+	if (min <= 0)
+		step_size = (max - min + 1) / num_threads;
+	else
+		step_size = (max - min) / num_threads;
+
 	unsigned int curr_count = min;
 	unsigned int items_built = 0;
 
@@ -77,7 +83,7 @@ SortCommon::MinMaxVect SortCommon::buildPairs(size_t num_threads, size_t min, si
 
 	while(items_built < num_threads)
 	{
-		if(items_built == num_threads) 
+		if(items_built == num_threads - 1) 
 		{
 			curr_max = max;
 		}
@@ -85,6 +91,8 @@ SortCommon::MinMaxVect SortCommon::buildPairs(size_t num_threads, size_t min, si
 		{
 			curr_max = curr_count + step_size - 1;
 		}
+
+		//std::cout << "Items Built: " << items_built << " Pair Min: " << curr_count << " Pair Max: " << curr_max << std::endl;
 
 		MinMaxPairsType temp_pair(curr_count, curr_max);
 

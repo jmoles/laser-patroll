@@ -57,13 +57,13 @@ void MergeSort::MSort(DataType &data_in, DataType &dst, const unsigned int threa
 }
 
 void MergeSort::Merge(DataType &src, DataType &dst, size_t low, size_t pivot, size_t high){
-
     
     size_t h,i,j,k;
     h=low;
     i=low;
     j=pivot+1;
       
+    
     while((h<=pivot)&&(j<=high))
     {
         if(src[h]<=src[j])
@@ -100,7 +100,9 @@ void MergeSort::Merge(DataType &src, DataType &dst, size_t low, size_t pivot, si
     }
 
     for(k=low; k<=high; k++) 
+    {
         src[k]=dst[k];
+    }
 }
 
 void MergeSort::Sort(DataType &data_in, const threadCount num_threads){
