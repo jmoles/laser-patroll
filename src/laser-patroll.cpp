@@ -5,8 +5,8 @@
 
 #include "BasicSort.hpp"
 #include "BitonicSort.hpp"
-#include "QuickSort.hpp"
-#include "MergeSort.hpp"
+// #include "QuickSort.hpp"
+// #include "MergeSort.hpp"
 
 // Potential return values.
 const int SUCCESS                   = 0;
@@ -52,11 +52,11 @@ int main(int argc, char * argv[])
 		size_t num_threads = vm["threads"].as<size_t>();
 
 		// The original data that should not get touched.
-		SortCommon::DataType 	orig_data;
+		SortCommon::DataType *	orig_data = new SortCommon::DataType();
 
 		// Instaniate the three sort classes.
     //	QuickSort                   quick_sort;
-    MergeSort					merge_sort;
+    //MergeSort					merge_sort;
 		BasicSort 		    basic_sort;
 		BitonicSort 			bio_sort;
 
@@ -66,8 +66,9 @@ int main(int argc, char * argv[])
 	  //std::cout << "QuickSort Sort Time:         " << quick_sort.BenchmarkSort(orig_data, num_threads) << std::endl;
 		std::cout << "Basic Sort Time:             " << basic_sort.BenchmarkSort(orig_data, num_threads) << std::endl;
 		std::cout << "Bitonic Sort Time:           " << bio_sort.BenchmarkSort(orig_data, num_threads) << std::endl;
-		std::cout << "MergeSort Sort Time:         " << merge_sort.BenchmarkSort(orig_data, num_threads) << std::endl;
+		//std::cout << "MergeSort Sort Time:         " << merge_sort.BenchmarkSort(orig_data, num_threads) << std::endl;
                 
+        free(orig_data);
 		return SUCCESS;
 
 	}

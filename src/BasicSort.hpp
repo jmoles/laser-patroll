@@ -28,7 +28,7 @@ public:
 	/*!
 	  \param data_in the object getting sorted.
 	 */
-	void		Sort(DataType &data_in, const threadCount num_threads);
+	void		Sort(DataType * , const threadCount );
 
 private:
 

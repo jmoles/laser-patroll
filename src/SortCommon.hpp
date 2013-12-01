@@ -43,14 +43,14 @@ public:
 	/*!
 	  \param data_in the object getting sorted.
 	 */
-	virtual void		Sort(DataType &data_in, const threadCount num_threads) = 0;
+	virtual void		Sort(DataType * , const threadCount ) = 0;
 
 	//*! Benchmarks the sort returning the number of seconds required to run.
 	/*!
 	  \param data_in the object getting sorted. Is passed in as constant.
 	  \returns The number of seconds necessary to run sort. Returns negative value if sort failed.
 	 */
-	double		BenchmarkSort(const DataType &data_in, const threadCount num_threads);
+	double		BenchmarkSort(const DataType *, const threadCount );
 
 	//*! Creates new data object
 	/*!
@@ -59,7 +59,7 @@ public:
 	  \param size the number of elements to get created in the ranom data object.
 	  \returns A DataType object.
 	 */
-	static DataType		NewData(size_t size);
+	static DataType	*	NewData(size_t size);
 
 	//*! Confirms that a DataType object is sorted and returns true or false.
 	/*!
@@ -67,7 +67,7 @@ public:
 	  \retval true If DataType object is sorted.
 	  \retval false If DataType object is not sorted.
 	 */
-	bool		CheckSort(const DataType &data_in);
+	bool		CheckSort(const DataType * );
 
 protected:
 	static MinMaxVect	buildPairs(size_t num_threads, size_t min, size_t max);

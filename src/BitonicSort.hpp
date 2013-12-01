@@ -22,7 +22,7 @@ public:
 	/*!
 	  \param data_in the object getting sorted.
 	 */
-	void 		Sort(DataType &data_in, const threadCount num_threads);
+	void 		Sort(DataType *, const threadCount num_threads);
 
 private:
 	//*! Runs Bitonic Sort by directly modifying passed argument.
@@ -32,26 +32,26 @@ private:
 	  \param min the lowest index to start sort at.
 	  \param max the highest index to start sort at.
 	 */
-	static DataType		BSort(bool up, DataType &data_in, size_t min, size_t max);
+	static DataType	*	BSort(bool up, DataType *, size_t min, size_t max);
 
 	//*! Runs Bitonic Sort using a ThreadInfo object passed in.
 	/*!
 	  \param thread_info the ThreadInfo object of data to sort.
 	 */
-	static DataType 	BSort(ThreadInfo* thread_info);
+	static DataType *	BSort(ThreadInfo* thread_info);
 
 	//*! Runs Bitonic Sort directly sorting entire passed argument.
 	/*!
 	  \param up
 	  \param data_in the object getting sorted.
 	 */
-	static DataType 	BSort(bool up, DataType &data_in);
+	static DataType *	BSort(bool up, DataType *);
 
 	static void*		PBSort(void *);
 
-	static DataType		BMerge(bool up, DataType &data_in);
+	static DataType	*	BMerge(bool up, DataType *);
 
-	static void			BCompare(bool up, DataType &data_in);
+	static void			BCompare(bool up, DataType *);
 
 	struct arg_struct {
 		DataType data_in;
