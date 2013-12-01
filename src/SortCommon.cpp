@@ -8,22 +8,22 @@ SortCommon::~SortCommon() {
 }
 
 double SortCommon::BenchmarkSort(const DataType &data_in, const size_t num_threads) {
-	time_t start, stop;
-	double seconds;
+	double start, stop;
+	double usec;
 
 	// Create a copy of object to sort here.
 	DataType my_data (data_in);
 
 	// Get current time and run the sort.
-	time(&start);
+	start	= GetTime();
 	Sort(my_data, num_threads);
-	time(&stop);
-	seconds = difftime(stop, start);
+	stop	= GetTime();
+	usec 	= stop - start; 
 
 	if(CheckSort(my_data))
-		return seconds;
+		return usec;
 	else
-		return (-1.0) * seconds;
+		return (-1.0) * usec;
 }
 
 SortCommon::DataType SortCommon::NewData(size_t size) {
@@ -96,6 +96,14 @@ SortCommon::MinMaxVect SortCommon::buildPairs(size_t num_threads, size_t min, si
 
 	return retVal;
 
+}
+
+double SortCommon::GetTime()
+{
+	struct timeval t;
+	struct timezone tzp;
+	gettimeofday(&t, &tzp);
+	return t.tv_sec + t.tv_usec*1e-6;
 }
 
 

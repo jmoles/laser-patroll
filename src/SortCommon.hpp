@@ -11,6 +11,8 @@
 #include <pthread.h>
 
 #include <cstdlib>
+#include <sys/time.h>
+#include <sys/resource.h>
 
 #include "NumGen.cpp"
 
@@ -71,6 +73,7 @@ protected:
 	static MinMaxVect	buildPairs(size_t num_threads, size_t min, size_t max);
 
 private:
+	double 				GetTime();
 
 
 };
