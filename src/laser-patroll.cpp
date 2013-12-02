@@ -1,7 +1,7 @@
+#include <fstream>
 #include <iomanip>
 #include <iostream>
 #include <string>
-#include <vector>
 
 #include <boost/program_options.hpp>
 
@@ -9,6 +9,7 @@
 #include "BitonicSort.hpp"
 // #include "QuickSort.hpp"
 #include "MergeSort.hpp"
+#include "CSVTools.hpp"
 
 
 #define THREAD_START		1
@@ -51,7 +52,9 @@ int main(int argc, char * argv[])
 				"Number of threads to use for sorting.")
 			("sweep,z", po::value(&sweep)->zero_tokens(), 
 				"Runs sweep mode. Increment threads by 1 to <threads> and "
-				"multiple size from 10 by <gap>.");
+				"multiple size from 10 by <gap>.")
+			("file,f", po::value<std::string>(),
+				"File name to save output data in.");
 
 		po::options_description sweep_po("Sweep Options (Used only if <sweep> is set)");
 		sweep_po.add_options()
@@ -112,9 +115,14 @@ int main(int argc, char * argv[])
 
 		// Instantiate the sort classes.
 		//QuickSort					quick_sort;
-		MergeSort					merge_sort;
-		BasicSort					basic_sort;
-		BitonicSort					bio_sort;
+		MergeSort	*				merge_sort	= new MergeSort();
+		BasicSort	*				basic_sort	= new BasicSort();
+		BitonicSort	*				bio_sort	= new BitonicSort();
+
+		CSVTools    *				csv;
+
+		if(vm.count("file"))
+			csv = new CSVTools(vm["file"].as<std::string>());
 
 		// User has requested that data is swept.
 		for(size_t curr_thread = thread_init; curr_thread <= num_threads; curr_thread++)
@@ -128,15 +136,30 @@ int main(int argc, char * argv[])
 
 				SortCommon::DataType const * input_data = new SortCommon::DataType();
 				input_data = SortCommon::NewData(curr_size);
+
+				double basic_time	= basic_sort->
+					BenchmarkSort(input_data, curr_thread);
+				double bio_time		= bio_sort->
+					BenchmarkSort(input_data, curr_thread);
+				double merge_time	= merge_sort->
+					BenchmarkSort(input_data, curr_thread);
+
+				if( vm.count("file") )
+				{
+					csv->WriteResult(BasicSort::kTableKey, curr_thread,
+						curr_size, basic_time);
+					csv->WriteResult(BitonicSort::kTableKey, curr_thread,
+						curr_size, bio_time);
+					csv->WriteResult(MergeSort::kTableKey, curr_thread,
+						curr_size, merge_time);
+				}
+
 				std::cout << "Basic Sort Time:     " << std::fixed  <<
-					std::setw(FIELD_WIDTH) <<
-					basic_sort.BenchmarkSort(input_data, curr_thread) << std::endl;
+					std::setw(FIELD_WIDTH) << basic_time << std::endl;
 				std::cout << "Bitonic Sort Time:   " << std::fixed <<
-					std::setw(FIELD_WIDTH) <<
-					bio_sort.BenchmarkSort(input_data, curr_thread) << std::endl;
+					std::setw(FIELD_WIDTH) << bio_time << std::endl;
 				std::cout << "MergeSort Sort Time: " << std::fixed <<
-					std::setw(FIELD_WIDTH) <<
-					merge_sort.BenchmarkSort(input_data, curr_thread) << std::endl;
+					std::setw(FIELD_WIDTH) << merge_time << std::endl;
 
 				std::cout << std::endl;
 

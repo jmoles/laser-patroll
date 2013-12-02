@@ -20,6 +20,7 @@
 # Mac OSX
 *.DS_Store
 *.gch
+*.dSYM
 
 # Editor Files
 sftp-config.json
@@ -31,3 +32,4 @@ doc/report.pdf
 doc/include/IEEEtran.zip
 doc/include/IEEEtran
 doc/doxygen/
+*.csv
