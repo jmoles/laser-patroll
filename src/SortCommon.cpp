@@ -39,6 +39,16 @@ SortCommon::DataType * SortCommon::NewData(size_t size) {
 	return retdata;
 }
 
+void SortCommon::PrintDataType(const DataType * data_in, std::string title, bool line_before) {
+	if(line_before)
+		std::cout << std::endl;
+	std::cout << "Printing <" << title << "> : [";
+	for(DataType::const_iterator it = data_in->begin(); it != data_in->end(); ++it) {
+		std::cout << *it << ",";
+	}
+	std::cout << "]" << std::endl;
+}
+
 
 bool SortCommon::CheckSort(const DataType * data_in, const size_t orig_size) {
 
@@ -56,6 +66,11 @@ bool SortCommon::CheckSort(const DataType * data_in, const size_t orig_size) {
 
 	for(DataType::const_iterator it = data_in->begin(); it != data_in->end(); ++it) {
 		if(prevValue > *it) {
+			std::cout << "CheckSort failed. FYI, data_in is [";
+			for(DataType::const_iterator it = data_in->begin(); it != data_in->end(); ++it) {
+				std::cout << *it << ",";
+			}
+			std::cout << "]" << std::endl;
 			std::cout << std::endl << "CheckSort is returning false because " <<  prevValue << 
 				" is greater than " << *it << "." << std::endl;
 			return false;
@@ -119,6 +134,26 @@ SortCommon::MinMaxVect SortCommon::buildPairs(size_t num_threads, size_t min, si
 	return retVal;
 
 }
+
+SortCommon::MinMaxVect SortCommon::buildPow2Pairs(size_t num_threads, size_t min, size_t max)
+{
+	// First, determine how to get everything in a nice to split size.
+	double step_size;
+	size_t new_max = max;
+
+	step_size = ((double) (new_max - min + 1) ) / num_threads;
+
+	while(floor(log2(step_size)) != log2(step_size))
+	{
+		new_max++;
+
+		step_size = ((double) (new_max - min + 1) )/ num_threads;
+	}
+
+	return buildPairs(num_threads, min, new_max);
+
+}
+
 
 double SortCommon::GetTime()
 {

@@ -11,14 +11,16 @@ BitonicSort::~BitonicSort() {
 void BitonicSort::Sort(DataType * data_in, const threadCount num_threads)
 {
 
-	DataType * ret_val = new DataType();
+	DataType * ret_val  = new DataType();
 
 	if(num_threads > 1)
 	{
-
 		// Build the pairs of data to split up amongst all the threads.
 		MinMaxVect min_max_pairs;
-		min_max_pairs = buildPairs(num_threads, 0, data_in->size() - 1);
+		min_max_pairs = buildPow2Pairs(num_threads, 0, data_in->size() - 1);
+
+		// Pad the vector to be the correct length. It must be a power of two.
+		size_t pad_len = PadVector(data_in, min_max_pairs.back().second + 1);
 
 		// Prepare the infrastructure variables for threads.
 		std::vector<pthread_t> threads;
@@ -49,49 +51,79 @@ void BitonicSort::Sort(DataType * data_in, const threadCount num_threads)
 		// Now, use the Merge function in MergeSort to join all of the vectors together.
 		unsigned int max_level 	= ((unsigned int) std::ceil(log2(min_max_pairs.size())));
 
-		for(unsigned int i = 0; i < max_level; i++)
+		for(size_t i = 0; i < max_level; i++)
 		{
-			for(MinMaxVect::iterator it = min_max_pairs.begin(); it != min_max_pairs.end(); it++)
-			{
-				MinMaxVect::iterator low 	= it;
+            for(MinMaxVect::iterator it = min_max_pairs.begin(); it != min_max_pairs.end(); it++)
+            {
+            		size_t low_i, pivot_i, high_i;
 
-				size_t inc;
-				if(i == 0)
-					inc = 1;
-				else
-					inc = ( ( (size_t) pow(2,i + 1) ) - 1 );
+					MinMaxVect::iterator low         = it;
 
-				for (size_t j = 0; j < inc; j++)
-				{
-					it++;
-					if(it == min_max_pairs.end())
-						it--;
-				}
+					size_t inc;
+					if(i == 0)
+						inc = 1;
+					else
+						inc = ( ( (size_t) pow(2,i + 1) ) - 1 );
 
-				MinMaxVect::iterator high 	= it;
-				//std::cout << "Sort on [" << low->first << ", " << (low->first + high->second + 1) / 2 << ", " << high->second << "]" << std::endl;
-				MergeSort::Merge(ret_val, ret_val, low->first, (low->first + high->second + 1) / 2, high->second);
-			}
+					for (size_t j = 0; j < inc; j++)
+					{
+						it++;
+						if(it == min_max_pairs.end())
+						{
+							// Need to add a "phantom" element to the end that is just zeros and add padding.
+							// Then just remove the padding later.
+							it--;
+
+							// Build a min/max pair to add that would be the next in the list.
+							MinMaxPairsType temp_pair(it->second + 1, it->second + (it->second - it->first) + 1);
+							min_max_pairs.insert(min_max_pairs.end(), temp_pair);
+
+							// Determine the number of elements to add and actually add it.
+							size_t elem_to_add = (it->second - it->first) + 1;
+							pad_len += PadVector(ret_val, ret_val->size() + elem_to_add);
+
+							// Reset the iterator to the element we just added.
+							it = min_max_pairs.end() - 1;
+						}
+					}
+
+					MinMaxVect::iterator high = it;
+
+					// Set all of the indexes.
+					low_i	= low->first;
+					high_i	= high->second;
+					pivot_i	= (low->first + high->second + 1) / 2;
+
+					//std::cout << "Sort on [" << low_i << ", " << pivot_i << ", " << high_i << "]" << std::endl;
+					Merge(ret_val, ret_val, low_i, pivot_i, high_i);
+            }
 		}
+
+		UnpadVector(ret_val, pad_len);
+
+		data_in->swap(*ret_val);
 	}
 	else
 	{
+		// Need to make sure the length of data_in is a power of 2.
+		size_t pad_len = PadVector(data_in, (size_t) pow(2,ceil(log2(data_in->size()))));
+
+		// Actually perform the sort.
 		ret_val = BSort(true, data_in);
+		UnpadVector(ret_val, pad_len);
 
-
+		data_in->swap(*ret_val);
 	}
 
-	data_in->swap(*ret_val);
-
 	delete ret_val;
+
 
 }
 
 void* BitonicSort::PBSort(void *arguments)
 {
 	ThreadInfo* thread_info = (ThreadInfo*)arguments;
-	DataType * ret_val = new DataType();
-	ret_val = BSort(thread_info);
+	DataType * ret_val = BSort(thread_info);
 
 	// Swap the returned data in
 	pthread_mutex_lock(thread_info->mutex_);
@@ -124,8 +156,7 @@ BitonicSort::DataType * BitonicSort::BSort(bool up, DataType * data_in, size_t m
 	 	joined->insert(joined->end(), second->begin(), second->end());
 
 	 	// Merge them together and return the value.
-	 	DataType * ret_val = new DataType();
-	 	ret_val = BMerge(up, joined);
+	 	DataType * ret_val = BMerge(up, joined);
 
 	 	// Clean up data
 	 	delete first;
@@ -175,8 +206,8 @@ BitonicSort::DataType * BitonicSort::BMerge(bool up, DataType * data_in)
 		ret_val->insert(ret_val->end(), second->begin(), second->end());
 
 		// Clean up everything that is no longer needed.
-		delete sv1;
-		delete sv2;
+		delete first;
+		delete second;
 
 		return ret_val;
 	}
@@ -201,5 +232,72 @@ void BitonicSort::BCompare(bool up, DataType * data_in)
 		}
 
 	}
+}
+
+size_t BitonicSort::PadVector(DataType * const data_in, size_t new_length)
+{
+	size_t len_diff = new_length - data_in->size();
+
+	if(len_diff > 0)
+	{
+		data_in->insert(data_in->end(), len_diff, 0);
+	}
+
+	return len_diff;
+}
+
+void BitonicSort::UnpadVector(DataType * const data_in, size_t remove_count)
+{
+	data_in->erase(data_in->begin(), data_in->begin() + remove_count);
+}
+
+void BitonicSort::Merge(DataType * const src, DataType * dst, size_t low, size_t pivot, size_t high){
+    // Make a copy of source
+    DataType * const src_cpy = new DataType(*src);
+
+    // Create the iterators 
+    DataType::iterator i       = dst->begin() + low;
+    DataType::const_iterator h = src_cpy->begin() + low;
+    DataType::const_iterator j = src_cpy->begin() + pivot;
+
+    // Traverse through both areas until we get to the pivot point or the end.
+    while( h != src_cpy->begin() + pivot && j != src_cpy->begin() + high + 1 )
+    {
+    	if((*h) <= (*j))
+    	{
+    		(*i) = (*h);
+    		h++;
+    	}
+    	else
+    	{
+    		(*i) = (*j);
+    		j++;
+    	}
+
+    	i++;
+
+    }
+
+    // Have reached the pivot point or the end. Determine which we are at.
+    // If at pivot point on h, start where j left off and just grab other elements.
+    // Else, means h has leftovers and j finished. So start at h and grab
+    //   elements up to pivot.
+    if(h == src_cpy->begin() + pivot)
+    {
+    	for(DataType::const_iterator k = j; k != src_cpy->begin() + high + 1; k++ )
+    	{
+    		(*i) = (*k);
+    		i++;
+    	}
+
+    }
+    else
+    {
+    	for(DataType::const_iterator k = h; k != src_cpy->begin() + pivot; k++ )
+    	{
+    		(*i) = (*k);
+    		i++;
+    	}
+    }
 }
 

@@ -6,6 +6,7 @@
 #include <complex>
 #include <ctime>
 #include <iostream>
+#include <string>
 #include <utility>
 #include <vector>
 #include <pthread.h>
@@ -69,8 +70,12 @@ public:
 	 */
 	bool		CheckSort(const DataType * , const size_t);
 
+	static void			PrintDataType(const DataType *, std::string, bool = false);
+
 protected:
 	static MinMaxVect	buildPairs(size_t num_threads, size_t min, size_t max);
+
+	static MinMaxVect	buildPow2Pairs(size_t num_threads, size_t min, size_t max);
 
 private:
 	double 				GetTime();
