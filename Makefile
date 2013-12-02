@@ -16,7 +16,7 @@ HEADERS=$(wildcard src/*.hpp)
 DOC=doc/report.tex
 
 .PHONY: all
-all: laser-patroll doc/report.pdf 
+all: laser-patroll
 
 doc/report.pdf: $(DOC)
 	$(MAKE) -C doc
