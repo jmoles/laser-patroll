@@ -1,5 +1,7 @@
 #include "QuickSort.hpp"
 
+const std::string QuickSort::kTableKey    = "quick";
+const std::string QuickSort::kPrettyName  = "Quick Sort";
 
 QuickSort::QuickSort() {
 	

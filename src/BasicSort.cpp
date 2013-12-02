@@ -1,5 +1,7 @@
 #include "BasicSort.hpp"
 
+const std::string BasicSort::kTableKey    = "basic";
+const std::string BasicSort::kPrettyName  = "Basic Sort";
 
 BasicSort::BasicSort() {
 	

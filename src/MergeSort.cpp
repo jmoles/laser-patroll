@@ -1,5 +1,8 @@
 #include "MergeSort.hpp"
 
+const std::string MergeSort::kTableKey    = "merge";
+const std::string MergeSort::kPrettyName  = "Merge Sort";
+
 // default constructor/destructors
 MergeSort::MergeSort() {}
 MergeSort::~MergeSort() {}
@@ -117,5 +120,3 @@ void MergeSort::Sort(DataType * data_in, const threadCount num_threads){
     data_in->swap(*dst);    
     free(dst);
 }
-
-

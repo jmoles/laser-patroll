@@ -1,5 +1,8 @@
 #include "BitonicSort.hpp"
 
+const std::string BitonicSort::kTableKey    = "bitonic";
+const std::string BitonicSort::kPrettyName  = "Bitonic Sort";
+
 BitonicSort::BitonicSort() {
 
 }

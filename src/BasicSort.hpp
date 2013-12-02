@@ -30,6 +30,12 @@ public:
 	 */
 	void		Sort(DataType * , const threadCount );
 
+	//*! Unique table key to identify items from this class.
+	static const std::string kTableKey;
+
+	//*! Unique pretty name to print information related to this class
+	static const std::string kPrettyName;
+
 private:
 
 

@@ -34,6 +34,12 @@ public:
 
 	static void  Merge(DataType * src, DataType * dst, size_t low, size_t pivot, size_t high);
 
+	//*! Unique table key to identify items from this class.
+	static const std::string kTableKey;
+
+	//*! Unique pretty name to print information related to this class
+	static const std::string kPrettyName;
+
 private:
         static void*  Thread_MSort(void*);
 

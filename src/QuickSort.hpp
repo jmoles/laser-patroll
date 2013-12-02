@@ -28,6 +28,12 @@ public:
 	 */
 	void  Sort(DataType * data_in, const threadCount num_threads);
 
+	//*! Unique table key to identify items from this class.
+	static const std::string kTableKey;
+
+	//*! Unique pretty name to print information related to this class
+	static const std::string kPrettyName;
+
 private:
 	//*! Recursive algorithm called by "Sort".
 	/*!
