@@ -30,7 +30,7 @@ void CSVTools::WriteResult(std::string name, size_t threads, size_t size, double
 void CSVTools::OpenFile()
 {
 	if(!os_.is_open())
-		os_.open(file_name_, DEFAULT_OUTPUT_MODE);
+		os_.open(file_name_.c_str(), DEFAULT_OUTPUT_MODE);
 
 	if(!header_wrote_ && os_.good())
 	{

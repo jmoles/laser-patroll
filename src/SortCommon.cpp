@@ -67,8 +67,8 @@ bool SortCommon::CheckSort(const DataType * data_in, const size_t orig_size) {
 	for(DataType::const_iterator it = data_in->begin(); it != data_in->end(); ++it) {
 		if(prevValue > *it) {
 			std::cout << "CheckSort failed. FYI, data_in is [";
-			for(DataType::const_iterator it = data_in->begin(); it != data_in->end(); ++it) {
-				std::cout << *it << ",";
+			for(DataType::const_iterator it_fail = data_in->begin(); it_fail != data_in->end(); ++it_fail) {
+				std::cout << *it_fail << ",";
 			}
 			std::cout << "]" << std::endl;
 			std::cout << std::endl << "CheckSort is returning false because " <<  prevValue << 
