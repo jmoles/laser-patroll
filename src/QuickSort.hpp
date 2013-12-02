@@ -26,7 +26,7 @@ public:
 	/*!
 	  \param data_in the object getting sorted.
 	 */
-	void  Sort(DataType &data_in, const threadCount num_threads);
+	void  Sort(DataType * data_in, const threadCount num_threads);
 
 private:
 	//*! Recursive algorithm called by "Sort".
@@ -35,7 +35,7 @@ private:
 	  \param left leftmost index of the region to sort.
 	  \param right rightmost index of the region to sort.
 	 */
-	void RecursiveSort(DataType &data_in, size_t left, size_t right);
+	void RecursiveSort(DataType * data_in, size_t left, size_t right);
 
 
 
