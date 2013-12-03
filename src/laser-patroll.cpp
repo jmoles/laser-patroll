@@ -37,6 +37,7 @@ int main(int argc, char * argv[])
 		namespace po = boost::program_options;
 		po::variables_map vm;
 		bool sweep;
+		bool no_bitonic, no_merge, no_basic;
 
 		// Add options here
 		po::options_description generic("Program Options");
@@ -65,8 +66,18 @@ int main(int argc, char * argv[])
 				po::value<size_t>()->default_value(SIZE_START),
 				"The initial data size to use in sweep mode.");
 
+		po::options_description tests_po("Exclude Tests:");
+		tests_po.add_options()
+			("basic", po::value(&no_basic)->zero_tokens(),
+				"Excludes basic sort from tests.")
+			("bitonic", po::value(&no_bitonic)->zero_tokens(),
+				"Excludes bitonic sort from tests.")
+			("merge", po::value(&no_merge)->zero_tokens(),
+				"Excludes merge sort from tests.");
+
+
 		po::options_description cmd_line_options;
-		cmd_line_options.add(generic).add(configuration).add(sweep_po);
+		cmd_line_options.add(generic).add(configuration).add(sweep_po).add(tests_po);
 
 		// Try to parse the input parameters.
 		try {
@@ -137,29 +148,44 @@ int main(int argc, char * argv[])
 				SortCommon::DataType const * input_data = new SortCommon::DataType();
 				input_data = SortCommon::NewData(curr_size);
 
-				double basic_time	= basic_sort->
-					BenchmarkSort(input_data, curr_thread);
-				double bio_time		= bio_sort->
-					BenchmarkSort(input_data, curr_thread);
-				double merge_time	= merge_sort->
-					BenchmarkSort(input_data, curr_thread);
-
-				if( vm.count("file") )
+				if(!no_basic)
 				{
-					csv->WriteResult(BasicSort::kTableKey, curr_thread,
-						curr_size, basic_time);
-					csv->WriteResult(BitonicSort::kTableKey, curr_thread,
-						curr_size, bio_time);
-					csv->WriteResult(MergeSort::kTableKey, curr_thread,
-						curr_size, merge_time);
+					double basic_time	= basic_sort->
+						BenchmarkSort(input_data, curr_thread);
+					if( vm.count("file") )
+					{
+						csv->WriteResult(BasicSort::kTableKey, curr_thread,
+							curr_size, basic_time);
+					}
+					std::cout << "Basic Sort Time:     " << std::fixed  <<
+						std::setw(FIELD_WIDTH) << basic_time << std::endl;
 				}
 
-				std::cout << "Basic Sort Time:     " << std::fixed  <<
-					std::setw(FIELD_WIDTH) << basic_time << std::endl;
-				std::cout << "Bitonic Sort Time:   " << std::fixed <<
-					std::setw(FIELD_WIDTH) << bio_time << std::endl;
-				std::cout << "MergeSort Sort Time: " << std::fixed <<
-					std::setw(FIELD_WIDTH) << merge_time << std::endl;
+				if(!no_bitonic)
+				{
+					double bio_time		= bio_sort->
+						BenchmarkSort(input_data, curr_thread);
+					if( vm.count("file") )
+					{
+						csv->WriteResult(BitonicSort::kTableKey, curr_thread,
+							curr_size, bio_time);
+					}
+					std::cout << "Bitonic Sort Time:   " << std::fixed <<
+						std::setw(FIELD_WIDTH) << bio_time << std::endl;
+				}
+
+				if(!no_merge)
+				{
+					double merge_time	= merge_sort->
+						BenchmarkSort(input_data, curr_thread);
+					if( vm.count("file") )
+					{
+						csv->WriteResult(MergeSort::kTableKey, curr_thread,
+							curr_size, merge_time);
+					}
+					std::cout << "MergeSort Sort Time: " << std::fixed <<
+						std::setw(FIELD_WIDTH) << merge_time << std::endl;
+				}
 
 				std::cout << std::endl;
 
