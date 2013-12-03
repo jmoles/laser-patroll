@@ -29,6 +29,7 @@ public:
 	 */
 	void  Sort(DataType &data_in, const TheadCount num_threads);
 
+    static void Merge(DataType &src, DataType &dst, size_t low, size_t pivot, size_t high);
 private:
 	//*! Recursive algorithm called by "Sort".
 	/*!
@@ -38,7 +39,6 @@ private:
 	 */
 	static void QRSort(DataType &data_in, DataType &dst, const unsigned int num_threads, size_t left, size_t right);
      static  void * Thread_Work(void * args);
-    static void Merge(DataType &src, DataType &dst, size_t low, size_t pivot, size_t high);
 };
 
 #endif

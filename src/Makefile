@@ -6,7 +6,7 @@ all: MergeSort.o PQuickSort.o BasicSort.o ThreadInfo.o SortCommon.o BitonicSort.
 MergeSort.o: MergeSort.cpp MergeSort.hpp
 	$(CXX) $(CXXFLAGS) -c MergeSort.cpp
 
-PQuickSort.o: QuickSort.cpp QuickSort.hpp
+PQuickSort.o: PQuickSort.cpp PQuickSort.hpp
 	$(CXX) $(CXXFLAGS) -c PQuickSort.cpp
 
 BasicSort.o: BasicSort.cpp BasicSort.hpp
