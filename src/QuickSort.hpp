@@ -35,14 +35,6 @@ public:
 	static const std::string kPrettyName;
 
 private:
-	//*! Recursive algorithm called by "Sort".
-	/*!
-	  \param data_in the object getting sorted
-	  \param left leftmost index of the region to sort.
-	  \param right rightmost index of the region to sort.
-	 */
-	void RecursiveSort(DataType * data_in, size_t left, size_t right);
-
 
 
 };
