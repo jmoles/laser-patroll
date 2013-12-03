@@ -7,22 +7,30 @@ else
 	INC= 
 endif
 
-CXXFLAGS=-Wall -g
+CXXFLAGS=-Wall
 LDLIBS=-lboost_program_options -lpthread
+
+CXX_DEBUG_FLAGS=-g3 -DDEBUG_ALL
+CXX_RELEASE_FLAGS=-O3
 
 OBJS=src/BasicSort.o src/ThreadInfo.o src/BitonicSort.o src/NumGen.o src/SortCommon.o src/QuickSort.o src/MergeSort.o src/CSVTools.o
 SOURCES=$(wildcard src/*.cpp)
 HEADERS=$(wildcard src/*.hpp)
 DOC=doc/report.tex
 
-.PHONY: all
-all: laser-patroll
+.PHONY: release
+release: CXXFLAGS+=$(CXX_RELEASE_FLAGS)
+release: laser-patroll
+
+.PHONY: debug
+debug: CXXFLAGS+=$(CXX_DEBUG_FLAGS)
+debug: laser-patroll
 
 doc/report.pdf: $(DOC)
 	$(MAKE) -C doc
 
 laser-patroll: src/laser-patroll.cpp $(OBJS)
-	$(CXX) $(CXXFLAGS) $(INC) $(LDFLAGS) $(LDLIBS) -o laser-patroll src/laser-patroll.cpp $(OBJS)
+	$(CXX) $(CXXFLAGS) $(INC) $(LDFLAGS) $(LDLIBS) -o $@ src/laser-patroll.cpp $(OBJS)
 
 $(OBJS): $(SOURCES) $(HEADERS)
 	$(MAKE) -C src CXXFLAGS='$(CXXFLAGS)' CXX='$(CXX)' INC='$(INC)' LDFLAGS='$(LDFLAGS)' LDLIBS='$(LDLIBS)' all
