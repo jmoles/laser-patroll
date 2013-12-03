@@ -16,3 +16,6 @@ void QuickSort::Sort(DataType * data_in, const threadCount num_threads) {
 
 }
 
+QuickSort::DataType * QuickSort::QSort(DataType * data_in) {
+
+}

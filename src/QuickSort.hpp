@@ -35,6 +35,7 @@ public:
 	static const std::string kPrettyName;
 
 private:
+	DataType * QSort(DataType * data_in);
 
 
 };
