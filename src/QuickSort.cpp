@@ -32,8 +32,8 @@ void QuickSort::QSort(DataType * data_in, size_t left, size_t right) {
       j--;
     if (i <= j) {
       tmp = data_in->at(i);
-      data_in->at(i) = data_in->at(j);
-      data_in->at(j) = tmp;
+      (*data_in)[i] = data_in->at(j);
+      (*data_in)[j] = tmp;
       i++;
       j--;
     }
