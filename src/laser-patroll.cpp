@@ -36,8 +36,10 @@ int main(int argc, char * argv[])
 		// Setup and configure the input parser.
 		namespace po = boost::program_options;
 		po::variables_map vm;
-		bool sweep;
-		bool no_bitonic, no_merge, no_basic;
+		bool sweep 		= false;
+		bool no_bitonic = false;
+		bool no_merge 	= false;
+		bool no_basic 	= false;
 
 		// Add options here
 		po::options_description generic("Program Options");
@@ -130,7 +132,7 @@ int main(int argc, char * argv[])
 		BasicSort	*				basic_sort	= new BasicSort();
 		BitonicSort	*				bio_sort	= new BitonicSort();
 
-		CSVTools    *				csv;
+		CSVTools    *				csv         = NULL;
 
 		if(vm.count("file"))
 			csv = new CSVTools(vm["file"].as<std::string>());
