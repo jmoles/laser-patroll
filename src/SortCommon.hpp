@@ -60,7 +60,7 @@ public:
 	  \param size the number of elements to get created in the ranom data object.
 	  \returns A DataType object.
 	 */
-	static DataType	*	NewData(size_t size);
+	static DataType	*	NewData(size_t size, bool ordered=false, bool reverse=false);
 
 	//*! Confirms that a DataType object is sorted and returns true or false.
 	/*!

@@ -30,10 +30,19 @@ double SortCommon::BenchmarkSort(const DataType *data_in, const size_t num_threa
 		return (-1.0) * usec;
 }
 
-SortCommon::DataType * SortCommon::NewData(size_t size) {
+SortCommon::DataType * SortCommon::NewData(size_t size, bool ordered, bool reverse) {
 	DataType * retdata = new DataType(size);
 
 	std::generate(retdata->begin(), retdata->end(), NumGen(0));
+
+	if(ordered)
+		return retdata;
+
+	std::reverse(retdata->begin(), retdata->end());
+
+	if(reverse)
+		return retdata;
+
 	std::random_shuffle(retdata->begin(), retdata->end());
 
 	return retdata;
