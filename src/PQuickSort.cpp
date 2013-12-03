@@ -24,12 +24,11 @@ void PQuickSort::QRSort(DataType &data_in, DataType &dst, const unsigned int num
   size_t pivot = (left + right) / 2;
   size_t thread_Lside, thread_Rside;
   thread_amount = num_threads;
-  while (i <= j) 
+  while (i < j) 
   {
     if(!thread_amount)
     {
-      if (j==1) cout << "WOAH!!!";
-      while (i <= j)
+      while (i < j)
       {
       while (data_in[i] < pivot)
         i++;
@@ -40,21 +39,21 @@ void PQuickSort::QRSort(DataType &data_in, DataType &dst, const unsigned int num
         cout << "inside while data_in[j] > pivot. I = " << i << " J = " << j << endl;
         cout.flush();
       }
-      if (i <= j) 
+      if (i < j) 
       {
         tmp = data_in[i];
         data_in[i] = data_in[j];
         data_in[j] = tmp;
         i++;
         j--;
-        cout << "inside if (i <= j). I = " << i << " J = " << j << endl;
-        cout.flush();
+     //   cout << "inside if (i <= j). I = " << i << " J = " << j << endl;
+     //   cout.flush();
       }
       if (left < j)
       {
-        cout << "inside if (left < j). I = " << i << " J = " << j << endl;
-        cout << "right = " << right << endl;
-        cout.flush();
+      //  cout << "inside if (left < j). I = " << i << " J = " << j << endl;
+      //  cout << "right = " << right << endl;
+      //  cout.flush();
       QRSort(data_in, dst, thread_amount, left, j);
 
         //      QRSort(data_in, dst, thread_amount, left, pivot);
@@ -62,9 +61,9 @@ void PQuickSort::QRSort(DataType &data_in, DataType &dst, const unsigned int num
       }
       if (i < right)
       {
-        cout << "inside if (i < right). I = " << i << " J = " << j << endl;
-        cout << "left  = " << left << endl;
-        cout.flush();
+      //  cout << "inside if (i < right). I = " << i << " J = " << j << endl;
+      //  cout << "left  = " << left << endl;
+     //   cout.flush();
         QRSort(data_in, dst, thread_amount, i, right); 
      } 
     }
