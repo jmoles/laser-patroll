@@ -26,8 +26,6 @@ void PQuickSort::QRSort(DataType &data_in, DataType &dst, const unsigned int num
   thread_amount = num_threads;
   while (i < j) 
   {
-    if(!thread_amount)
-    {
       while (i < j)
       {
       while (data_in[i] < pivot)
@@ -66,7 +64,6 @@ void PQuickSort::QRSort(DataType &data_in, DataType &dst, const unsigned int num
      //   cout.flush();
         QRSort(data_in, dst, thread_amount, i, right); 
      } 
-    }
     }
     else {
       thread_amount--;
