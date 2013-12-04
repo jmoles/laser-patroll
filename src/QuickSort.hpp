@@ -36,8 +36,8 @@ public:
 
 private:
 void  QSort(DataType * data_in, size_t left, size_t right);
-
-
+static size_t CheckIncBound(DataType * data_in, size_t i);
+static size_t CheckDecBound(DataType * data_in, size_t j);
 };
 
 #endif
