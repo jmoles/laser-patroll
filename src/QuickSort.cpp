@@ -55,17 +55,17 @@ void QuickSort::QSort(DataType * data_in, size_t left, size_t right) {
     }
     else
     {
-     return ++i;
+      return ++i;
     }
   }
 
   size_t QuickSort::CheckDecBound(DataType * data_in, size_t j){
     if (j == 0)
     {
-    return  data_in->size() - 1;
+      return  data_in->size() - 1;
     }
     else
     {
-    return --j;
+      return --j;
     }
   }
