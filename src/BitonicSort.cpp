@@ -23,18 +23,15 @@ void BitonicSort::Sort(DataType * data_in, const threadCount num_threads)
 		// Pad the vector to be the correct length. It must be a power of two.
 		size_t pad_len = PadVector(data_in, min_max_pairs.back().second + 1);
 
-		// Prepare the infrastructure variables for threads.
+		// Vector to hold all of the threads that are running.
 		std::vector<pthread_t> threads;
-		pthread_mutex_t * vector_mutex = new pthread_mutex_t;
-		pthread_mutex_init(vector_mutex, NULL);
 
 		// Prepare and actually run the threads for the sort.	
 		for(MinMaxVect::iterator it = min_max_pairs.begin(); it != min_max_pairs.end(); it++)
 		{
 			pthread_t 	curr_thread;
 			
-
-			ThreadInfo * curr_thread_info = new ThreadInfo(it->first, it->second, data_in, NULL, 0, vector_mutex);
+			ThreadInfo * curr_thread_info = new ThreadInfo(it->first, it->second, data_in);
 
 			pthread_create(&curr_thread, NULL, &PBSort, curr_thread_info);
 			threads.push_back(curr_thread);
@@ -42,12 +39,9 @@ void BitonicSort::Sort(DataType * data_in, const threadCount num_threads)
 
 		for(unsigned int i = 0; i < threads.size(); i++)
 		{
-			// TODO: Probably don't want to use NULL here. Add some return value to help out.
+			// Join each of the threads.
 			pthread_join(threads[i], NULL);
 		}
-
-		// Get rid of the mutex.
-		pthread_mutex_destroy(vector_mutex);
 
 		// Now, use the Merge function in MergeSort to join all of the vectors together.
 		unsigned int max_level 	= ((unsigned int) std::ceil(log2(min_max_pairs.size())));
@@ -120,7 +114,9 @@ void* BitonicSort::PBSort(void *arguments)
 	ThreadInfo* thread_info = (ThreadInfo*)arguments;
 	BSort(thread_info);
 
-	pthread_exit((void *) 0);
+	delete thread_info;
+
+	pthread_exit((void *) NULL);
 }
 
 void BitonicSort::BSort(bool up, DataType * data_in, size_t min, size_t max)
@@ -247,5 +243,7 @@ void BitonicSort::Merge(DataType * const src, DataType * dst, size_t low, size_t
     		i++;
     	}
     }
+
+    delete src_cpy;
 }
 

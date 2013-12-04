@@ -147,8 +147,7 @@ int main(int argc, char * argv[])
 				std::cout << "Data Size:           " << 
 					std::setw(FIELD_WIDTH) <<  curr_size << std::endl;
 
-				SortCommon::DataType const * input_data = new SortCommon::DataType();
-				input_data = SortCommon::NewData(curr_size);
+				SortCommon::DataType const * input_data = new SortCommon::DataType(curr_size);
 
 				if(!no_basic)
 				{
@@ -194,6 +193,12 @@ int main(int argc, char * argv[])
 				delete input_data;
 			}
 		}
+
+		delete merge_sort;
+		delete basic_sort;
+		delete bio_sort;
+		delete csv;
+
 		return SUCCESS;
 
 	}

@@ -118,5 +118,5 @@ void MergeSort::Sort(DataType * data_in, const threadCount num_threads){
 
     // data_in needs to have sorted data upon finish
     data_in->swap(*dst);    
-    free(dst);
+    delete dst;
 }
