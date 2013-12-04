@@ -6,10 +6,12 @@
 #include <ctime>
 #include <iostream>
 #include <vector>
-
+#include <pthread.h>
 #include <cstdlib>
 
 #include "SortCommon.hpp"
+#include "ThreadInfo.hpp"
+#include "MergeSort.hpp"
 
 /*! Basic sorting class providing the framework for benchmarking the sorting algorithms
  *  as well as the basic histogram sort.
@@ -35,9 +37,11 @@ class QuickSort : public SortCommon {
     static const std::string kPrettyName;
 
   private:
-    void  QSort(DataType * data_in, size_t left, size_t right);
+  static  void * Thread_work(void*);
+  static  void  QSort(DataType * data_in, DataType * dst, const unsigned int num_threads, size_t left, size_t right);
     static size_t CheckIncBound(DataType * data_in, size_t i);
     static size_t CheckDecBound(DataType * data_in, size_t j);
+  static void Merge(DataType * const src, DataType * dst, size_t left, size_t pivot, size_t right);
 };
 
 #endif
