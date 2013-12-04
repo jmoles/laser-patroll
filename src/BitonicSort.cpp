@@ -14,8 +14,6 @@ BitonicSort::~BitonicSort() {
 void BitonicSort::Sort(DataType * data_in, const threadCount num_threads)
 {
 
-	DataType * ret_val  = new DataType();
-
 	if(num_threads > 1)
 	{
 		// Build the pairs of data to split up amongst all the threads.
@@ -36,7 +34,7 @@ void BitonicSort::Sort(DataType * data_in, const threadCount num_threads)
 			pthread_t 	curr_thread;
 			
 
-			ThreadInfo * curr_thread_info = new ThreadInfo(it->first, it->second, data_in, ret_val, 0, vector_mutex);
+			ThreadInfo * curr_thread_info = new ThreadInfo(it->first, it->second, data_in, NULL, 0, vector_mutex);
 
 			pthread_create(&curr_thread, NULL, &PBSort, curr_thread_info);
 			threads.push_back(curr_thread);
@@ -83,7 +81,7 @@ void BitonicSort::Sort(DataType * data_in, const threadCount num_threads)
 
 							// Determine the number of elements to add and actually add it.
 							size_t elem_to_add = (it->second - it->first) + 1;
-							pad_len += PadVector(ret_val, ret_val->size() + elem_to_add);
+							pad_len += PadVector(data_in, data_in->size() + elem_to_add);
 
 							// Reset the iterator to the element we just added.
 							it = min_max_pairs.end() - 1;
@@ -98,13 +96,12 @@ void BitonicSort::Sort(DataType * data_in, const threadCount num_threads)
 					pivot_i	= (low->first + high->second + 1) / 2;
 
 					//std::cout << "Sort on [" << low_i << ", " << pivot_i << ", " << high_i << "]" << std::endl;
-					Merge(ret_val, ret_val, low_i, pivot_i, high_i);
+					Merge(data_in, data_in, low_i, pivot_i, high_i);
             }
 		}
 
-		UnpadVector(ret_val, pad_len);
+		UnpadVector(data_in, pad_len);
 
-		data_in->swap(*ret_val);
 	}
 	else
 	{
@@ -112,124 +109,72 @@ void BitonicSort::Sort(DataType * data_in, const threadCount num_threads)
 		size_t pad_len = PadVector(data_in, (size_t) pow(2,ceil(log2(data_in->size()))));
 
 		// Actually perform the sort.
-		ret_val = BSort(true, data_in);
-		UnpadVector(ret_val, pad_len);
+		BSort(true, data_in);
+		UnpadVector(data_in, pad_len);
 
-		data_in->swap(*ret_val);
 	}
-
-	delete ret_val;
-
-
 }
 
 void* BitonicSort::PBSort(void *arguments)
 {
 	ThreadInfo* thread_info = (ThreadInfo*)arguments;
-	DataType * ret_val = BSort(thread_info);
-
-	// Swap the returned data in
-	pthread_mutex_lock(thread_info->mutex_);
-	thread_info->dst_->insert(thread_info->dst_->end(), ret_val->begin(), ret_val->end());
-	pthread_mutex_unlock(thread_info->mutex_);
-
-	delete ret_val;
+	BSort(thread_info);
 
 	pthread_exit((void *) 0);
 }
 
-BitonicSort::DataType * BitonicSort::BSort(bool up, DataType * data_in, size_t min, size_t max)
+void BitonicSort::BSort(bool up, DataType * data_in, size_t min, size_t max)
 {
-	if((max - min) <= 0)
-	{
-		DataType * ret_val = new DataType(1, data_in->at(min));
-		return ret_val;
-	}
-	else
+	if((max - min) > 0)
 	{
 		size_t avg = ((min + max + 1) / 2);
 
-		DataType * first  = BSort(true, data_in, min, avg - 1);
-		DataType * second = BSort(false, data_in, avg, max);
-
-		// Concatenate the two vectors together.
-		DataType * joined = new DataType();
-		joined->reserve(first->size() + second->size());
-		joined->insert(joined->end(), first->begin(), first->end());
-	 	joined->insert(joined->end(), second->begin(), second->end());
+		BSort(true, data_in, min, avg - 1);
+		BSort(false, data_in, avg, max);
 
 	 	// Merge them together and return the value.
-	 	DataType * ret_val = BMerge(up, joined);
-
-	 	// Clean up data
-	 	delete first;
-	 	delete second;
-	 	delete joined;
-
-	 	return ret_val;
+	 	BMerge(up, data_in, min, max);
 	}
 }
 
-BitonicSort::DataType * BitonicSort::BSort(ThreadInfo* thread_info) 
+void BitonicSort::BSort(ThreadInfo* thread_info) 
 {
-	return BSort(true, thread_info->data_, thread_info->min_, thread_info->max_);
+	BSort(true, thread_info->data_, thread_info->min_, thread_info->max_);
 }
 
-BitonicSort::DataType * BitonicSort::BSort(bool up, DataType * data_in)
+void BitonicSort::BSort(bool up, DataType * data_in)
 {
-	return BSort(up, data_in, 0, data_in->size() - 1);
+	BSort(up, data_in, 0, data_in->size() - 1);
 }
 
-BitonicSort::DataType * BitonicSort::BMerge(bool up, DataType * data_in)
+void BitonicSort::BMerge(bool up, DataType * data_in, size_t min, size_t max)
 {
-	const size_t size_of_data_in = data_in->size();
-
-	if(size_of_data_in == 1)
+	if(min != max)
 	{
-		return data_in;
-	}
-	else
-	{
-		BCompare(up, data_in);
+		size_t avg = (min + max + 1) / 2;
 
-		// Create two sub-vectors to store the data temporarily.
-		DataType * sv1 = new DataType();
-		DataType * sv2 = new DataType();
-		sv1->insert(sv1->begin(), data_in->begin(), data_in->begin() + size_of_data_in / 2);
-		sv2->insert(sv2->begin(), data_in->begin() + size_of_data_in / 2, data_in->end());
+		BCompare(up, data_in, min, max);
 
 		// Build the first and second vector with BMerge.
-		DataType * first = BMerge(up, sv1);
-		DataType * second = BMerge(up, sv2);
+		BMerge(up, data_in, min, avg - 1);
+		BMerge(up, data_in, avg, max);
 
-		// Join the two Vectors together
-		DataType * ret_val = new DataType();
-		ret_val->reserve(first->size() + second->size());
-		ret_val->insert(ret_val->end(), first->begin(), first->end());
-		ret_val->insert(ret_val->end(), second->begin(), second->end());
-
-		// Clean up everything that is no longer needed.
-		delete first;
-		delete second;
-
-		return ret_val;
 	}
 }
 
-void BitonicSort::BCompare(bool up, DataType * data_in)
+void BitonicSort::BCompare(bool up, DataType * data_in, size_t min, size_t max)
 {
-	const size_t dist = data_in->size() / 2;
+	const size_t dist = (min + max + 1) / 2;
 
-	for(size_t i = 0; i < dist; i++)
+	for(size_t i = min; i < dist; i++)
 	{
-
-		if((data_in->at(i) > data_in->at(i + dist)) == up)
+		if((data_in->at(i) > data_in->at(i + dist - min)) == up)
 		{
 			// Swap the elements
 			ContainType d1 = data_in->at(i);
-			ContainType d2 = data_in->at(i + dist);
+			ContainType d2 = data_in->at(i + dist - min);
 
-			(*data_in)[i + dist] = d1;
+			(*data_in)[i + dist - min] = d1;
 			(*data_in)[i]        = d2;
 
 		}
