@@ -23,7 +23,7 @@ class SortCommon {
 
 public:
 
-	typedef long unsigned int ContainType;
+	typedef unsigned int ContainType;
 	typedef std::vector<ContainType> DataType;
 
 	typedef std::pair<size_t, size_t>		MinMaxPairsType;
