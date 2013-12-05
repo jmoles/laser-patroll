@@ -9,7 +9,11 @@
 
 #include <cstdlib>
 
+#include <pthread.h>
+
 #include "SortCommon.hpp"
+#include "BitonicSort.hpp"
+#include "ThreadInfo.hpp"
 
 /*! Basic sorting class providing the framework for benchmarking the sorting algorithms
  *  as well as the basic histogram sort.
@@ -35,9 +39,10 @@ class QuickSort : public SortCommon {
     static const std::string kPrettyName;
 
   private:
-    void  QSort(DataType * data_in, size_t left, size_t right);
-    static size_t CheckIncBound(DataType * data_in, size_t i);
-    static size_t CheckDecBound(DataType * data_in, size_t j);
+    static void  QSort(DataType * data_in, size_t left, size_t right);
+    static void* PQSort(void * arguments);
+    static size_t CheckIncBound(size_t max, size_t i, size_t min);
+    static size_t CheckDecBound(size_t max, size_t j, size_t min);
 };
 
 #endif

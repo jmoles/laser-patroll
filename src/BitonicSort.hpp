@@ -30,6 +30,23 @@ public:
 	//*! Unique pretty name to print information related to this class
 	static const std::string kPrettyName;
 
+	//*! Pads the end of a vector to the requested size.
+	/*!
+	  \param data_in pointer to the vector to get padded.
+	  \param new_length desired size of the vector for padding.
+	  \returns The number of elements that had to get added to meet the requested size.
+	 */
+	static size_t 		PadVector(DataType * const, size_t);
+
+	//*! Removes the padding of a vector often applied by PadVector.
+	/*!
+	  \param data_in pointer to the vector to remove padding.
+	  \param remove_count number of elements to remove from the front of the vector.
+	 */
+	static void 		UnpadVector(DataType * const, size_t);
+
+	static void			Merge(DataType * const src, DataType * dst, size_t low, size_t pivot, size_t high);
+
 private:
 	//*! Runs Bitonic Sort by directly modifying passed argument.
 	/*!
@@ -59,22 +76,9 @@ private:
 
 	static void			BCompare(bool up, DataType *, size_t min, size_t max);
 
-	//*! Pads the end of a vector to the requested size.
-	/*!
-	  \param data_in pointer to the vector to get padded.
-	  \param new_length desired size of the vector for padding.
-	  \returns The number of elements that had to get added to meet the requested size.
-	 */
-	static size_t 		PadVector(DataType * const, size_t);
 
-	//*! Removes the padding of a vector often applied by PadVector.
-	/*!
-	  \param data_in pointer to the vector to remove padding.
-	  \param remove_count number of elements to remove from the front of the vector.
-	 */
-	static void 		UnpadVector(DataType * const, size_t);
 
-	static void			Merge(DataType * const src, DataType * dst, size_t low, size_t pivot, size_t high);
+
 
 };
 
