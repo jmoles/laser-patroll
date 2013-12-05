@@ -109,7 +109,7 @@ void QuickSort::Sort(DataType *data_in, const threadCount num_threads )
 
     DataType *dst = new DataType(data_in->size(), 0);
     QSort(data_in, 0, data_in->size() - 1);
-    free(dst);
+    delete dst;
 }
 
 void *QuickSort::PQSort(void *arguments)

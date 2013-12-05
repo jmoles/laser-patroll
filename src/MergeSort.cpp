@@ -14,7 +14,7 @@ void *MergeSort::Thread_MSort(void *args)
 
     MSort(a->data_, a->dst_, a->remain_threads_, a->min_, a->max_);
 
-    return NULL;
+    pthread_exit((void *) NULL);
 
 }
 

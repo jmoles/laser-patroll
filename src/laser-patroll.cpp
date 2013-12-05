@@ -218,6 +218,7 @@ int main(int argc, char *argv[])
             }
         }
 
+        delete quick_sort;
         delete merge_sort;
         delete basic_sort;
         delete bio_sort;
