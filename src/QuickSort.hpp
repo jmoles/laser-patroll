@@ -16,35 +16,28 @@
  */
 class QuickSort : public SortCommon {
 
-public:
+  public:
 
-	QuickSort();
+    QuickSort();
 
-	~QuickSort();
+    ~QuickSort();
 
-	//*! Runs a basic quicksort, directly modifying the passed argument.
-	/*!
-	  \param data_in the object getting sorted.
-	 */
-	void  Sort(DataType * data_in, const threadCount num_threads);
+    //*! Runs a basic quicksort, directly modifying the passed argument.
+    /*!
+      \param data_in the object getting sorted.
+      */
+    void  Sort(DataType * data_in, const threadCount num_threads);
 
-	//*! Unique table key to identify items from this class.
-	static const std::string kTableKey;
+    //*! Unique table key to identify items from this class.
+    static const std::string kTableKey;
 
-	//*! Unique pretty name to print information related to this class
-	static const std::string kPrettyName;
+    //*! Unique pretty name to print information related to this class
+    static const std::string kPrettyName;
 
-private:
-	//*! Recursive algorithm called by "Sort".
-	/*!
-	  \param data_in the object getting sorted
-	  \param left leftmost index of the region to sort.
-	  \param right rightmost index of the region to sort.
-	 */
-	void RecursiveSort(DataType * data_in, size_t left, size_t right);
-
-
-
+  private:
+    void  QSort(DataType * data_in, size_t left, size_t right);
+    static size_t CheckIncBound(DataType * data_in, size_t i);
+    static size_t CheckDecBound(DataType * data_in, size_t j);
 };
 
 #endif

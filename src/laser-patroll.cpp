@@ -7,7 +7,7 @@
 
 #include "BasicSort.hpp"
 #include "BitonicSort.hpp"
-// #include "QuickSort.hpp"
+#include "QuickSort.hpp"
 #include "MergeSort.hpp"
 #include "CSVTools.hpp"
 
@@ -36,10 +36,11 @@ int main(int argc, char * argv[])
 		// Setup and configure the input parser.
 		namespace po = boost::program_options;
 		po::variables_map vm;
-		bool sweep 		= false;
-		bool no_bitonic = false;
-		bool no_merge 	= false;
-		bool no_basic 	= false;
+		bool sweep 			= false;
+		bool no_bitonic 	= false;
+		bool no_merge 		= false;
+		bool no_basic 		= false;
+		bool no_quicksort 	= false;
 
 		// Add options here
 		po::options_description generic("Program Options");
@@ -75,7 +76,9 @@ int main(int argc, char * argv[])
 			("bitonic", po::value(&no_bitonic)->zero_tokens(),
 				"Excludes bitonic sort from tests.")
 			("merge", po::value(&no_merge)->zero_tokens(),
-				"Excludes merge sort from tests.");
+				"Excludes merge sort from tests.")
+			("quicksort", po::value(&no_quicksort)->zero_tokens(),
+				"Excludes quick sort from tests.");
 
 
 		po::options_description cmd_line_options;
@@ -127,7 +130,7 @@ int main(int argc, char * argv[])
 		}
 
 		// Instantiate the sort classes.
-		//QuickSort					quick_sort;
+		QuickSort	*				quick_sort	= new QuickSort();
 		MergeSort	*				merge_sort	= new MergeSort();
 		BasicSort	*				basic_sort	= new BasicSort();
 		BitonicSort	*				bio_sort	= new BitonicSort();
@@ -186,6 +189,19 @@ int main(int argc, char * argv[])
 					}
 					std::cout << "MergeSort Sort Time: " << std::fixed <<
 						std::setw(FIELD_WIDTH) << merge_time << std::endl;
+				}
+
+				if(!no_quicksort)
+				{
+					double quick_time	= quick_sort->
+						BenchmarkSort(input_data, curr_thread);
+					if( vm.count("file") )
+					{
+						csv->WriteResult(QuickSort::kTableKey, curr_thread,
+							curr_size, quick_time);
+					}
+					std::cout << "QuickSort Sort Time: " << std::fixed <<
+						std::setw(FIELD_WIDTH) << quick_time << std::endl;
 				}
 
 				std::cout << std::endl;
