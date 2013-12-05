@@ -70,7 +70,7 @@ int main(int argc, char *argv[])
          po::value<size_t>()->default_value(SIZE_START),
          "The initial data size to use in sweep mode.");
 
-        po::options_description tests_po("Exclude Tests:");
+        po::options_description tests_po("Exclude Tests");
         tests_po.add_options()
         ("basic", po::value(&no_basic)->zero_tokens(),
          "Excludes basic sort from tests.")
