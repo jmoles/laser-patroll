@@ -75,7 +75,7 @@ void QuickSort::Sort(DataType * data_in, const threadCount num_threads ) {
 
               // Determine the number of elements to add and actually add it.
               size_t elem_to_add = (it->second - it->first) + 1;
-              pad_len += BitonicSort::PadVector(data_in, data_in->size() + elem_to_add);
+              pad_len += PadVector(data_in, data_in->size() + elem_to_add);
 
               // Reset the iterator to the element we just added.
               it = min_max_pairs.end() - 1;
@@ -90,11 +90,11 @@ void QuickSort::Sort(DataType * data_in, const threadCount num_threads ) {
           pivot_i = (low->first + high->second + 1) / 2;
 
           //std::cout << "Sort on [" << low_i << ", " << pivot_i << ", " << high_i << "]" << std::endl;
-          BitonicSort::Merge(data_in, data_in, low_i, pivot_i, high_i);
+          Merge(data_in, data_in, low_i, pivot_i, high_i);
             }
     }
 
-    BitonicSort::UnpadVector(data_in, pad_len);
+    UnpadVector(data_in, pad_len);
 
   }
   else
@@ -119,8 +119,8 @@ void* QuickSort::PQSort(void * arguments)
 
 void QuickSort::QSort(DataType * data_in, size_t left, size_t right) {
   size_t i = left, j = right;
-  SortCommon::ContainType tmp;
-  SortCommon::ContainType pivot_point = (left + right)/2;
+  ContainType tmp;
+  ContainType pivot_point = (left + right)/2;
 
   // If there is only one element, simply return.
   if(left == right)

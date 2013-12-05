@@ -163,6 +163,75 @@ SortCommon::MinMaxVect SortCommon::buildPow2Pairs(size_t num_threads, size_t min
 
 }
 
+size_t SortCommon::PadVector(DataType * const data_in, size_t new_length)
+{
+	size_t len_diff = new_length - data_in->size();
+
+	if(len_diff > 0)
+	{
+		data_in->insert(data_in->end(), len_diff, 0);
+	}
+
+	return len_diff;
+}
+
+void SortCommon::UnpadVector(DataType * const data_in, size_t remove_count)
+{
+	data_in->erase(data_in->begin(), data_in->begin() + remove_count);
+}
+
+void SortCommon::Merge(DataType * const src, DataType * dst, size_t low, size_t pivot, size_t high){
+    // Make a copy of source
+    DataType * const src_cpy = new DataType(*src);
+
+    // Create the iterators 
+    DataType::iterator i       = dst->begin() + low;
+    DataType::const_iterator h = src_cpy->begin() + low;
+    DataType::const_iterator j = src_cpy->begin() + pivot;
+
+    // Traverse through both areas until we get to the pivot point or the end.
+    while( h != src_cpy->begin() + pivot && j != src_cpy->begin() + high + 1 )
+    {
+    	if((*h) <= (*j))
+    	{
+    		(*i) = (*h);
+    		h++;
+    	}
+    	else
+    	{
+    		(*i) = (*j);
+    		j++;
+    	}
+
+    	i++;
+
+    }
+
+    // Have reached the pivot point or the end. Determine which we are at.
+    // If at pivot point on h, start where j left off and just grab other elements.
+    // Else, means h has leftovers and j finished. So start at h and grab
+    //   elements up to pivot.
+    if(h == src_cpy->begin() + pivot)
+    {
+    	for(DataType::const_iterator k = j; k != src_cpy->begin() + high + 1; k++ )
+    	{
+    		(*i) = (*k);
+    		i++;
+    	}
+
+    }
+    else
+    {
+    	for(DataType::const_iterator k = h; k != src_cpy->begin() + pivot; k++ )
+    	{
+    		(*i) = (*k);
+    		i++;
+    	}
+    }
+
+    delete src_cpy;
+}
+
 
 double SortCommon::GetTime()
 {

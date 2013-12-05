@@ -12,7 +12,6 @@
 #include <pthread.h>
 
 #include "SortCommon.hpp"
-#include "BitonicSort.hpp"
 #include "ThreadInfo.hpp"
 
 /*! Basic sorting class providing the framework for benchmarking the sorting algorithms
