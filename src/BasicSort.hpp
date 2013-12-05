@@ -16,25 +16,26 @@
 /*! Basic sorting class providing the framework for benchmarking the sorting algorithms
  *  as well as the basic histogram sort.
  */
-class BasicSort : public SortCommon {
+class BasicSort : public SortCommon
+{
 
 public:
 
-	BasicSort();
+    BasicSort();
 
-	~BasicSort();
+    ~BasicSort();
 
-	//*! Runs std::sort directly modifying the passed argument.
-	/*!
-	  \param data_in the object getting sorted.
-	 */
-	void		Sort(DataType * , const threadCount );
+    //*! Runs std::sort directly modifying the passed argument.
+    /*!
+      \param data_in the object getting sorted.
+     */
+    void        Sort(DataType *, const threadCount );
 
-	//*! Unique table key to identify items from this class.
-	static const std::string kTableKey;
+    //*! Unique table key to identify items from this class.
+    static const std::string kTableKey;
 
-	//*! Unique pretty name to print information related to this class
-	static const std::string kPrettyName;
+    //*! Unique pretty name to print information related to this class
+    static const std::string kPrettyName;
 
 private:
 
