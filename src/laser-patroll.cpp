@@ -22,7 +22,7 @@
 #define FIELD_WIDTH         10
 
 #define PROG_NAME           "Laser Patroll Sorting Benchmark Application"
-#define VERSION_STRING      "Version: 1.0"
+#define VERSION_STRING      "Version: v1.0.0"
 
 // Potential return values.
 const int SUCCESS                   = 0;
