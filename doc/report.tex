@@ -69,7 +69,10 @@
 % manually specify the path to it like:
 % \documentclass[journal]{../sty/IEEEtran}
 
-
+\usepackage{url}
+\usepackage{pgfplots}  % Used to produce graphs.
+\usepackage{pgfplotstable} % Used to make graphs from reading tables.
+\usepackage{datatool}  % Used to read CSV and make simple table.
 
 
 
@@ -388,12 +391,12 @@
 % correct bad hyphenation here
 \hyphenation{op-tical net-works semi-conduc-tor}
 
-
+\linespread{2}
 \begin{document}
 %
 % paper title
 % can use linebreaks \\ within to get better formatting as desired
-\title{Bare Demo of IEEEtran.cls for Journals}
+\title{Laser Patroll Final Report}
 %
 %
 % author names and IEEE memberships
@@ -405,14 +408,13 @@
 % was not built to handle multiple paragraphs
 %
 
-\author{Michael~Shell,~\IEEEmembership{Member,~IEEE,}
-        John~Doe,~\IEEEmembership{Fellow,~OSA,}
-        and~Jane~Doe,~\IEEEmembership{Life~Fellow,~IEEE}% <-this % stops a space
-\thanks{M. Shell is with the Department
-of Electrical and Computer Engineering, Georgia Institute of Technology, Atlanta,
-GA, 30332 USA e-mail: (see http://www.michaelshell.org/contact.html).}% <-this % stops a space
-\thanks{J. Doe and J. Doe are with Anonymous University.}% <-this % stops a space
-\thanks{Manuscript received April 19, 2005; revised January 11, 2007.}}
+\author{Eric~Krause,~\IEEEmembership{Griddle~Master,~Breakfast~Confectionery~Guild,}
+        Josh~Moles,~\IEEEmembership{Waffle~Stomper,~Breakfast~Confectionery~Guild,}
+        and~Erik~Rhodes,~\IEEEmembership{Eggtravagent~Chef,~Breakfast~Confectionery~Guild}% <-this % stops a space
+\thanks{E. Krause is a master of the arts of pancake capture at the Guild.}% <-this % stops a space
+\thanks{J. Moles enjoys the art of waffle design.}% <-this % stops a space
+\thanks{E. Rhodes does not understand why eggs are not more common in everyone's daily life.}%
+\thanks{Manuscript completed for 10 December 2013.}}
 
 % note the % following the last \IEEEmembership and also \thanks - 
 % these prevent an unwanted space from occurring between the last author name
@@ -435,7 +437,7 @@ GA, 30332 USA e-mail: (see http://www.michaelshell.org/contact.html).}% <-this %
 
 
 % The paper headers
-\markboth{Journal of \LaTeX\ Class Files,~Vol.~6, No.~1, January~2007}%
+\markboth{Journal of Doctor Robotnik Baking through Sorting,~Vol.~19,No.~2, December~2013}%
 {Shell \MakeLowercase{\textit{et al.}}: Bare Demo of IEEEtran.cls for Journals}
 % The only time the second header will appear is for the odd numbered pages
 % after the title page when using the twoside option.
@@ -468,7 +470,8 @@ GA, 30332 USA e-mail: (see http://www.michaelshell.org/contact.html).}% <-this %
 
 \begin{abstract}
 %\boldmath
-The abstract goes here.
+%TODO: Abstract needs expanding once paper is completed.
+This work discusses a benchmarking of four sort algorithms tested against each other for a Portland State University ECE 588 project. The four sorts tested were C++'s \texttt{std::sort}, quick sort, merge sort, and bitonic sort.
 \end{abstract}
 % IEEEtran.cls defaults to using nonbold math in the Abstract.
 % This preserves the distinction between vectors and scalars. However,
@@ -479,7 +482,7 @@ The abstract goes here.
 
 % Note that keywords are not normally used for peerreview papers.
 \begin{IEEEkeywords}
-IEEEtran, journal, \LaTeX, paper, template.
+soting, bitonic sort, quick sort, merge sort, class.
 \end{IEEEkeywords}
 
 
@@ -515,16 +518,121 @@ IEEEtran, journal, \LaTeX, paper, template.
 % 
 % Here we have the typical use of a "T" for an initial drop letter
 % and "HIS" in caps to complete the first word.
-\IEEEPARstart{T}{his} demo file is intended to serve as a ``starter file''
-for IEEE journal papers produced under \LaTeX\ using
-IEEEtran.cls version 1.7 and later.
+
+% TODO: Probably want to expand this intro.
+\IEEEPARstart{S}{orting} is an important task that is often performed on sets of data. This report discusses the work done by Laser Patroll (sic) for a team project at Portland State University for the course ECE 588. The project was focused around sorting a list of arbitrary elements through various methods and benchmarking each of the algorithms against each other. The four algorithms benchmarked and discussed in this report the C++ std::sort, Quick Sort, Merge Sort, and Bitonic Sort (TODO: CITE ALL OF THESE). In this report, we present an overview of the sorting algorithms in Section~\ref{sec:sorting}, the C++ testing framework designed to check the sorted data and gather results in Section~\ref{sec:testing}, and the results of the four algorithms in Section~\ref{sec:results}.
+
+%TODO: Talk about how we picked these algorithms.
+
 % You must have at least 2 lines in the paragraph with the drop letter
 % (should never be an issue)
-I wish you the best of success.
 
-\hfill mds
- 
-\hfill January 11, 2007
+
+\section{Sorting Algorithms}
+\label{sec:sorting}
+This section will discuss the four sorting algorithms run.
+
+\subsection{Basic Sort}
+%TODO: Expand std::sort description. It apparently uses a introspective sort and heapsort, maybe? Should cite.
+Basic sort was implemented by simply passing the data array to \texttt{std::sort}. In no case was it executed in a parallel fashion.
+
+\subsection{Quick Sort}
+%TODO: Put diagram for this sort.
+%TODO: Talk about how data was split for threading.
+
+\subsection{Merge Sort}
+%TODO: Put diagram for this sort.
+%TODO: Talk about how data was split for threading.
+
+\subsection{Bitonic Sort}
+%TODO: Put diagram for this sort.
+%TODO: Talk about how data was split for threading.
+
+\section{Testing Framework}
+\label{sec:testing}
+
+C++ was selected as the language to implement the testing framework and all the sorting algorithms because of the relative ease and ubiquity of tools to compile for the language. The framework had the following objectives for its design:
+
+\begin{itemize}
+\item A common path to benchmark each function to ensure timing is measured consistently.
+\item Re-usability of common tasks between the sort algorithms.
+\item Common call to a Sort function allow blind usage of sort only passing the number of threads and a vector of data.
+\item Ability to swap object that data for sorting was stored in easily.
+\end{itemize}
+
+%TODO: Figure
+These goals were accomplished through an object oriented set of classes. A common \texttt{SortCommon} class was the parent of all the sort algorithms and contained the means to benchmark an algorithm, generate an unsorted data vector, check if a given set of data is sorted or not, divide set of data using domain decomposition, merging, and padding (used by Bitonic). Each of the sort functions were free to do the sort by any reasonable means necessary. The requirements were that the only two inputs the Sort gets is a set of data and the number of threads it is allowed to divide the data up across. Figure XX shows the layout of these classes and the overall framework.
+
+The algorithm was to sort the data in place (or at least modify the pointer to the new set of data) so that the benchmark function can then validate that the data was sorted. All four of the algorithms did the sort in place (modified the passed in data directly) or created a ``destination'' data set and then swapped the pointer of the two at the end. Memory utilization can become an issue with sets of data this large so copying or making copies of large subsets of the data was not performed in the algorithms.
+
+C++'s \texttt{std::vector} filled with \texttt{unsigned int} was used as the storage object and data type for each of the algorithms. A \texttt{std::vector} is an efficient, dynamically linked list that was selected over an array for the ability to have an easily growing and shrinking memory space (in case an algorithm selected to do an operation involving such a task). We also feel that the C++ compiler can do a better job optimizing the use of a \texttt{std::vector} in our code compared to the relatively manual task of memory management in an array.
+
+The benchmark function prepared a given set of data to pass to the virtual \texttt{Sort} function implemented by each algorithm. The benchmark function also verified that the data was actually sorted when the \texttt{Sort} function returned. The function only ran the timer for a benchmark of an algorithm during the \texttt{Sort} call portion of the testing. This was done to ensure that any overhead tasks performed by the benchmark function itself does not add to the time a given sort runs.
+
+Data could be generated in a few different patterns depending on the type of sort desired for benchmarking. The three options available were a set of data that is actually in order, a set of data that is in complete reverse, and a set of data that was completely random. The first two were used primarily for verification and testing of aspects of the algorithm. The third (random) set of data was used for all testing shown Section~\ref{sec:results} of the report.
+
+The data was checked for sorting using a single-threaded function to look through the elements. The function simply started at the front of the data and moved through all of the elements. If it found an element that was greater than the previous element (in other words, not sorted), the function would multiply the time it took for the sort to run by $-1$ and print a warning stating that the data was not sorted.
+
+A few other other utility functions were also in the \texttt{SortCommon} class. A function that would take the length of the data and how many threads to divide the work amongst would return a \texttt{std::vector} containing a \texttt{std::pair} of the minimum and maximum index for a given thread to perform the sorting on. Bitonic and quick sort used this in the functional decomposition of the data, but merge used its own algorithm. For bitonic, the data and the number of threads had to be a power of two without modification. A padding and unpadding function is also added to pad zeros to the data in the event the user requests a sort on data that does not meet the power of two requirement for bitonic.
+
+% TODO: Add valgrind citation, listing, and note about what the results mean.
+The code was also checked with valgrind to verify that there were no memory leaks. Listing XX shows the output from valgrind.
+
+GitHub was also used for revision control. This entire project is available for download at \url{http://github.com/jmoles/laser-patroll/}. Doxygen is also commented in-line to generate a set of HTML and PDF documentation for the project.
+
+%TODO: Mention:
+% Code having no memory leaks.
+
+
+\section{Results}
+\label{sec:results}
+%TODO: Things to mention.
+% - Bitonic time with padding if not power of two.
+% - Add the four charts that were shown in the presentation.
+
+This section provides the results for the tests of the algorithms. Two different types of tests will be presented. The first is showing the amount of time it took each algorithm to sort with a varying number of threads and constant data size. The other shows the total time all four algorithms took to execute and then percentage of that total time that each algorithm took to run plotting for a constant number of threads and a varying data size.
+
+It is important to note that throughout all of these tests, anything labeled as ``basic'' is \texttt{std::sort} running in a \textbf{serial} fashion. We did not wrap any parallelization around \texttt{std::sort} so that each of the algorithms are evaluated against the sort that would likely be used in C++.
+
+The first series are in Figure~\ref{fig:tvtlg} for a data set of size 134,217,728 elements and Figure~\ref{fig:tvtsm} for a data set of size 512 elements. These tests aimed to see how each algorithm performs with an increasing number of threads both with a small set of data and a large set of data. Ideally, each algorithm should get faster as the number of threads it has available to perform work increases.
+
+% TODO: Why does quick sort do what it does?
+Looking first at the large data set, merge sort follows the ideal situation quite well and starts to reach a limit in execution time as it gets to the end. Quick sort seems fairly flat over the execution regardless of the number of threads allocated to it. This could be a results of the domain decomposition model of splitting up the work and bringing it back together. As the number of threads increases, there is a final merge that only merges two sets of data at a time. This could result in this final merge occupying more time. 
+
+Bitonic is affected by the same merge issue; however, it has another factor slowing it down. Bitonic shows an average trend of decreasing execution time, but it is susceptible to the requirement that the data and threads must be a power of two. As a result, bitonic performs the best on the situations where the number of threads is a power of two and begins to slow down as it increases from a power of two, peaking one value right before the next power of two.  
+%TODO: Small data execution results for size.
+%TODO: Single threaded case is missing on the plot.
+
+
+\begin{figure}[!t]
+  \centering
+  %\includegraphics[width=2.5in]{myfigure}
+  \caption{Time vs Threads Large Data}
+  \label{fig:tvtlg}
+\end{figure}
+
+\begin{figure}[!t]
+  \centering
+  %\includegraphics[width=2.5in]{myfigure}
+  \caption{Time vs Threads Small Data}
+  \label{fig:tvtsm}
+\end{figure}
+
+%TOOO/Note: Do these second series even show anything of value? Should we produce something else? Thoughts?
+
+\begin{figure}[!t]
+  \centering
+  %\includegraphics[width=2.5in]{myfigure}
+  \caption{Time Percentage Four Threads}
+  \label{fig:timeperfour}
+\end{figure}
+
+\begin{figure}[!t]
+  \centering
+  %\includegraphics[width=2.5in]{myfigure}
+  \caption{Time Percentage Twenty Four Threads}
+  \label{fig:timepertwentyfour}
+\end{figure}
 
 \subsection{Subsection Heading Here}
 Subsection text here.
@@ -708,22 +816,25 @@ H.~Kopka and P.~W. Daly, \emph{A Guide to \LaTeX}, 3rd~ed.\hskip 1em plus
 %\begin{biography}[{\includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{mshell}}]{Michael Shell}
 % or if you just want to reserve a space for a photo:
 
-\begin{IEEEbiography}{Michael Shell}
-Biography text here.
+\begin{IEEEbiography}{Eric Krause}
+%TODO: Type Eric's contribution.
+bio
 \end{IEEEbiography}
 
 % if you will not have a photo at all:
-\begin{IEEEbiographynophoto}{John Doe}
+\begin{IEEEbiography}{Josh Moles}
+%TODO: Type Josh's Bio
 Biography text here.
-\end{IEEEbiographynophoto}
+\end{IEEEbiography}
 
 % insert where needed to balance the two columns on the last page with
 % biographies
 %\newpage
 
-\begin{IEEEbiographynophoto}{Jane Doe}
-Biography text here.
-\end{IEEEbiographynophoto}
+\begin{IEEEbiography}{Erik Rhodes}
+%TODO: Erik's bio
+bio
+\end{IEEEbiography}
 
 % You can push biographies down or up by placing
 % a \vfill before or after them. The appropriate

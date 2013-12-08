@@ -1,4 +1,11 @@
 TEXINPUTSPATHS=.:$(TEXINPUTS):include/IEEEtran
+UNAME:=$(shell uname -s)
+
+ifeq ($(UNAME), Darwin)
+	VIEWER=open
+else
+	VIEWER=evince
+endif
 
 report.pdf: include/IEEEtran report.tex
 	TEXINPUTS=$(TEXINPUTSPATHS) pdflatex report.tex
@@ -10,6 +17,10 @@ include/IEEEtran:
 doxygen/html/index.html: Doxyfile
 	mkdir -p doxygen
 	doxygen Doxyfile
+
+.PHONY: show
+show: report.pdf
+	$(VIEWER) report.pdf
 
 
 
