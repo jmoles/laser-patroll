@@ -1,4 +1,4 @@
-TEXINPUTSPATHS=.:$(TEXINPUTS):include/IEEEtran
+TEXINPUTSPATHS=.:$(TEXINPUTS):include/IEEEtran:../src/
 UNAME:=$(shell uname -s)
 
 ifeq ($(UNAME), Darwin)
@@ -7,7 +7,7 @@ else
 	VIEWER=evince
 endif
 
-report.pdf: include/IEEEtran report.tex manualsources.bib mendeleysources.bib
+report.pdf: include/IEEEtran report.tex manualsources.bib mendeleysources.bib valgrind.out
 	TEXINPUTS=$(TEXINPUTSPATHS) pdflatex report
 	TEXINPUTS=$(TEXINPUTSPATHS) bibtex report
 	TEXINPUTS=$(TEXINPUTSPATHS) pdflatex report

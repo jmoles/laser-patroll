@@ -73,6 +73,7 @@
 \usepackage{pgfplots}  % Used to produce graphs.
 \usepackage{pgfplotstable} % Used to make graphs from reading tables.
 \usepackage{datatool}  % Used to read CSV and make simple table.
+\usepackage{listings}  % Show source code.
 
 
 
@@ -99,7 +100,41 @@
 % have to be run twice to clear warning/error messages.
 
 
+% *** SOURCE CODE (LISTINGS) SETUP ***
+\lstloadlanguages{C++} % Load Perl syntax for listings, for a list of other languages supported see: ftp://ftp.tex.ac.uk/tex-archive/macros/latex/contrib/listings/listings.pdf
+\lstset{language=C++, % Use Perl in this example
+        frame=single, % Single frame around code
+        basicstyle=\small\ttfamily, % Use small true type font
+        identifierstyle=, % Nothing special about identifiers                                         
+        commentstyle=\usefont{T1}{pcr}{m}{sl}\color{MyDarkGreen}\small, % Comments small dark green courier font
+        showstringspaces=false, % Don't put marks in string spaces
+        tabsize=4, % 4 spaces per tab
+        %
+        numbers=left, % Line numbers on left
+        firstnumber=1, % Line numbers start with line 1
+        stepnumber=5, % Line numbers go in steps of 5
+        breaklines=true,
+        float=*, % Make listing span both columns.
+        lineskip=-1ex % Make the list listings single spaced by undoing 2x spacing
+}
 
+\newcommand{\cppcode}[2]{
+\begin{figure*}
+\lstinputlisting[language=C++,caption=#2,label=#1]{#1.cpp}
+\end{figure*}
+}
+
+\newcommand{\hppcode}[2]{
+\begin{figure*}
+\lstinputlisting[language=C++,caption=#2,label=#1]{#1.hpp}
+\end{figure*}
+}
+
+\newcommand{\bashout}[2]{
+\begin{figure*}
+\lstinputlisting[language=bash,caption=#2,label=#1]{#1.out}
+\end{figure*}
+}
 
 
 
@@ -471,7 +506,7 @@
 \begin{abstract}
 %\boldmath
 %TODO: Abstract needs expanding once paper is completed.
-This work discusses a benchmarking of four sort algorithms tested against each other for a Portland State University ECE 588 project. The four sorts tested were C++'s \texttt{\texttt{std::sort}}, Quicksort, Merge sort, and Bitonic sort.
+This work discusses a benchmarking of four sort algorithms tested against each other for a Portland State University ECE 588 project. The four sorts tested were C++'s \texttt{std::sort}, Quicksort, Merge sort, and Bitonic sort.
 \end{abstract}
 % IEEEtran.cls defaults to using nonbold math in the Abstract.
 % This preserves the distinction between vectors and scalars. However,
@@ -540,18 +575,18 @@ The four algorithms benchmarked and discussed in this report are the C++ \texttt
 This section will discuss the four sorting algorithms run.
 
 \subsection{Basic Sort}
-%TODO: Expand \texttt{std::sort} description. It apparently uses a introspective sort and heapsort, maybe? Should cite.
-Basic sort was implemented by simply passing the data array to \texttt{\texttt{std::sort}}. In no case was it executed in a parallel fashion.
+%TODO: Expand std::sort description. It apparently uses a introspective sort and heapsort, maybe? Should cite.
+Basic sort was implemented by simply passing the data array to \texttt{std::sort}. In no case was it executed in a parallel fashion.
 
-\subsection{Quicksort}
+\subsection{Quick Sort}
 %TODO: Put diagram for this sort.
 %TODO: Talk about how data was split for threading.
 
-\subsection{Merge sort}
+\subsection{Merge Sort}
 %TODO: Put diagram for this sort.
 %TODO: Talk about how data was split for threading.
 
-\subsection{Bitonic sort}
+\subsection{Bitonic Sort}
 %TODO: Put diagram for this sort.
 %TODO: Talk about how data was split for threading.
 
@@ -582,8 +617,9 @@ The data was checked for sorting using a single-threaded function to look throug
 
 A few other other utility functions were also in the \texttt{SortCommon} class. A function that would take the length of the data and how many threads to divide the work amongst would return a \texttt{std::vector} containing a \texttt{std::pair} of the minimum and maximum index for a given thread to perform the sorting on. Bitonic and Quicksort used this in the functional decomposition of the data, but merge used its own algorithm. For bitonic, the data and the number of threads had to be a power of two without modification. A padding and unpadding function is also added to pad zeros to the data in the event the user requests a sort on data that does not meet the power of two requirement for bitonic.
 
-% TODO: Add valgrind citation, listing, and note about what the results mean.
-The code was also checked with valgrind to verify that there were no memory leaks. Listing XX shows the output from valgrind.
+The code was also checked with valgrind to verify that there were minimal memory leaks. Listing~\ref{valgrind} shows the output from valgrind. The listing shows that the code frees everything of concern (definitely lost).
+
+\bashout{valgrind}{Valgrind Output}
 
 GitHub was also used for revision control. This entire project is available for download at \url{http://github.com/jmoles/laser-patroll/}. Doxygen is also commented in-line to generate a set of HTML and PDF documentation for the project.
 
@@ -599,7 +635,7 @@ GitHub was also used for revision control. This entire project is available for 
 
 This section provides the results for the tests of the algorithms. Two different types of tests will be presented. The first is showing the amount of time it took each algorithm to sort with a varying number of threads and constant data size. The other shows the total time all four algorithms took to execute and then percentage of that total time that each algorithm took to run plotting for a constant number of threads and a varying data size.
 
-It is important to note that throughout all of these tests, anything labeled as ``basic'' is \texttt{\texttt{std::sort}} running in a \textbf{serial} fashion. We did not wrap any parallelization around \texttt{\texttt{std::sort}} so that each of the algorithms are evaluated against the sort that would likely be used in C++.
+It is important to note that throughout all of these tests, anything labeled as ``basic'' is \texttt{std::sort} running in a \textbf{serial} fashion. We did not wrap any parallelization around \texttt{std::sort} so that each of the algorithms are evaluated against the sort that would likely be used in C++.
 
 The first series are in Figure~\ref{fig:tvtlg} for a data set of size 134,217,728 elements and Figure~\ref{fig:tvtsm} for a data set of size 512 elements. These tests aimed to see how each algorithm performs with an increasing number of threads both with a small set of data and a large set of data. Ideally, each algorithm should get faster as the number of threads it has available to perform work increases.
 
@@ -611,35 +647,35 @@ Bitonic is affected by the same merge issue; however, it has another factor slow
 %TODO: Single threaded case is missing on the plot.
 
 
-\begin{figure}[!t]
+\begin{figure*}[!t]
   \centering
-  %\includegraphics[width=2.5in]{myfigure}
+  \includegraphics[width=0.7\textwidth]{tvtlg}
   \caption{Time vs Threads Large Data}
   \label{fig:tvtlg}
-\end{figure}
+\end{figure*}
 
-\begin{figure}[!t]
+\begin{figure*}[!t]
   \centering
-  %\includegraphics[width=2.5in]{myfigure}
+  \includegraphics[width=0.7\textwidth]{tvtsm}
   \caption{Time vs Threads Small Data}
   \label{fig:tvtsm}
-\end{figure}
+\end{figure*}
 
 %TOOO/Note: Do these second series even show anything of value? Should we produce something else? Thoughts?
 
-\begin{figure}[!t]
+\begin{figure*}[!t]
   \centering
   %\includegraphics[width=2.5in]{myfigure}
   \caption{Time Percentage Four Threads}
   \label{fig:timeperfour}
-\end{figure}
+\end{figure*}
 
-\begin{figure}[!t]
+\begin{figure*}[!t]
   \centering
   %\includegraphics[width=2.5in]{myfigure}
   \caption{Time Percentage Twenty Four Threads}
   \label{fig:timepertwentyfour}
-\end{figure}
+\end{figure*}
 
 \subsection{Subsection Heading Here}
 Subsection text here.
@@ -739,6 +775,47 @@ Subsubsection text here.
 The conclusion goes here.
 
 
+
+\section{Lorem}
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nec dictum massa. Phasellus ornare massa congue mi sodales suscipit. Maecenas tristique volutpat porttitor. Quisque venenatis rutrum orci ac auctor. Vestibulum ullamcorper, purus eu tempus malesuada, tellus felis lobortis risus, vel tincidunt felis nunc ut sem. Mauris iaculis tellus non mauris laoreet, sit amet viverra turpis pharetra. Curabitur hendrerit aliquam nunc a elementum. Quisque leo quam, fringilla hendrerit tristique non, consectetur nec elit. Fusce tristique lobortis vestibulum. Nam id dictum libero. Quisque eget lectus commodo nibh egestas consectetur sed vitae elit. Nulla id purus urna.
+
+Etiam hendrerit a diam nec feugiat. Praesent non ultricies est, ac pellentesque neque. Vestibulum eu libero lectus. Vestibulum id justo vitae libero consequat auctor. Mauris et posuere lorem. Etiam sed tincidunt purus. Fusce ac felis arcu. Sed sit amet mi vel enim faucibus porta. Praesent et tincidunt nulla. Nunc tincidunt ligula in lacus posuere, fermentum tempus sapien convallis. Quisque eu lectus fermentum, bibendum dui luctus, aliquet neque. Curabitur a magna fringilla, semper ligula eget, interdum dolor. Etiam aliquet dui sit amet metus faucibus, id tempor metus gravida. Vestibulum nec nibh eu elit imperdiet cursus a sed tortor.
+
+Duis congue fermentum libero vitae feugiat. Quisque vel libero sit amet magna euismod tristique. Sed luctus elit eget sem vehicula consequat. Proin vitae metus erat. Curabitur nisl nisl, ultrices vitae diam faucibus, condimentum volutpat velit. Proin semper nisi nec fringilla aliquet. Pellentesque ante ligula, tempor id placerat vel, tincidunt eget arcu. Sed facilisis accumsan felis, eu scelerisque leo consequat ac. Cras sed pellentesque urna, quis placerat neque. Vivamus rutrum, elit elementum posuere tristique, neque urna imperdiet massa, at interdum velit lorem sit amet neque. Donec fringilla nibh dui, in egestas sapien tempus non. Fusce venenatis, est in gravida dictum, sapien purus sollicitudin dui, eu porttitor nibh sem eu lacus. Mauris quis luctus massa.
+
+Sed luctus turpis nulla, ut faucibus sapien congue id. Vestibulum vestibulum neque vitae luctus consectetur. Nullam tempor non nisi sit amet dictum. Cras auctor semper tortor eget pretium. Ut eu ultrices dolor. Donec ac lectus eget dui semper rhoncus eu et tortor. Nulla eu eros vel turpis imperdiet fermentum ut pretium nisi. Sed eget nunc pretium, consequat nulla in, sagittis massa. Fusce nec dictum tellus. Fusce lobortis erat risus, in fringilla turpis molestie a. Nam commodo nulla leo, vitae semper enim dictum a. Suspendisse a suscipit purus. Quisque in metus at metus aliquet iaculis.
+
+Aliquam fermentum urna sem, at dapibus massa luctus id. Sed sit amet tincidunt nisi. Morbi tincidunt, arcu nec dapibus consequat, est lacus convallis dolor, sed euismod justo purus quis arcu. Vivamus euismod sem erat, in tincidunt sem semper sed. Quisque massa risus, euismod ut neque non, bibendum suscipit quam. Sed eget congue est, sit amet dictum odio. Praesent quam libero, tincidunt non augue sit amet, pellentesque faucibus enim. Integer pellentesque dolor et vulputate pellentesque. Nullam velit nulla, aliquet ac fringilla a, vestibulum non est. In in faucibus felis. Aenean aliquam, neque ac varius volutpat, nulla mauris rutrum mi, ut congue augue justo eu tortor. Nulla eget nisi tempor, sagittis urna eget, iaculis turpis. Nunc malesuada justo mauris, vel tristique magna sodales a. Fusce et massa sit amet urna fringilla interdum. Nulla id augue sit amet sem laoreet iaculis. Nullam id ornare nisl.
+
+Etiam vel urna tellus. Mauris viverra nulla vitae tellus dapibus, sit amet pulvinar nisl luctus. Nunc porttitor diam massa, ut blandit lectus ultrices at. Sed consectetur venenatis turpis interdum ullamcorper. Quisque orci tortor, malesuada vel placerat ac, rutrum non mauris. Phasellus leo neque, venenatis sit amet tellus id, interdum placerat turpis. Mauris ullamcorper volutpat arcu, eu mollis lorem pellentesque elementum.
+
+Integer eget nisl bibendum, tristique turpis vitae, interdum nulla. Quisque sit amet lobortis nulla. Nulla lobortis diam nec luctus aliquet. Suspendisse eleifend sed arcu vitae consequat. Praesent quis ipsum quis nulla varius malesuada. Cras sit amet mi blandit, auctor felis lobortis, feugiat odio. In mattis sodales ligula sit amet porttitor. Quisque quam leo, ullamcorper ut tempus id, venenatis non justo. Suspendisse potenti. Pellentesque dapibus dui sed mauris tristique auctor. Phasellus sed semper nunc. Donec posuere urna ac dictum ultricies. Quisque placerat dui magna, sed faucibus quam posuere sit amet.
+
+Aenean egestas tellus sit amet felis bibendum hendrerit. Aenean eleifend at erat sed mollis. Quisque ac malesuada arcu, id accumsan velit. Morbi a orci ut elit porta eleifend. Fusce metus arcu, sodales vel aliquam eget, semper in odio. Sed fermentum aliquam mauris, ullamcorper auctor ante blandit vitae. Aenean eu massa mauris. Etiam vitae dignissim elit. Phasellus volutpat massa vitae tortor porttitor vestibulum. Pellentesque pulvinar elit sed augue aliquam, in aliquet mauris tristique. Nam eleifend molestie nulla et commodo. Fusce lobortis ligula sed feugiat condimentum. Vestibulum eget tristique arcu. Duis porttitor ac metus vel ullamcorper.
+
+Aliquam dui nibh, egestas et odio quis, auctor tempus dui. Nullam sed convallis nisl. Sed eu vulputate dui. Suspendisse sodales ipsum ut adipiscing suscipit. Phasellus vel diam ornare, placerat lorem quis, posuere odio. Sed id arcu ut ante ultrices laoreet. Sed mattis euismod urna vitae porta. Aenean vel urna eu augue molestie ultricies. Sed molestie ipsum sem, in venenatis nulla facilisis quis. Pellentesque lorem odio, ornare at libero quis, vehicula dignissim nisl. Nam facilisis, elit at mattis vulputate, nisl ipsum molestie purus, ut consequat leo tellus quis diam. Vestibulum volutpat consequat lectus et porta. Phasellus mollis libero quis scelerisque accumsan. Duis a ipsum ultricies, imperdiet nulla tempor, pellentesque arcu.
+
+Proin vel quam feugiat, elementum sem id, vestibulum urna. Pellentesque congue odio at consequat pharetra. Integer quis varius arcu, ac malesuada turpis. In lacus risus, sagittis in arcu at, tincidunt consequat turpis. Ut eget magna accumsan, adipiscing est vel, posuere nunc. Maecenas laoreet aliquam varius. Fusce dictum, sapien tincidunt pretium tempus, lectus nibh fermentum est, sit amet ornare dolor dolor eu nunc.
+
+Aliquam eros quam, lobortis quis faucibus convallis, iaculis bibendum velit. Sed in lectus ut nibh bibendum suscipit id ac justo. Aenean turpis tortor, mollis nec libero id, ultrices hendrerit orci. Nullam eu nulla ut dolor pretium vehicula. Cras auctor nisi vitae eros aliquet, quis pulvinar risus tristique. Praesent nisi arcu, consequat quis tempus quis, porttitor at justo. Curabitur ut mauris vitae massa feugiat congue. Aenean vulputate felis at euismod ultricies. Aliquam at fringilla dui, nec gravida metus. Nunc vulputate bibendum felis ut mollis. Maecenas imperdiet pellentesque erat, quis pellentesque quam venenatis in.
+
+Quisque aliquam ligula felis, vel auctor turpis eleifend eu. Maecenas aliquet quam et magna viverra, et suscipit mi tempus. Fusce sit amet lectus magna. Quisque dignissim porttitor neque, quis accumsan dui gravida et. Sed lacinia quam velit. Duis vehicula neque id aliquam egestas. Phasellus molestie dolor ut posuere convallis.
+
+Donec malesuada ut augue ut mattis. In dictum mauris sapien, eu euismod purus semper in. Nunc malesuada elit erat, vel semper massa gravida et. Proin lobortis auctor condimentum. Vestibulum diam sem, adipiscing et tellus eget, iaculis pellentesque quam. Integer ac nunc eu ipsum ullamcorper blandit vitae ut nisi. Sed commodo magna nec tempor bibendum. Nam metus nisi, malesuada at magna sed, eleifend lobortis massa. Suspendisse facilisis velit vitae malesuada fringilla. Etiam augue massa, aliquam non aliquam ac, vestibulum nec orci.
+
+Vestibulum convallis, eros ut sodales mattis, sapien nisl sodales lectus, vitae blandit lectus mi vel justo. Cras mollis lacinia bibendum. Morbi tristique sem in egestas gravida. Duis hendrerit massa sit amet elit tincidunt, et vestibulum metus condimentum. Donec venenatis luctus est, tempus iaculis orci consequat non. Sed in tortor accumsan urna luctus pulvinar. Nunc velit mi, interdum et turpis eu, porttitor convallis ligula. Curabitur dui augue, commodo sed lacus at, molestie tincidunt enim. In facilisis sapien eget nisi blandit, in fermentum sem viverra. Vestibulum viverra ac lectus vitae vehicula. Quisque condimentum vel mi vitae convallis. Integer convallis suscipit elit a varius. Proin sollicitudin sapien eget nibh cursus viverra. Ut placerat nulla ac nulla suscipit, in posuere enim consequat. Nulla posuere mauris vel ligula eleifend, sit amet condimentum odio pulvinar.
+
+Nullam posuere libero sed lectus ultricies congue. Nam accumsan justo ac ultricies euismod. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Proin leo urna, ultricies quis lacus quis, pulvinar suscipit purus. Cras elementum sed nisl at condimentum. Nulla et porttitor sapien. Proin a gravida leo, vel iaculis turpis. Vivamus lacinia, nunc eu lacinia fermentum, neque felis tempor massa, scelerisque rhoncus lorem quam vitae nulla. Vivamus volutpat erat vitae lacinia congue.
+
+Maecenas scelerisque in ante nec interdum. Integer ullamcorper nulla ac neque iaculis, sit amet semper quam varius. Vivamus sollicitudin imperdiet nunc, sed adipiscing mi. Etiam sed est ipsum. Nullam adipiscing vitae erat nec tincidunt. Donec a tortor sed arcu luctus consectetur. Vivamus viverra mauris eget sollicitudin consectetur.
+
+In aliquet massa in venenatis elementum. Etiam in nibh non leo dictum dignissim. Aliquam in tortor magna. Aliquam dolor nisi, aliquet eu ipsum vel, malesuada volutpat velit. Sed a dui a augue pulvinar ornare id ac urna. Sed fringilla odio at leo rutrum, sit amet imperdiet odio mollis. Nam at velit et sem molestie pellentesque. Curabitur dignissim ipsum fringilla, ullamcorper quam vel, pellentesque dolor. Vivamus imperdiet ultricies mauris, non porta libero pharetra id. Pellentesque vitae sapien sed metus porta elementum non non tellus. Morbi congue tortor turpis, et cursus sapien elementum quis. Duis posuere euismod lacus, quis eleifend urna euismod eget. Aenean sollicitudin odio eget pellentesque luctus. Quisque condimentum, nisi a commodo aliquet, erat arcu tempor nisi, et ullamcorper enim massa ac tortor. Suspendisse porttitor viverra orci sit amet viverra. Donec dolor ipsum, ultrices quis enim eget, molestie imperdiet nisl.
+
+Ut erat velit, auctor quis nulla ac, mattis fermentum leo. Nulla ultrices arcu vitae mattis rutrum. In gravida sapien in dapibus aliquam. Proin luctus mollis dui nec vehicula. Cras ut elit eu mauris luctus lacinia. Vestibulum quis lectus laoreet, tincidunt massa vel, venenatis leo. Aliquam augue tellus, lacinia sit amet nibh ut, dictum rutrum metus. Cras ut risus lorem. Nam eget mi elit. Curabitur eget ipsum enim. Etiam sed iaculis diam, eget fermentum lectus.
+
+Vestibulum quis nunc eget urna lobortis aliquam a id odio. Morbi vehicula dui ac adipiscing suscipit. In hac habitasse platea dictumst. Pellentesque dapibus sagittis erat. Ut fermentum tincidunt volutpat. Integer nec hendrerit erat. Quisque rutrum id elit et vehicula. Vivamus gravida eros rhoncus sollicitudin elementum. In hac habitasse platea dictumst. Curabitur condimentum placerat odio, non feugiat metus vulputate non. Nulla eros leo, aliquet a posuere eget, dictum malesuada lorem. Morbi varius lectus tortor, in tincidunt orci congue in. Ut rhoncus ultricies scelerisque. Phasellus sodales nisi in elit condimentum volutpat. Pellentesque dignissim, orci vitae rhoncus sodales, risus diam rutrum nibh, vitae aliquet ligula urna eu diam. Integer dignissim eros sed dolor pulvinar, non congue elit hendrerit.
+
+Proin tempor adipiscing lobortis. Duis in sapien nibh. Aliquam vel mauris sem. Vestibulum iaculis eleifend neque ac sagittis. Sed quis purus risus. Ut justo purus, vestibulum ac malesuada vitae, pellentesque blandit tellus. Donec elementum turpis ante, vitae dignissim augue tempor eu. Integer gravida erat ut neque fermentum, vel adipiscing mauris consectetur. Cras a ligula lacinia, hendrerit dolor quis, lobortis magna. Sed placerat cursus erat in pretium. Etiam est sapien, cursus interdum interdum dictum, facilisis quis augue. Phasellus feugiat, neque ut placerat facilisis, nunc odio molestie ligula, eu convallis nisl enim sit amet mauris.
 
 
 
