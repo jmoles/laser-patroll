@@ -18,6 +18,7 @@
 *.aux
 *.bbl
 *.blg
+*.synctex.gz
 
 # Mac OSX
 *.DS_Store

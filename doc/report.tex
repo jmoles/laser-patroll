@@ -471,7 +471,7 @@
 \begin{abstract}
 %\boldmath
 %TODO: Abstract needs expanding once paper is completed.
-This work discusses a benchmarking of four sort algorithms tested against each other for a Portland State University ECE 588 project. The four sorts tested were C++'s \texttt{std::sort}, quick sort, merge sort, and bitonic sort.
+This work discusses a benchmarking of four sort algorithms tested against each other for a Portland State University ECE 588 project. The four sorts tested were C++'s \texttt{\texttt{std::sort}}, Quicksort, Merge sort, and Bitonic sort.
 \end{abstract}
 % IEEEtran.cls defaults to using nonbold math in the Abstract.
 % This preserves the distinction between vectors and scalars. However,
@@ -482,7 +482,7 @@ This work discusses a benchmarking of four sort algorithms tested against each o
 
 % Note that keywords are not normally used for peerreview papers.
 \begin{IEEEkeywords}
-soting, bitonic sort, quick sort, merge sort, class.
+soting, Bitonic sort, Quicksort, Merge sort, class.
 \end{IEEEkeywords}
 
 
@@ -520,7 +520,14 @@ soting, bitonic sort, quick sort, merge sort, class.
 % and "HIS" in caps to complete the first word.
 
 % TODO: Probably want to expand this intro.
-\IEEEPARstart{S}{orting} is an important task that is often performed on sets of data. This report discusses the work done by Laser Patroll (sic) for a team project at Portland State University for the course ECE 588. The project was focused around sorting a list of arbitrary elements through various methods and benchmarking each of the algorithms against each other. The four algorithms benchmarked and discussed in this report the C++ std::sort, Quick Sort~\cite{Hoare1961}~\cite{Hoare1962}, Merge Sort~\cite{Knuth:1998:ACP:280635}, and Bitonic Sort~\cite{Batcher1968}. In this report, we present an overview of the sorting algorithms in Section~\ref{sec:sorting}, the C++ testing framework designed to check the sorted data and gather results in Section~\ref{sec:testing}, and the results of the four algorithms in Section~\ref{sec:results}.
+\IEEEPARstart{S}{orting} data is a task in computer science that is highly important because it is a very common operation. This report discusses the work done by Laser Patroll [sic] for a team project at Portland State University for the ECE 588 course taught in Fall 2013. The focus of this project was twofold: 
+\begin{itemize}
+\item First, to either identify parallel sorting algorithms and implement them, or parallelize existing serial (single-threaded) algorithms. 
+\item Second, benchmark each of the selected algorithms against each other.  This involved sorting lists of varying lengths using varying numbers of threads, while measuring the relative performance and behavior of the selected algorithms against a known, highly optimized sort, the C++ \texttt{std::sort}.
+\end{itemize}
+
+
+The four algorithms benchmarked and discussed in this report are the C++ \texttt{std::sort}, Quicksort~\cite{Hoare1961}~\cite{Hoare1962}, Merge sort~\cite{Knuth:1998:ACP:280635}, and Bitonic sort~\cite{Batcher1968}. In this report, we first present an overview of these sorting algorithms in Section~\ref{sec:sorting}, then cover the C++ testing framework designed to check the sorted data and gather results in Section~\ref{sec:testing}, and finally present the results of the four algorithms in Section~\ref{sec:results}.
 
 %TODO: Talk about how we picked these algorithms.
 
@@ -533,18 +540,18 @@ soting, bitonic sort, quick sort, merge sort, class.
 This section will discuss the four sorting algorithms run.
 
 \subsection{Basic Sort}
-%TODO: Expand std::sort description. It apparently uses a introspective sort and heapsort, maybe? Should cite.
-Basic sort was implemented by simply passing the data array to \texttt{std::sort}. In no case was it executed in a parallel fashion.
+%TODO: Expand \texttt{std::sort} description. It apparently uses a introspective sort and heapsort, maybe? Should cite.
+Basic sort was implemented by simply passing the data array to \texttt{\texttt{std::sort}}. In no case was it executed in a parallel fashion.
 
-\subsection{Quick Sort}
+\subsection{Quicksort}
 %TODO: Put diagram for this sort.
 %TODO: Talk about how data was split for threading.
 
-\subsection{Merge Sort}
+\subsection{Merge sort}
 %TODO: Put diagram for this sort.
 %TODO: Talk about how data was split for threading.
 
-\subsection{Bitonic Sort}
+\subsection{Bitonic sort}
 %TODO: Put diagram for this sort.
 %TODO: Talk about how data was split for threading.
 
@@ -573,7 +580,7 @@ Data could be generated in a few different patterns depending on the type of sor
 
 The data was checked for sorting using a single-threaded function to look through the elements. The function simply started at the front of the data and moved through all of the elements. If it found an element that was greater than the previous element (in other words, not sorted), the function would multiply the time it took for the sort to run by $-1$ and print a warning stating that the data was not sorted.
 
-A few other other utility functions were also in the \texttt{SortCommon} class. A function that would take the length of the data and how many threads to divide the work amongst would return a \texttt{std::vector} containing a \texttt{std::pair} of the minimum and maximum index for a given thread to perform the sorting on. Bitonic and quick sort used this in the functional decomposition of the data, but merge used its own algorithm. For bitonic, the data and the number of threads had to be a power of two without modification. A padding and unpadding function is also added to pad zeros to the data in the event the user requests a sort on data that does not meet the power of two requirement for bitonic.
+A few other other utility functions were also in the \texttt{SortCommon} class. A function that would take the length of the data and how many threads to divide the work amongst would return a \texttt{std::vector} containing a \texttt{std::pair} of the minimum and maximum index for a given thread to perform the sorting on. Bitonic and Quicksort used this in the functional decomposition of the data, but merge used its own algorithm. For bitonic, the data and the number of threads had to be a power of two without modification. A padding and unpadding function is also added to pad zeros to the data in the event the user requests a sort on data that does not meet the power of two requirement for bitonic.
 
 % TODO: Add valgrind citation, listing, and note about what the results mean.
 The code was also checked with valgrind to verify that there were no memory leaks. Listing XX shows the output from valgrind.
@@ -592,12 +599,12 @@ GitHub was also used for revision control. This entire project is available for 
 
 This section provides the results for the tests of the algorithms. Two different types of tests will be presented. The first is showing the amount of time it took each algorithm to sort with a varying number of threads and constant data size. The other shows the total time all four algorithms took to execute and then percentage of that total time that each algorithm took to run plotting for a constant number of threads and a varying data size.
 
-It is important to note that throughout all of these tests, anything labeled as ``basic'' is \texttt{std::sort} running in a \textbf{serial} fashion. We did not wrap any parallelization around \texttt{std::sort} so that each of the algorithms are evaluated against the sort that would likely be used in C++.
+It is important to note that throughout all of these tests, anything labeled as ``basic'' is \texttt{\texttt{std::sort}} running in a \textbf{serial} fashion. We did not wrap any parallelization around \texttt{\texttt{std::sort}} so that each of the algorithms are evaluated against the sort that would likely be used in C++.
 
 The first series are in Figure~\ref{fig:tvtlg} for a data set of size 134,217,728 elements and Figure~\ref{fig:tvtsm} for a data set of size 512 elements. These tests aimed to see how each algorithm performs with an increasing number of threads both with a small set of data and a large set of data. Ideally, each algorithm should get faster as the number of threads it has available to perform work increases.
 
-% TODO: Why does quick sort do what it does?
-Looking first at the large data set, merge sort follows the ideal situation quite well and starts to reach a limit in execution time as it gets to the end. Quick sort seems fairly flat over the execution regardless of the number of threads allocated to it. This could be a results of the domain decomposition model of splitting up the work and bringing it back together. As the number of threads increases, there is a final merge that only merges two sets of data at a time. This could result in this final merge occupying more time. 
+% TODO: Why does Quicksort do what it does?
+Looking first at the large data set, Merge sort follows the ideal situation quite well and starts to reach a limit in execution time as it gets to the end. Quicksort seems fairly flat over the execution regardless of the number of threads allocated to it. This could be a results of the domain decomposition model of splitting up the work and bringing it back together. As the number of threads increases, there is a final merge that only merges two sets of data at a time. This could result in this final merge occupying more time. 
 
 Bitonic is affected by the same merge issue; however, it has another factor slowing it down. Bitonic shows an average trend of decreasing execution time, but it is susceptible to the requirement that the data and threads must be a power of two. As a result, bitonic performs the best on the situations where the number of threads is a power of two and begins to slow down as it increases from a power of two, peaking one value right before the next power of two.  
 %TODO: Small data execution results for size.
