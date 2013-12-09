@@ -520,7 +520,7 @@ soting, bitonic sort, quick sort, merge sort, class.
 % and "HIS" in caps to complete the first word.
 
 % TODO: Probably want to expand this intro.
-\IEEEPARstart{S}{orting} is an important task that is often performed on sets of data. This report discusses the work done by Laser Patroll (sic) for a team project at Portland State University for the course ECE 588. The project was focused around sorting a list of arbitrary elements through various methods and benchmarking each of the algorithms against each other. The four algorithms benchmarked and discussed in this report the C++ std::sort, Quick Sort, Merge Sort, and Bitonic Sort (TODO: CITE ALL OF THESE). In this report, we present an overview of the sorting algorithms in Section~\ref{sec:sorting}, the C++ testing framework designed to check the sorted data and gather results in Section~\ref{sec:testing}, and the results of the four algorithms in Section~\ref{sec:results}.
+\IEEEPARstart{S}{orting} is an important task that is often performed on sets of data. This report discusses the work done by Laser Patroll (sic) for a team project at Portland State University for the course ECE 588. The project was focused around sorting a list of arbitrary elements through various methods and benchmarking each of the algorithms against each other. The four algorithms benchmarked and discussed in this report the C++ std::sort, Quick Sort~\cite{Hoare1961}~\cite{Hoare1962}, Merge Sort~\cite{Knuth:1998:ACP:280635}, and Bitonic Sort~\cite{Batcher1968}. In this report, we present an overview of the sorting algorithms in Section~\ref{sec:sorting}, the C++ testing framework designed to check the sorted data and gather results in Section~\ref{sec:testing}, and the results of the four algorithms in Section~\ref{sec:results}.
 
 %TODO: Talk about how we picked these algorithms.
 
@@ -790,20 +790,15 @@ The authors would like to thank...
 % http://www.ctan.org/tex-archive/biblio/bibtex/contrib/doc/
 % The IEEEtran BibTeX style support page is at:
 % http://www.michaelshell.org/tex/ieeetran/bibtex/
-%\bibliographystyle{IEEEtran}
+\bibliographystyle{IEEEtran}
 % argument is your BibTeX string definitions and bibliography database(s)
 %\bibliography{IEEEabrv,../bib/paper}
+\bibliography{IEEEabrv,mendeleysources,manualsources}
 %
 % <OR> manually copy in the resultant .bbl file
 % set second argument of \begin to the number of references
 % (used to reserve space for the reference number labels box)
-\begin{thebibliography}{1}
 
-\bibitem{IEEEhowto:kopka}
-H.~Kopka and P.~W. Daly, \emph{A Guide to \LaTeX}, 3rd~ed.\hskip 1em plus
-  0.5em minus 0.4em\relax Harlow, England: Addison-Wesley, 1999.
-
-\end{thebibliography}
 
 % biography section
 % 

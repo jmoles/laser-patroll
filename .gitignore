@@ -16,6 +16,8 @@
 # *.pdf
 *.log
 *.aux
+*.bbl
+*.blg
 
 # Mac OSX
 *.DS_Store

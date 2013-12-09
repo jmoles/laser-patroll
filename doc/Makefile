@@ -7,9 +7,11 @@ else
 	VIEWER=evince
 endif
 
-report.pdf: include/IEEEtran report.tex
-	TEXINPUTS=$(TEXINPUTSPATHS) pdflatex report.tex
-	TEXINPUTS=$(TEXINPUTSPATHS) pdflatex report.tex
+report.pdf: include/IEEEtran report.tex manualsources.bib mendeleysources.bib
+	TEXINPUTS=$(TEXINPUTSPATHS) pdflatex report
+	TEXINPUTS=$(TEXINPUTSPATHS) bibtex report
+	TEXINPUTS=$(TEXINPUTSPATHS) pdflatex report
+	TEXINPUTS=$(TEXINPUTSPATHS) pdflatex report
 
 include/IEEEtran:
 	$(MAKE) -C include
