@@ -9,7 +9,7 @@ endif
 
 SOURCES=$(wildcard ../src/*.cpp)
 HEADERS=$(wildcard ../src/*.hpp)
-DATA=valgrind.out data/basic.csv data/bitonic.csv data/merge.csv data/quick.csv
+DATA=valgrind.out data/basic.csv data/bitonic.csv data/merge.csv data/quick.csv include/merge_algorithms.tex include/mms.png include/dd.png
 INCLUDES=$(SOURCES) $(HEADERS) $(DATA)
 
 report.pdf: include/IEEEtran report.tex manualsources.bib mendeleysources.bib $(INCLUDES)

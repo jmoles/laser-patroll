@@ -589,8 +589,9 @@ Basic sort was implemented by simply passing the data array to \texttt{std::sort
 
 Quicksort is a partition-exchange sort that uses pivots to reorder elements. While its worst case is $O(n^2)$, Quicksort tends to perform faster than other sorts in the same performance class. Caches improve the sort time substantially, due to Quicksort's tendency to exhibit spatial locality. It can be sorted in place, allowing for less memory usage during the process. 
 
-\begin{figure*}[!t]
+\begin{figure*}[f]
   \caption{Quicksort Algorithm}
+  \centering
   \includegraphics[width=2.5in]{quick-sort.png}
   \label{fig:Quicksort Algorithm}
 \end{figure*}
@@ -649,28 +650,32 @@ If the number of remaining threads is greater than zero however, it means that a
 
 An example of how MMS would create threads if initially launched with 4 threads is illustrated in figure \ref{mms_thread}.  At the top, MMS receives 4 threads. A new thread will be created.  The 3 remaining threads (R) are divided up amongst T\_1, the new thread and the recursive call to MMS performed by T\_0.  As shown, this threading model ensures that every thread has equal access to work at the bottom of the tree once N threads are created.  In this example, each thread is responsible for 2 of the 8 subarrays.  Note that many high-level threads would be blocked for the majority of execution if each call to MMS started (and had to wait on) two threads.
 
-\begin{figure}[H]
+\begin{figure*}[f]
 \caption{MMS threading model}
+\centering
 \includegraphics[width=.5\textwidth]{include/mms.png}
 \label{mms_thread}
-\end{figure}
+\end{figure*}
+
 \input{include/merge_algorithms} % put this anywhere that is convenient. it uses exactly 1 page
 
 \subsection{Bitonic Sort}
 %TODO: Integrate pseudocode
 %Source: wiki.rice.edu.
 
-	\begin{figure}[H]
+	\begin{figure*}[t!]
 	\caption{Bitonic Split}
+  \centering
 	\includegraphics[width=.5\textwidth]{bitonic_split.png}
 	\label{bitonic_split}
-	\end{figure}
+	\end{figure*}
 	
-	\begin{figure}[H]
+	\begin{figure*}[t!]
 	\caption{Bitonic Build}
+  \centering
 	\includegraphics[width=.5\textwidth]{bitonic_build_2.png}
 	\label{bitonic_build}
-	\end{figure}
+	\end{figure*}
 
 The bitonic sort is a sort algorithm primarily used for parallel execution. The complexity is consistently  $O(n\ Log^2(n))$, regardless of the data received. This sort consists of two different methods.  First, the random data must be sorted or "built" into one bitonic sequence.  After this is done, the bitonic sort algorithm is applied and the data is fully sorted (for the sequential version).  
 
