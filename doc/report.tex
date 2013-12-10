@@ -77,6 +77,7 @@
 \usepackage{algorithm}% http://ctan.org/pkg/algorithms
 \usepackage{algpseudocode}% http://ctan.org/pkg/algorithmicx
 \usepackage{xstring}
+\usepackage{caption}
 
 % Some very useful LaTeX packages include:
 % (uncomment the ones you want to load)
@@ -133,7 +134,7 @@
 
 \newcommand{\bashout}[2]{
 \begin{figure*}
-\lstinputlisting[language=bash,caption=#2,label=#1]{#1.out}
+\lstinputlisting[language=bash, label=#1,caption=#2]{#1.out}
 \end{figure*}
 }
 
@@ -650,7 +651,8 @@ GitHub was also used for revision control. This entire project is available for 
 \section{Results}
 \label{sec:results}
 %TODO: Things to mention.
-% - Bitonic time with padding if not power of two.
+
+
 % - Add the four charts that were shown in the presentation.
 
 This section provides the results for the tests of the algorithms. Two different types of tests will be presented. The first is showing the amount of time it took each algorithm to sort with a varying number of threads and constant data size. The other shows the total time all four algorithms took to execute and then percentage of that total time that each algorithm took to run plotting for a constant number of threads and a varying data size.
@@ -662,7 +664,9 @@ The first series are in Figure~\ref{fig:tvtlg} for a data set of size 134,217,72
 % TODO: Why does Quicksort do what it does?
 Looking first at the large data set, Merge sort follows the ideal situation quite well and starts to reach a limit in execution time as it gets to the end. Quicksort seems fairly flat over the execution regardless of the number of threads allocated to it. This could be a results of the domain decomposition model of splitting up the work and bringing it back together. As the number of threads increases, there is a final merge that only merges two sets of data at a time. This could result in this final merge occupying more time. 
 
-Bitonic is affected by the same merge issue; however, it has another factor slowing it down. Bitonic shows an average trend of decreasing execution time, but it is susceptible to the requirement that the data and threads must be a power of two. As a result, bitonic performs the best on the situations where the number of threads is a power of two and begins to slow down as it increases from a power of two, peaking one value right before the next power of two.  
+% - Bitonic time with padding if not power of two. 
+% - might need to mention more about this
+Bitonic is affected by the same merge issue; however, it has another factor slowing it down:  It can only operate on input arrays that are of a length that is a power of 2.  Our Bitonic algorithm pads the inputs data with zeros to increase its length until it is equal to a power of 2, and then removes this additional padding after it is sorted.  Evidently, the amount of time required to pad and unpad the input data is nontrivial, as Bitonic shows an average trend of decreasing execution time, but is susceptible to the requirement that the data and threads must be a power of two. As a result, Bitonic performs the best on the situations where the number of threads is a power of two and begins to slow down as it increases from a power of two, peaking one value right before the next power of two.  
 %TODO: Small data execution results for size.
 %TODO: Single threaded case is missing on the plot.
 
