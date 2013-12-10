@@ -74,7 +74,8 @@
 \usepackage{pgfplotstable} % Used to make graphs from reading tables.
 \usepackage{datatool}  % Used to read CSV and make simple table.
 \usepackage{listings}  % Show source code.
-
+\usepackage{algorithm}% http://ctan.org/pkg/algorithms
+\usepackage{algpseudocode}% http://ctan.org/pkg/algorithmicx
 
 
 % Some very useful LaTeX packages include:
@@ -583,8 +584,24 @@ Basic sort was implemented by simply passing the data array to \texttt{std::sort
 %TODO: Talk about how data was split for threading.
 
 \subsection{Merge Sort}
-%TODO: Put diagram for this sort.
-%TODO: Talk about how data was split for threading.
+Merge sort is a divide-and-conquer sorting algorithm which uniquely exhibits $O(n\ Log(n))$ time complexity regardless of the ordering of its inputs.  The merge algorithm shown in algorithm \ref{merge} creates a larger sorted array from two smaller sorted subarrays and is pivotal to how merge sort works.  The merge is where the majority of actual work is done when performing a merge sort.   
+
+As shown in algorithm 2, the input array is first split in half until only single elements remain.  Since an array consisting of a single element is inherently sorted, these single elements are then merged together to create increasingly large subarrays, until all subarrays have been merged together in a binary fashion to form a full-sorted result array.
+
+Since splitting the source data is such a fundamental aspect of merge sort, we developed an elegant algorithm which leverages the inherent domain decomposition present in merge sort.  Our method requires no communication between threads, uses no mutexes, and uses a total of only N barriers for N threads.  Furthermore, this algorithm ensures that each thread has access to approximately 1/N of the work and if blocked, is only ever blocked by a single other thread.  
+
+Shown in algorithm \ref{mms}, Multithreaded Merge Sort (MMS) modifies the merge sort shown in algorithm \ref{mergesort} to pass in the number of remaining threads.  If this number is zero, MMS functions identically to standard \texttt{mergesort()}. 
+
+If the number of remaining threads is greater than zero however, it means that a new thread will be created to handle one of the two \texttt{mergesort()} calls that MMS will make.  The remaining threads will be decremented by one to reflect the new thread that will be created.  Finally, the number of remaining threads will be divided by two and distributed between the two MMS calls.  Our algorithm always gives the new thread the left half of the input array, and always distributes the remainder of the thread count division to the right.  We measured no change in performance with changes to this convention so it was preserved.  
+
+An example of how MMS would create threads if initially launched with 4 threads is illustrated in figure \ref{mms_thread}.  At the top, MMS receives 4 threads. A new thread will be created.  The 3 remaining threads (R) are divided up amongst T\_1, the new thread and the recursive call to MMS performed by T\_0.  As shown, this threading model ensures that every thread has equal access to work at the bottom of the tree once N threads are created.  In this example, each thread is responsible for 2 of the 8 subarrays.  Note that many high-level threads would be blocked for the majority of execution if each call to MMS started (and had to wait on) two threads.
+
+\begin{figure}[H]
+\caption{MMS threading model}
+\includegraphics[width=.5\textwidth]{include/mms.png}
+\label{mms_thread}
+\end{figure}
+\input{include/merge_algorithms} % put this anywhere that is convenient. it uses exactly 1 page
 
 \subsection{Bitonic Sort}
 %TODO: Put diagram for this sort.
