@@ -76,7 +76,7 @@
 \usepackage{listings}  % Show source code.
 \usepackage{algorithm}% http://ctan.org/pkg/algorithms
 \usepackage{algpseudocode}% http://ctan.org/pkg/algorithmicx
-
+\usepackage{xstring}
 
 % Some very useful LaTeX packages include:
 % (uncomment the ones you want to load)
@@ -137,6 +137,7 @@
 \end{figure*}
 }
 
+% *** TABLE PLOTTING STUFF ***
 
 
 % *** CITATION PACKAGES ***
@@ -429,6 +430,8 @@
 
 \linespread{2}
 \begin{document}
+
+
 %
 % paper title
 % can use linebreaks \\ within to get better formatting as desired
@@ -663,34 +666,74 @@ Bitonic is affected by the same merge issue; however, it has another factor slow
 %TODO: Small data execution results for size.
 %TODO: Single threaded case is missing on the plot.
 
-
 \begin{figure*}[!t]
   \centering
-  \includegraphics[width=0.7\textwidth]{tvtlg}
-  \caption{Time vs Threads Large Data}
+  \caption{Time vs Threads Large Data (Size = 134217728)}
   \label{fig:tvtlg}
+  \begin{tikzpicture}
+    \begin{axis}[
+      xlabel={Threads},
+      ylabel={Runtime (s)},
+      ybar interval,
+      width=5.5in,
+      filter discard warning=false,
+      enlarge y limits=upper,
+      enlarge x limits=false,
+      legend entries={Basic, Bitonic, Merge, Quick},
+      x filter/.code={%
+        \ifnum \thisrow{Size} = 134217728
+        \else % false
+        \def\pgfmathresult{}
+        \fi}]
+      \addplot table [x=Threads, y=Time, col sep=comma] {data/basic.csv};
+      \addplot table [x=Threads, y=Time, col sep=comma] {data/bitonic.csv};
+      \addplot table [x=Threads, y=Time, col sep=comma] {data/merge.csv};
+      \addplot table [x=Threads, y=Time, col sep=comma] {data/quick.csv};
+    \end{axis}
+  \end{tikzpicture}
 \end{figure*}
 
 \begin{figure*}[!t]
   \centering
-  \includegraphics[width=0.7\textwidth]{tvtsm}
-  \caption{Time vs Threads Small Data}
+  \caption{Time vs Threads Large Data (Size = 512)}
   \label{fig:tvtsm}
+  \begin{tikzpicture}
+    \begin{axis}[
+      xlabel={Threads},
+      ylabel={Runtime (s)},
+      ybar interval,
+      width=5.5in,
+      bar width=2pt,
+      filter discard warning=false,
+      enlarge y limits=upper,
+      enlarge x limits=false,
+      xtick=data,
+      legend entries={Basic, Bitonic, Merge, Quick},
+      legend pos=north west,
+      x filter/.code={%
+        \ifnum \thisrow{Size} = 512
+        \else % false
+        \def\pgfmathresult{}
+        \fi}]
+      \addplot table [x=Threads, y=Time, col sep=comma] {data/basic.csv};
+      \addplot table [x=Threads, y=Time, col sep=comma] {data/bitonic.csv};
+      \addplot table [x=Threads, y=Time, col sep=comma] {data/merge.csv};
+      \addplot table [x=Threads, y=Time, col sep=comma] {data/quick.csv};
+    \end{axis}
+  \end{tikzpicture}
 \end{figure*}
 
 %TOOO/Note: Do these second series even show anything of value? Should we produce something else? Thoughts?
 
 \begin{figure*}[!t]
-  \centering
-  %\includegraphics[width=2.5in]{myfigure}
   \caption{Time Percentage Four Threads}
+  %\includegraphics[width=2.5in]{myfigure}
   \label{fig:timeperfour}
 \end{figure*}
 
 \begin{figure*}[!t]
-  \centering
-  %\includegraphics[width=2.5in]{myfigure}
   \caption{Time Percentage Twenty Four Threads}
+  %\includegraphics[width=2.5in]{myfigure}
   \label{fig:timepertwentyfour}
 \end{figure*}
 

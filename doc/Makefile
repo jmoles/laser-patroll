@@ -1,4 +1,4 @@
-TEXINPUTSPATHS=.:$(TEXINPUTS):include/IEEEtran:../src/
+TEXINPUTSPATHS=.:$(TEXINPUTS):include/IEEEtran:../src/:data/
 UNAME:=$(shell uname -s)
 
 ifeq ($(UNAME), Darwin)
@@ -7,7 +7,12 @@ else
 	VIEWER=evince
 endif
 
-report.pdf: include/IEEEtran report.tex manualsources.bib mendeleysources.bib valgrind.out
+SOURCES=$(wildcard ../src/*.cpp)
+HEADERS=$(wildcard ../src/*.hpp)
+DATA=valgrind.out data/basic.csv data/bitonic.csv data/merge.csv data/quick.csv
+INCLUDES=$(SOURCES) $(HEADERS) $(DATA)
+
+report.pdf: include/IEEEtran report.tex manualsources.bib mendeleysources.bib $(INCLUDES)
 	TEXINPUTS=$(TEXINPUTSPATHS) pdflatex report
 	TEXINPUTS=$(TEXINPUTSPATHS) bibtex report
 	TEXINPUTS=$(TEXINPUTSPATHS) pdflatex report
