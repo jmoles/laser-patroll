@@ -16,6 +16,9 @@
 # *.pdf
 *.log
 *.aux
+*.bbl
+*.blg
+*.synctex.gz
 
 # Mac OSX
 *.DS_Store
@@ -32,5 +35,4 @@ doc/report.pdf
 doc/include/IEEEtran.zip
 doc/include/IEEEtran
 doc/doxygen/
-*.synctex.gz
 *.csv

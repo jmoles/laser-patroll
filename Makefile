@@ -26,6 +26,9 @@ release: laser-patroll
 debug: CXXFLAGS+=$(CXX_DEBUG_FLAGS)
 debug: laser-patroll
 
+.PHONY: doc
+doc: doc/report.pdf
+
 doc/report.pdf: $(DOC)
 	$(MAKE) -C doc
 
