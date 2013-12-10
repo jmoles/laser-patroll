@@ -76,8 +76,6 @@
 \usepackage{listings}  % Show source code.
 \usepackage{xstring}
 
-\pgfplotsset{compat=1.8}
-
 % Some very useful LaTeX packages include:
 % (uncomment the ones you want to load)
 
@@ -693,6 +691,7 @@ Bitonic is affected by the same merge issue; however, it has another factor slow
       enlarge x limits=false,
       xtick=data,
       legend entries={Basic, Bitonic, Merge, Quick},
+      legend pos=north west,
       x filter/.code={%
         \ifnum \thisrow{Size} = 512
         \else % false
