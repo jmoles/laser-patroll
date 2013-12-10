@@ -32,4 +32,5 @@ doc/report.pdf
 doc/include/IEEEtran.zip
 doc/include/IEEEtran
 doc/doxygen/
+*.synctex.gz
 *.csv
