@@ -583,8 +583,57 @@ This section will discuss the four sorting algorithms run.
 Basic sort was implemented by simply passing the data array to \texttt{std::sort}. In no case was it executed in a parallel fashion.
 
 \subsection{Quick Sort}
-%TODO: Put diagram for this sort.
-%TODO: Talk about how data was split for threading.
+%TODO: cite  http://www.algolist.net/img/sorts/quick-sort.png
+%TODO: Integrate pseudocode
+
+Quicksort is a partition-exchange sort that uses pivots to reorder elements. While its worst case is $O(n^2)$, Quicksort tends to perform faster than other sorts in the same performance class. Caches improve the sort time substantially, due to Quicksort's tendency to exhibit spatial locality. It can be sorted in place, allowing for less memory usage during the process. 
+
+\begin{figure*}[!t]
+  \caption{Quicksort Algorithm}
+  \includegraphics[width=2.5in]{quick-sort.png}
+  \label{fig:Quicksort Algorithm}
+\end{figure*}
+
+Figure \ref{fig:Quicksort Algorithm} shows how the sorting is done. First a pivot value is selected.  Starting with the outermost locations, the numbers are compared against the pivot.  After each side has found a number belonging to the other side, the numbers are swapped in place. This is continued until the indexes have switched sides, at which point Quicksort is called recursively.
+
+Quicksort is primarily a sequential algorithm, so to take advantage of parallel threading, the data was divided into different sections by the number of threads available.  This domain decomposition is seen in figure ..  Once each thread has finished, they are merged back together and sorted sequentially. 
+
+
+%Parallel Quicksort (data[], num_threads)
+%	if (threads > 1)
+%		split_data (threads)
+%		
+%		for (array.length)
+%			create_threads
+%			
+%		for (array.length)
+%			join_threads
+%			
+%		for (threads)
+%			merge_threads	
+%	else 
+%		Quicksort		
+
+
+% Sequential Quicksort(data[], left, right)
+%
+%  i = left, j = right
+%  while (i <= j) 
+%        while (data[i] < pivot)
+%              increment i
+%        while (data[j] > pivot)
+%              decrement j
+%        if (i <= j) 
+%              swap (data[i], data[j])
+%              increment i
+%              decrement j
+%    
+%if (left < j)
+%    quickSort(data, left, j)
+%if (i < right)
+%        quickSort(data, i, right)
+%
+
 
 \subsection{Merge Sort}
 Merge sort is a divide-and-conquer sorting algorithm which uniquely exhibits $O(n\ Log(n))$ time complexity regardless of the ordering of its inputs.  The merge algorithm shown in algorithm \ref{merge} creates a larger sorted array from two smaller sorted subarrays and is pivotal to how merge sort works.  The merge is where the majority of actual work is done when performing a merge sort.   
@@ -607,8 +656,29 @@ An example of how MMS would create threads if initially launched with 4 threads 
 \input{include/merge_algorithms} % put this anywhere that is convenient. it uses exactly 1 page
 
 \subsection{Bitonic Sort}
-%TODO: Put diagram for this sort.
-%TODO: Talk about how data was split for threading.
+%TODO: Integrate pseudocode
+%Source: wiki.rice.edu.
+
+	\begin{figure}[H]
+	\caption{Bitonic Split}
+	\includegraphics[width=.5\textwidth]{bitonic_split.png}
+	\label{bitonic_split}
+	\end{figure}
+	
+	\begin{figure}[H]
+	\caption{Bitonic Build}
+	\includegraphics[width=.5\textwidth]{bitonic_build_2.png}
+	\label{bitonic_build}
+	\end{figure}
+
+The bitonic sort is a sort algorithm primarily used for parallel execution. The complexity is consistently  $O(n\ Log^2(n))$, regardless of the data received. This sort consists of two different methods.  First, the random data must be sorted or "built" into one bitonic sequence.  After this is done, the bitonic sort algorithm is applied and the data is fully sorted (for the sequential version).  
+
+A bitonic sequence consists of sorted data divided into two sections, one with an ascending order and one with a descending order [Figure \ref{bitonic_split}].   Once this has been arranged, the sorting can take place.  To sort the data, each element is compared with the corresponding element of the other half. One half stores the minimum of the compared elements, while the other half stores the maximum number.  Because the bitonic sort uses a divide-and-conquer algorithm, the data is split in half and sorted this way until atomic elements are reached.  
+
+To build the initial bitonic sequence, the bitonic sort is applied to every pair of elements.  It is important to note that if there are only two elements in a dataset, it is guaranteed to be a bitonic sequence.  After this has occurred, each element of the pair is compared with another pair and are sorted down to a single element.  This process is repeated until one large bitonic sequence has been reached [Figure \ref{bitonic_build}].  It is important to note that this sort only works on a data size that is a power of 2.  For this reason, any data of a different was padded to allow the same sorting algorithm to be supplied.
+%Mention padding ?
+
+The bitonic sort uses the same algorithm as Quicksort for parallel thread management [See figure ..].
 
 \section{Testing Framework}
 \label{sec:testing}

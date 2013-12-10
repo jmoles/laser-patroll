@@ -25,6 +25,9 @@
 *.gch
 *.dSYM
 
+#Windows
+Thumbs.db
+
 # Editor Files
 sftp-config.json
 
