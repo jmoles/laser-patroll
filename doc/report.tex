@@ -173,7 +173,7 @@ Basic sort was implemented by simply passing the data array to \texttt{std::sort
 
 \subsection{Quick Sort}
 \linespread{1}
-%TODO: Integrate pseudocode
+
 \begin{algorithm*}[t]
 
 \caption{QuickSort}\label{alg:quicksort}
@@ -204,7 +204,7 @@ Basic sort was implemented by simply passing the data array to \texttt{std::sort
 Quicksort is a partition-exchange sort that uses pivots to reorder elements. While its worst case is $O(n^2)$, Quicksort tends to perform faster than other sorts in the same performance class. Caches improve the sort time substantially, due to Quicksort's tendency to exhibit spatial locality. It can be sorted in place, allowing for less memory usage during the process. 
 
 \begin{figure*}[f]
-  \caption{Quicksort Algorithm from http://www.algolist.net/Algorithms/Sorting/Quicksort}
+  \caption{Quicksort Algorithm\cite{QuickSortDiagram}}
   \centering
   \includegraphics[width=2.5in]{quick-sort.png}
   \label{fig:Quicksort Algorithm}
@@ -220,40 +220,6 @@ Quicksort is primarily a sequential algorithm, so to take advantage of parallel 
   \includegraphics[width=.75\textwidth]{include/dd.png}
   \label{fig:dd}
 \end{figure*}
-
-
-%Parallel Quicksort (data[], num_threads)
-%	if (threads > 1)
-%		split_data (threads)
-%		
-%		for (array.length)
-%			create_threads
-%			
-%		for (array.length)
-%			join_threads
-%			
-%		for (threads)
-%			merge_threads	
-%	else 
-%		Quicksort		
-% Sequential Quicksort(data[], left, right)
-%
-%  i = left, j = right
-%  while (i <= j) 
-%        while (data[i] < pivot)
-%              increment i
-%        while (data[j] > pivot)
-%              decrement j
-%        if (i <= j) 
-%              swap (data[i], data[j])
-%              increment i
-%              decrement j
-%    
-%if (left < j)
-%    quickSort(data, left, j)
-%if (i < right)
-%        quickSort(data, i, right)
-%
 
 \subsection{Merge Sort}
 Merge sort is a divide-and-conquer sorting algorithm which uniquely exhibits $O(n\ Log(n))$ time complexity regardless of the ordering of its inputs.  The merge algorithm shown in Algorithm~\ref{merge} creates a larger sorted array from two smaller sorted subarrays and is pivotal to how merge sort works.  The merge is where the majority of actual work is done when performing a merge sort.   
@@ -282,14 +248,14 @@ An example of how MMS would create threads if initially launched with 4 threads 
 %Source: wiki.rice.edu.
 
 	\begin{figure*}[t!]
-	\caption{Bitonic Split}
+	\caption{Bitonic Split \cite{BitonicSlides}}
   \centering
 	\includegraphics[width=.5\textwidth]{bitonic_split.png}
 	\label{bitonic_split}
 	\end{figure*}
 	
 	\begin{figure*}[t!]
-	\caption{Bitonic Build}
+	\caption{Bitonic Build \cite{BitonicSlides}}
   \centering
 	\includegraphics[width=.5\textwidth]{bitonic_build_2.png}
 	\label{bitonic_build}
