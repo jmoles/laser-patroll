@@ -57,7 +57,7 @@
 \usepackage{algpseudocode}% http://ctan.org/pkg/algorithmicx
 \usepackage{xstring}
 \usepackage{caption}
-
+\usepackage{ wasysym }
 
 % *** SOURCE CODE (LISTINGS) SETUP ***
 \lstloadlanguages{C++} % Load Perl syntax for listings, for a list of other languages supported see: ftp://ftp.tex.ac.uk/tex-archive/macros/latex/contrib/listings/listings.pdf
@@ -173,7 +173,34 @@ This section will discuss the four sorting algorithms run.
 Basic sort was implemented by simply passing the data array to \texttt{std::sort}. In no case was it executed in a parallel fashion.
 
 \subsection{Quick Sort}
+\linespread{1}
 %TODO: Integrate pseudocode
+\begin{algorithm*}[t]
+
+\caption{QuickSort}\label{alg:quicksort}
+\begin{algorithmic}
+\Require input array src
+\Require output array dst
+
+\Procedure{QuickSort}{$src$}
+\If {$(\textsc{Length}(src)\le 1)$}
+	\State \Return $src$ \Comment an array of 0 or 1 elements is sorted
+\EndIf
+
+\State Select and remove a pivot element from $src$
+\State Create empty lists $less$ and $greater$
+\ForAll{$x$ \textbf{in} $src$}
+	\If {$x\le pivot$} append $x$ to $less$
+	\Else \ append $x$ to $greater$
+	\EndIf
+\EndFor
+\item[]
+\Return \textsc{Concatenate}(\textsc{QuickSort}($less$), $pivot$, \textsc{QuickSort}($greater$)) \Comment two recursive calls
+\EndProcedure
+\end{algorithmic}
+\end{algorithm*}
+\linespread{1.5}
+
 
 Quicksort is a partition-exchange sort that uses pivots to reorder elements. While its worst case is $O(n^2)$, Quicksort tends to perform faster than other sorts in the same performance class. Caches improve the sort time substantially, due to Quicksort's tendency to exhibit spatial locality. It can be sorted in place, allowing for less memory usage during the process. 
 

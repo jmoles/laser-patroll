@@ -1,32 +1,32 @@
 \linespread{1}
 \begin{algorithm*}[t]
-\caption{Merge Algorithm}\label{merge}
+\caption{Generic Merge of two Sorted Arrays (A,B)}\label{merge}
 \begin{algorithmic}
 \Require A,B are sorted arrays
 \Require length(dst) = length(A) + length(B)
 
 \Procedure{Merge}{$dst, A, B$}
 \State $i, j, k\gets0$ \Comment initialize array indicies
-\While{(\emph{i within bounds of A) \textbf{and} (j within bounds of B})} 
+\While{($i$ within bounds of $A$) \textbf{and} ($j$ within bounds of $B$)} 
 	\State $dst[k] \gets \textsc{min}(A[i], B[j]$)
-		\State \textit{Increment index of array containing min element (i or j)}	
-		\State \textit{Increment k}
+		\State Increment index of array containing min element ($i$ or $j$)	
+		\State Increment $k$
 \EndWhile
-\While{(\emph{i within bounds of A)}} \Comment i still in bounds
+\While{($i$ within bounds of $A$)} \Comment i still in bounds
 	\State $dst[k] \gets A[i]$
-	\State \textit{Increment i}
+	\State Increment $i$
 \EndWhile
 
-\While{(\emph{j within bounds of j)}} \Comment j still in bounds
+\While{($j$ within bounds of $B$)} \Comment j still in bounds
 	\State $dst[k] \gets A[j]$
-	\State \textit{Increment j}
+	\State Increment $j$
 \EndWhile
 \EndProcedure
 \end{algorithmic}
 \end{algorithm*}
 
 \begin{algorithm*}[t]
-\caption{MergeSort Algorithm}\label{mergesort}
+\caption{MergeSort}\label{mergesort}
 \begin{algorithmic}[1]
 \Require dst and src are arrays of equal length
 \Require low and high are indices into A
@@ -53,17 +53,17 @@
 \Procedure{MMS}{$dst, src, low, high, threads\_remaining$}
 
 
-	\If{$threads\_remaining == 0$} \Comment perform basic MergeSort
-		\State [perform basic MergeSort algorithm] 
+	\If{$threads\_remaining == 0$} \Comment cannot create a new thread
+		\State $ \rhd $ perform basic recursive MergeSort
 	
-	\Else \Comment a new thread will be spawned to sort left
+	\Else \Comment a thread may be created in this call to MMS
 	\If {$(low < high)$}
 \State \emph {pivot} $\gets$ $\textsc{floor}(low+high)/2$
 	\State \emph{t\_left} = $\textsc{Floor}((threads\_remaining-1)/2)$
 	\State \emph{t\_right = t\_left}$ + ((threads\_remaining-1)\%2)$
-	\State \emph{New\_Thread}$\gets\emph{\textsc{MMS}(SortedLeft,A,low,pivot, t\_left)}$
-	\State \emph{\textsc{MMS}$(SortedRight,A,pivot+1, high, t\_right)$}
-	\State \emph{\textsc{Wait}(New\_Thread)}
+	\State [New\_Thread]$\gets\emph{\textsc{MMS}(SortedLeft,A,low,pivot, t\_left)}$ \Comment a new thread will be spawned to sort left
+	\State \emph{\textsc{MMS}$(SortedRight,A,pivot+1, high, t\_right)$} \Comment right will be sorted recursively by current thread
+	\State \textsc{Wait}(New\_Thread)
 	\State \emph{\textsc{Merge}$(dst,SortedLeft,SortedRight)$}
 \EndIf
 \EndIf
