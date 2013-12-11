@@ -144,8 +144,7 @@
 
 
 \begin{abstract}
-%TODO: Abstract needs expanding once paper is completed.
-This work discusses a benchmarking of four sort algorithms tested against each other for a Portland State University ECE 588 project. The four sorts tested were C++'s \texttt{std::sort}, Quicksort, Merge sort, and Bitonic sort.
+This work discusses a benchmarking of four sort algorithms tested against each other for a Portland State University ECE 588 project. The four sorts tested were C++'s \texttt{std::sort}, Quicksort, Merge sort, and Bitonic sort. This was accomplished by building a benchmark framework in C++ and then building each of the described algorithms to compare each of them running a sort against the same set of data. We found that in a multi-threaded case, our merge sort was able to outperform C++'s \texttt{std::sort}. Bitonic and Quicksort did not outperform, but still showed decent gains as the number of threads increased. These results were ran with a set of unsigned integers across multiple threads and could be used to help determine the performance of these algorithms when run on a \texttt{std::vector}.
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -257,13 +256,13 @@ Quicksort is primarily a sequential algorithm, so to take advantage of parallel 
 %
 
 \subsection{Merge Sort}
-Merge sort is a divide-and-conquer sorting algorithm which uniquely exhibits $O(n\ Log(n))$ time complexity regardless of the ordering of its inputs.  The merge algorithm shown in algorithm~\ref{merge} creates a larger sorted array from two smaller sorted subarrays and is pivotal to how merge sort works.  The merge is where the majority of actual work is done when performing a merge sort.   
+Merge sort is a divide-and-conquer sorting algorithm which uniquely exhibits $O(n\ Log(n))$ time complexity regardless of the ordering of its inputs.  The merge algorithm shown in Algorithm~\ref{merge} creates a larger sorted array from two smaller sorted subarrays and is pivotal to how merge sort works.  The merge is where the majority of actual work is done when performing a merge sort.   
 
-As shown in algorithm 2, the input array is first split in half until only single elements remain.  Since an array consisting of a single element is inherently sorted, these single elements are then merged together to create increasingly large subarrays, until all subarrays have been merged together in a binary fashion to form a full-sorted result array.
+As shown in Algorithm~\ref{mergesort}, the input array is first split in half until only single elements remain.  Since an array consisting of a single element is inherently sorted, these single elements are then merged together to create increasingly large subarrays, until all subarrays have been merged together in a binary fashion to form a full-sorted result array.
 
-Since splitting the source data is such a fundamental aspect of merge sort, we developed an elegant algorithm which leverages the inherent domain decomposition present in merge sort.  Our method requires no communication between threads, uses no mutexes, and uses a total of only N barriers for N threads.  Furthermore, this algorithm ensures that each thread has access to approximately 1/N of the work and if blocked, is only ever blocked by a single other thread.  
+Since splitting the source data is such a fundamental aspect of merge sort, we developed an elegant algorithm which leverages the inherent domain decomposition present in merge sort.  Our method requires no communication between threads, uses no mutexes, and uses a total of only N barriers for N threads.  Furthermore, this algorithm ensures that each thread has access to approximately $\frac{1}{N}$ of the work and if blocked, is only ever blocked by a single other thread.  
 
-Shown in algorithm~\ref{mms}, Multithreaded Merge Sort (MMS) modifies the merge sort shown in algorithm~\ref{mergesort} to pass in the number of remaining threads.  If this number is zero, MMS functions identically to standard \texttt{mergesort()}. 
+Shown in Algorithm~\ref{mms}, Multithreaded Merge Sort (MMS) modifies the merge sort shown in Algorithm~\ref{mergesort} to pass in the number of remaining threads.  If this number is zero, MMS functions identically to standard \texttt{mergesort()}. 
 
 If the number of remaining threads is greater than zero however, it means that a new thread will be created to handle one of the two \texttt{mergesort()} calls that MMS will make.  The remaining threads will be decremented by one to reflect the new thread that will be created.  Finally, the number of remaining threads will be divided by two and distributed between the two MMS calls.  Our algorithm always gives the new thread the left half of the input array, and always distributes the remainder of the thread count division to the right.  We measured no change in performance with changes to this convention so it was preserved.  
 
@@ -413,7 +412,7 @@ Bitonic is affected by the same merge issue; however, it has another factor slow
 \end{figure*}
 
 \section{Conclusion}
-The conclusion goes here.
+We provided the description of the sort algorithms as well as the means to run each of them. In summary, a multi-threaded Merge sort is a worthy competitor to the C++ \texttt{std::sort}. Quicksort and Bitonic do not perform poorly, but do not quite reach the speeds of the Merge sort. These algorithms could potentially used some more optimization to further improve their speed down the road. Overall, this project provided a good background to sorting, parallel computing, and the building of algorithms for optimal use on a multicore architecture.
 
 
 \appendices
@@ -421,7 +420,7 @@ The conclusion goes here.
 \section*{Acknowledgment}
 
 
-The authors would like to thank...
+The authors would like to thank Dr. Alaa Alameldeen for the opportunity to work on this project as well as what we learned throughout the term to complete this course. We also would like to give thanks to the respective authors and contributers to the sort algorithms. We also would like to thank Github for hosting of this open source project. This project was also powered by Ninkasi Brewing Company Total Domination IPA and thanks goes out to them. Please remember to drink responsibly when sorting.
 
 
 % Can use something like this to put references on a page
@@ -456,7 +455,7 @@ The authors would like to thank...
  was born.  After this, he grew up. 
 frequently enjoys deleting things.  
 
-He occasionally invites friends over to his "meat sweat" parties, where guests compete against each other for ... 
+He occasionally invites friends over to his ``meat sweat'' parties, where guests compete against each other for ... 
 
 He frequently practices playing footsies with himself.
 
@@ -467,16 +466,16 @@ His current website, sauerkrause.org, is dedicated to converting physical docume
 \end{IEEEbiography}
 
 % if you will not have a photo at all:
-\begin{IEEEbiography}{Josh Moles}
+\begin{IEEEbiography}[{\includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{moles}}]{Josh Moles}
 %TODO: Type Josh's Bio
-Josh "Badness 10000" Moles was pronounced dead in 1985 in District 13 of either Oklahoma or Ohio (no one can remember).  Soon after, he was brought back to life, and he has recovered miraculously, having sustained only major, permanent, lifelong side effects.  Even though his condition was caused by infection, he maintains that vaccines are the reason for his autism.  Certain inconsistencies, such as the fact that he never received any vaccines and is not actually autistic, don't bother him in the slightest bit.  
+Josh ``Badness 10000'' Moles was pronounced dead in 1985 in District 13 of either Oklahoma or Ohio (no one can remember).  Soon after, he was brought back to life, and he has recovered miraculously, having sustained only major, permanent, lifelong side effects.  Even though his condition was caused by infection, he maintains that vaccines are the reason for his autism.  Certain inconsistencies, such as the fact that he never received any vaccines and is not actually autistic, don't bother him in the slightest bit.  
 
 Josh first stumbled upon video games when he tripped over a Christmas present his mother had put by the tree. 
 
 He tried to sue Sony after the Playstation II was released, claiming that he had come up with the idea of a Playstation II right after the first one came out.  Inspired by these video games, he would often dress up in a trenchcoat 
-and invite his ``friends'' over for some ``Dark Fighting''.  Soon after, he mysteriously began to lose his friends, a situation that was made worse by the fact that he referred to everyone as "Mum". 
+and invite his ``friends'' over for some ``Dark Fighting''.  Soon after, he mysteriously began to lose his friends, a situation that was made worse by the fact that he referred to everyone as ``Mum''. 
 
-His claim to fame came in 2005, when he won the XBOX ``UNO'' tournament.  He unfortunately never realized that the word  ``UNO'' actually referred to the number of players in the game.  It did, however, inspire him to create a ``2nd person shooter'' game. 
+His claim to fame came in 2005, when he won the Xbox 360 ``UNO'' tournament.  He unfortunately never realized that the word  ``UNO'' actually referred to the number of players in the game.  It did, however, inspire him to create a ``2nd person shooter'' game. 
 
 While most people like to socialize with others, Josh does not engage in this activity, claiming it's as boring as ``watching 4 Kirby's playing Super Smash Bros.''  Instead, he frequently goes to malls wearing small running shorts and tells everyone to look at his white thighs or ``mayonnaise jars'', as he likes to call them.  
 
