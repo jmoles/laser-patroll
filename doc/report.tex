@@ -574,7 +574,6 @@ The four algorithms benchmarked and discussed in this report are the C++ \texttt
 % You must have at least 2 lines in the paragraph with the drop letter
 % (should never be an issue)
 
-
 \section{Sorting Algorithms}
 \label{sec:sorting}
 This section will discuss the four sorting algorithms run.
@@ -615,8 +614,6 @@ Quicksort is primarily a sequential algorithm, so to take advantage of parallel 
 %			merge_threads	
 %	else 
 %		Quicksort		
-
-
 % Sequential Quicksort(data[], left, right)
 %
 %  i = left, j = right
@@ -635,7 +632,6 @@ Quicksort is primarily a sequential algorithm, so to take advantage of parallel 
 %if (i < right)
 %        quickSort(data, i, right)
 %
-
 
 \subsection{Merge Sort}
 Merge sort is a divide-and-conquer sorting algorithm which uniquely exhibits $O(n\ Log(n))$ time complexity regardless of the ordering of its inputs.  The merge algorithm shown in algorithm \ref{merge} creates a larger sorted array from two smaller sorted subarrays and is pivotal to how merge sort works.  The merge is where the majority of actual work is done when performing a merge sort.   
@@ -722,11 +718,9 @@ GitHub was also used for revision control. This entire project is available for 
 %TODO: Mention:
 % Code having no memory leaks.
 
-
 \section{Results}
 \label{sec:results}
 %TODO: Things to mention.
-
 
 % - Add the four charts that were shown in the presentation.
 
@@ -736,7 +730,7 @@ It is important to note that throughout all of these tests, anything labeled as 
 
 The first series are in Figure~\ref{fig:tvtlg} for a data set of size 134,217,728 elements and Figure~\ref{fig:tvtsm} for a data set of size 512 elements. These tests aimed to see how each algorithm performs with an increasing number of threads both with a small set of data and a large set of data. Ideally, each algorithm should get faster as the number of threads it has available to perform work increases.
 
-% TODO: Why does Quicksort do what it does?
+%TODO: Why does Quicksort do what it does?
 Looking first at the large data set, Merge sort follows the ideal situation quite well and starts to reach a limit in execution time as it gets to the end. Quicksort seems fairly flat over the execution regardless of the number of threads allocated to it. This could be a results of the domain decomposition model of splitting up the work and bringing it back together. As the number of threads increases, there is a final merge that only merges two sets of data at a time. This could result in this final merge occupying more time. 
 
 % - Bitonic time with padding if not power of two. 
@@ -1034,15 +1028,42 @@ The authors would like to thank...
 %\begin{biography}[{\includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{mshell}}]{Michael Shell}
 % or if you just want to reserve a space for a photo:
 
-\begin{IEEEbiography}{Eric Krause}
+\begin{IEEEbiography}{Eric ``Josh Moles'' Krause}
 %TODO: Type Eric's contribution.
-bio
+ was born.  After this, he grew up. 
+frequently enjoys deleting things.  
+
+He occasionally invites friends over to his "meat sweat" parties, where guests compete against each other for ... 
+
+He frequently practices playing footsies with himself.
+
+Eric tries to convince everyone that his opinions mean nothing, but they never seem to care. 
+
+His current website, sauerkrause.org, is dedicated to converting physical documents to their digital version.
+
 \end{IEEEbiography}
 
 % if you will not have a photo at all:
 \begin{IEEEbiography}{Josh Moles}
 %TODO: Type Josh's Bio
-Biography text here.
+Josh "Badness 10000" Moles was pronounced dead in 1985 in District 13 of either Oklahoma or Ohio (no one can remember).  Soon after, he was brought back to life, and he has recovered miraculously, having sustained only major, permanent, lifelong side effects.  Even though his condition was caused by infection, he maintains that vaccines are the reason for his autism.  Certain inconsistencies, such as the fact that he never received any vaccines and is not actually autistic, don't bother him in the slightest bit.  
+
+Josh first stumbled upon video games when he tripped over a Christmas present his mother had put by the tree. 
+
+He tried to sue Sony after the Playstation II was released, claiming that he had come up with the idea of a Playstation II right after the first one came out.  Inspired by these video games, he would often dress up in a trenchcoat 
+and invite his ``friends'' over for some ``Dark Fighting''.  Soon after, he mysteriously began to lose his friends, a situation that was made worse by the fact that he referred to everyone as "Mum". 
+
+His claim to fame came in 2005, when he won the XBOX ``UNO'' tournament.  He unfortunately never realized that the word  ``UNO'' actually referred to the number of players in the game.  It did, however, inspire him to create a ``2nd person shooter'' game. 
+
+While most people like to socialize with others, Josh does not engage in this activity, claiming it's as boring as ``watching 4 Kirby's playing Super Smash Bros.''  Instead, he frequently goes to malls wearing small running shorts and tells everyone to look at his white thighs or ``mayonnaise jars'', as he likes to call them.  
+
+After seeing Unbreakable, he became convinced that he, too, could read people's past just by touching them. Not only did he receive multiple restraining orders and felonies - he also single-handedly gave over 10,000 people shingles.
+
+
+When he isn't in prison, Josh likes to paint pictures of himself in prison.  
+Josh has three children, all of which have had amber alerts issued by their real parents.  When he's not turning in early, 
+He is fluent in moustache. 
+
 \end{IEEEbiography}
 
 % insert where needed to balance the two columns on the last page with
