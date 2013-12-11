@@ -429,7 +429,7 @@
 % correct bad hyphenation here
 \hyphenation{op-tical net-works semi-conduc-tor}
 
-\linespread{2}
+\linespread{1.5}
 \begin{document}
 
 
@@ -558,47 +558,43 @@ soting, Bitonic sort, Quicksort, Merge sort, class.
 % 
 % Here we have the typical use of a "T" for an initial drop letter
 % and "HIS" in caps to complete the first word.
-
-% TODO: Probably want to expand this intro.
 \IEEEPARstart{S}{orting} data is a task in computer science that is highly important because it is a very common operation. This report discusses the work done by Laser Patroll [sic] for a team project at Portland State University for the ECE 588 course taught in Fall 2013. The focus of this project was twofold: 
 \begin{itemize}
 \item First, to either identify parallel sorting algorithms and implement them, or parallelize existing serial (single-threaded) algorithms. 
 \item Second, benchmark each of the selected algorithms against each other.  This involved sorting lists of varying lengths using varying numbers of threads, while measuring the relative performance and behavior of the selected algorithms against a known, highly optimized sort, the C++ \texttt{std::sort}.
 \end{itemize}
 
-
 The four algorithms benchmarked and discussed in this report are the C++ \texttt{std::sort}, Quicksort~\cite{Hoare1961}~\cite{Hoare1962}, Merge sort~\cite{Knuth:1998:ACP:280635}, and Bitonic sort~\cite{Batcher1968}. In this report, we first present an overview of these sorting algorithms in Section~\ref{sec:sorting}, then cover the C++ testing framework designed to check the sorted data and gather results in Section~\ref{sec:testing}, and finally present the results of the four algorithms in Section~\ref{sec:results}.
-
-%TODO: Talk about how we picked these algorithms.
-
-% You must have at least 2 lines in the paragraph with the drop letter
-% (should never be an issue)
-
 
 \section{Sorting Algorithms}
 \label{sec:sorting}
 This section will discuss the four sorting algorithms run.
 
 \subsection{Basic Sort}
-%TODO: Expand std::sort description. It apparently uses a introspective sort and heapsort, maybe? Should cite.
 Basic sort was implemented by simply passing the data array to \texttt{std::sort}. In no case was it executed in a parallel fashion.
 
 \subsection{Quick Sort}
-%TODO: cite  http://www.algolist.net/img/sorts/quick-sort.png
 %TODO: Integrate pseudocode
 
 Quicksort is a partition-exchange sort that uses pivots to reorder elements. While its worst case is $O(n^2)$, Quicksort tends to perform faster than other sorts in the same performance class. Caches improve the sort time substantially, due to Quicksort's tendency to exhibit spatial locality. It can be sorted in place, allowing for less memory usage during the process. 
 
 \begin{figure*}[f]
-  \caption{Quicksort Algorithm}
+  \caption{Quicksort Algorithm from http://www.algolist.net/Algorithms/Sorting/Quicksort}
   \centering
   \includegraphics[width=2.5in]{quick-sort.png}
   \label{fig:Quicksort Algorithm}
 \end{figure*}
 
-Figure \ref{fig:Quicksort Algorithm} shows how the sorting is done. First a pivot value is selected.  Starting with the outermost locations, the numbers are compared against the pivot.  After each side has found a number belonging to the other side, the numbers are swapped in place. This is continued until the indexes have switched sides, at which point Quicksort is called recursively.
+Figure~\ref{fig:Quicksort Algorithm} shows how the sorting is done. First a pivot value is selected.  Starting with the outermost locations, the numbers are compared against the pivot.  After each side has found a number belonging to the other side, the numbers are swapped in place. This is continued until the indexes have switched sides, at which point Quicksort is called recursively.
 
-Quicksort is primarily a sequential algorithm, so to take advantage of parallel threading, the data was divided into different sections by the number of threads available.  This domain decomposition is seen in figure ..  Once each thread has finished, they are merged back together and sorted sequentially. 
+Quicksort is primarily a sequential algorithm, so to take advantage of parallel threading, the data was divided into different sections by the number of threads available.  This domain decomposition is seen in Figure~\ref{fig:dd}.  Once each thread has finished, they are merged back together and sorted sequentially. 
+
+\begin{figure*}[t]
+  \caption{Domain Decomposition}
+  \centering
+  \includegraphics[width=.75\textwidth]{include/dd.png}
+  \label{fig:dd}
+\end{figure*}
 
 
 %Parallel Quicksort (data[], num_threads)
@@ -638,17 +634,17 @@ Quicksort is primarily a sequential algorithm, so to take advantage of parallel 
 
 
 \subsection{Merge Sort}
-Merge sort is a divide-and-conquer sorting algorithm which uniquely exhibits $O(n\ Log(n))$ time complexity regardless of the ordering of its inputs.  The merge algorithm shown in algorithm \ref{merge} creates a larger sorted array from two smaller sorted subarrays and is pivotal to how merge sort works.  The merge is where the majority of actual work is done when performing a merge sort.   
+Merge sort is a divide-and-conquer sorting algorithm which uniquely exhibits $O(n\ Log(n))$ time complexity regardless of the ordering of its inputs.  The merge algorithm shown in algorithm~\ref{merge} creates a larger sorted array from two smaller sorted subarrays and is pivotal to how merge sort works.  The merge is where the majority of actual work is done when performing a merge sort.   
 
 As shown in algorithm 2, the input array is first split in half until only single elements remain.  Since an array consisting of a single element is inherently sorted, these single elements are then merged together to create increasingly large subarrays, until all subarrays have been merged together in a binary fashion to form a full-sorted result array.
 
 Since splitting the source data is such a fundamental aspect of merge sort, we developed an elegant algorithm which leverages the inherent domain decomposition present in merge sort.  Our method requires no communication between threads, uses no mutexes, and uses a total of only N barriers for N threads.  Furthermore, this algorithm ensures that each thread has access to approximately 1/N of the work and if blocked, is only ever blocked by a single other thread.  
 
-Shown in algorithm \ref{mms}, Multithreaded Merge Sort (MMS) modifies the merge sort shown in algorithm \ref{mergesort} to pass in the number of remaining threads.  If this number is zero, MMS functions identically to standard \texttt{mergesort()}. 
+Shown in algorithm~\ref{mms}, Multithreaded Merge Sort (MMS) modifies the merge sort shown in algorithm~\ref{mergesort} to pass in the number of remaining threads.  If this number is zero, MMS functions identically to standard \texttt{mergesort()}. 
 
 If the number of remaining threads is greater than zero however, it means that a new thread will be created to handle one of the two \texttt{mergesort()} calls that MMS will make.  The remaining threads will be decremented by one to reflect the new thread that will be created.  Finally, the number of remaining threads will be divided by two and distributed between the two MMS calls.  Our algorithm always gives the new thread the left half of the input array, and always distributes the remainder of the thread count division to the right.  We measured no change in performance with changes to this convention so it was preserved.  
 
-An example of how MMS would create threads if initially launched with 4 threads is illustrated in figure \ref{mms_thread}.  At the top, MMS receives 4 threads. A new thread will be created.  The 3 remaining threads (R) are divided up amongst T\_1, the new thread and the recursive call to MMS performed by T\_0.  As shown, this threading model ensures that every thread has equal access to work at the bottom of the tree once N threads are created.  In this example, each thread is responsible for 2 of the 8 subarrays.  Note that many high-level threads would be blocked for the majority of execution if each call to MMS started (and had to wait on) two threads.
+An example of how MMS would create threads if initially launched with 4 threads is illustrated in Figure~\ref{mms_thread}.  At the top, MMS receives 4 threads. A new thread will be created.  The 3 remaining threads (R) are divided up amongst T\_1, the new thread and the recursive call to MMS performed by T\_0.  As shown, this threading model ensures that every thread has equal access to work at the bottom of the tree once N threads are created.  In this example, each thread is responsible for 2 of the 8 subarrays.  Note that many high-level threads would be blocked for the majority of execution if each call to MMS started (and had to wait on) two threads.
 
 \begin{figure*}[f]
 \caption{MMS threading model}
@@ -677,14 +673,14 @@ An example of how MMS would create threads if initially launched with 4 threads 
 	\label{bitonic_build}
 	\end{figure*}
 
-The bitonic sort is a sort algorithm primarily used for parallel execution. The complexity is consistently  $O(n\ Log^2(n))$, regardless of the data received. This sort consists of two different methods.  First, the random data must be sorted or "built" into one bitonic sequence.  After this is done, the bitonic sort algorithm is applied and the data is fully sorted (for the sequential version).  
+The bitonic sort is a sort algorithm primarily used for parallel execution. The complexity is consistently  $O(n\ Log^2(n))$, regardless of the data received. This sort consists of two different methods.  First, the random data must be sorted or ``built'' into one bitonic sequence.  After this is done, the bitonic sort algorithm is applied and the data is fully sorted (for the sequential version).  
 
 A bitonic sequence consists of sorted data divided into two sections, one with an ascending order and one with a descending order [Figure \ref{bitonic_split}].   Once this has been arranged, the sorting can take place.  To sort the data, each element is compared with the corresponding element of the other half. One half stores the minimum of the compared elements, while the other half stores the maximum number.  Because the bitonic sort uses a divide-and-conquer algorithm, the data is split in half and sorted this way until atomic elements are reached.  
 
-To build the initial bitonic sequence, the bitonic sort is applied to every pair of elements.  It is important to note that if there are only two elements in a dataset, it is guaranteed to be a bitonic sequence.  After this has occurred, each element of the pair is compared with another pair and are sorted down to a single element.  This process is repeated until one large bitonic sequence has been reached [Figure \ref{bitonic_build}].  It is important to note that this sort only works on a data size that is a power of 2.  For this reason, any data of a different was padded to allow the same sorting algorithm to be supplied.
+To build the initial bitonic sequence, the bitonic sort is applied to every pair of elements.  It is important to note that if there are only two elements in a dataset, it is guaranteed to be a bitonic sequence.  After this has occurred, each element of the pair is compared with another pair and are sorted down to a single element.  Figure \ref{bitonic_build}~shows how this process is repeated until one large bitonic sequence has been reached.  It is important to note that this sort only works on a data size that is a power of 2.  For this reason, any data of a different was padded to allow the same sorting algorithm to be supplied.
 %Mention padding ?
 
-The bitonic sort uses the same algorithm as Quicksort for parallel thread management [See figure ..].
+The bitonic sort uses the same algorithm as Quicksort for parallel thread management as shown in Figure~\ref{fig:dd}.
 
 \section{Testing Framework}
 \label{sec:testing}
@@ -698,8 +694,14 @@ C++ was selected as the language to implement the testing framework and all the 
 \item Ability to swap object that data for sorting was stored in easily.
 \end{itemize}
 
-%TODO: Figure
-These goals were accomplished through an object oriented set of classes. A common \texttt{SortCommon} class was the parent of all the sort algorithms and contained the means to benchmark an algorithm, generate an unsorted data vector, check if a given set of data is sorted or not, divide set of data using domain decomposition, merging, and padding (used by Bitonic). Each of the sort functions were free to do the sort by any reasonable means necessary. The requirements were that the only two inputs the Sort gets is a set of data and the number of threads it is allowed to divide the data up across. Figure XX shows the layout of these classes and the overall framework.
+\begin{figure*}[t]
+  \caption{Framework}
+  \centering
+  \includegraphics[width=.75\textwidth]{framework.png}
+  \label{fig:framework}
+\end{figure*}
+
+These goals were accomplished through an object oriented set of classes. A common \texttt{SortCommon} class was the parent of all the sort algorithms and contained the means to benchmark an algorithm, generate an unsorted data vector, check if a given set of data is sorted or not, divide set of data using domain decomposition, merging, and padding (used by Bitonic). Each of the sort functions were free to do the sort by any reasonable means necessary. The requirements were that the only two inputs the Sort gets is a set of data and the number of threads it is allowed to divide the data up across. Figure~\ref{fig:framework} shows the layout of these classes and the overall framework.
 
 The algorithm was to sort the data in place (or at least modify the pointer to the new set of data) so that the benchmark function can then validate that the data was sorted. All four of the algorithms did the sort in place (modified the passed in data directly) or created a ``destination'' data set and then swapped the pointer of the two at the end. Memory utilization can become an issue with sets of data this large so copying or making copies of large subsets of the data was not performed in the algorithms.
 
@@ -719,33 +721,18 @@ The code was also checked with valgrind to verify that there were minimal memory
 
 GitHub was also used for revision control. This entire project is available for download at \url{http://github.com/jmoles/laser-patroll/}. Doxygen is also commented in-line to generate a set of HTML and PDF documentation for the project.
 
-%TODO: Mention:
-% Code having no memory leaks.
-
 
 \section{Results}
 \label{sec:results}
-%TODO: Things to mention.
+This section provides the results for the tests of the algorithms. The results will show the amount of time it took each algorithm to sort with a varying number of threads and constant data size. It is important to note that throughout all of these tests, anything labeled as ``basic'' is \texttt{std::sort} running in a \textbf{serial} fashion. We did not wrap any parallelization around \texttt{std::sort} so that each of the algorithms are evaluated against the sort that would likely be used in C++.
 
+The results are in Figure~\ref{fig:tvtlg} for a data set of size 134,217,728 elements and Figure~\ref{fig:tvtsm} for a data set of size 512 elements. These tests aimed to see how each algorithm performs with an increasing number of threads both with a small set of data and a large set of data. Ideally, each algorithm should get faster as the number of threads it has available to perform work increases.
 
-% - Add the four charts that were shown in the presentation.
-
-This section provides the results for the tests of the algorithms. Two different types of tests will be presented. The first is showing the amount of time it took each algorithm to sort with a varying number of threads and constant data size. The other shows the total time all four algorithms took to execute and then percentage of that total time that each algorithm took to run plotting for a constant number of threads and a varying data size.
-
-It is important to note that throughout all of these tests, anything labeled as ``basic'' is \texttt{std::sort} running in a \textbf{serial} fashion. We did not wrap any parallelization around \texttt{std::sort} so that each of the algorithms are evaluated against the sort that would likely be used in C++.
-
-The first series are in Figure~\ref{fig:tvtlg} for a data set of size 134,217,728 elements and Figure~\ref{fig:tvtsm} for a data set of size 512 elements. These tests aimed to see how each algorithm performs with an increasing number of threads both with a small set of data and a large set of data. Ideally, each algorithm should get faster as the number of threads it has available to perform work increases.
-
-% TODO: Why does Quicksort do what it does?
 Looking first at the large data set, Merge sort follows the ideal situation quite well and starts to reach a limit in execution time as it gets to the end. Quicksort seems fairly flat over the execution regardless of the number of threads allocated to it. This could be a results of the domain decomposition model of splitting up the work and bringing it back together. As the number of threads increases, there is a final merge that only merges two sets of data at a time. This could result in this final merge occupying more time. 
 
-% - Bitonic time with padding if not power of two. 
-% - might need to mention more about this
 Bitonic is affected by the same merge issue; however, it has another factor slowing it down:  It can only operate on input arrays that are of a length that is a power of 2.  Our Bitonic algorithm pads the inputs data with zeros to increase its length until it is equal to a power of 2, and then removes this additional padding after it is sorted.  Evidently, the amount of time required to pad and unpad the input data is nontrivial, as Bitonic shows an average trend of decreasing execution time, but is susceptible to the requirement that the data and threads must be a power of two. As a result, Bitonic performs the best on the situations where the number of threads is a power of two and begins to slow down as it increases from a power of two, peaking one value right before the next power of two.  
-%TODO: Small data execution results for size.
-%TODO: Single threaded case is missing on the plot.
 
-\begin{figure*}[!t]
+\begin{figure*}[t]
   \centering
   \caption{Time vs Threads Large Data (Size = 134217728)}
   \label{fig:tvtlg}
@@ -772,7 +759,7 @@ Bitonic is affected by the same merge issue; however, it has another factor slow
   \end{tikzpicture}
 \end{figure*}
 
-\begin{figure*}[!t]
+\begin{figure*}[t]
   \centering
   \caption{Time vs Threads Large Data (Size = 512)}
   \label{fig:tvtsm}
@@ -801,29 +788,6 @@ Bitonic is affected by the same merge issue; however, it has another factor slow
     \end{axis}
   \end{tikzpicture}
 \end{figure*}
-
-%TOOO/Note: Do these second series even show anything of value? Should we produce something else? Thoughts?
-
-\begin{figure*}[!t]
-  \caption{Time Percentage Four Threads}
-  %\includegraphics[width=2.5in]{myfigure}
-  \label{fig:timeperfour}
-\end{figure*}
-
-\begin{figure*}[!t]
-  \caption{Time Percentage Twenty Four Threads}
-  %\includegraphics[width=2.5in]{myfigure}
-  \label{fig:timepertwentyfour}
-\end{figure*}
-
-\subsection{Subsection Heading Here}
-Subsection text here.
-
-% needed in second column of first page if using \IEEEpubid
-%\IEEEpubidadjcol
-
-\subsubsection{Subsubsection Heading Here}
-Subsubsection text here.
 
 
 % An example of a floating figure using the graphicx package.
@@ -912,50 +876,6 @@ Subsubsection text here.
 
 \section{Conclusion}
 The conclusion goes here.
-
-
-
-\section{Lorem}
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nec dictum massa. Phasellus ornare massa congue mi sodales suscipit. Maecenas tristique volutpat porttitor. Quisque venenatis rutrum orci ac auctor. Vestibulum ullamcorper, purus eu tempus malesuada, tellus felis lobortis risus, vel tincidunt felis nunc ut sem. Mauris iaculis tellus non mauris laoreet, sit amet viverra turpis pharetra. Curabitur hendrerit aliquam nunc a elementum. Quisque leo quam, fringilla hendrerit tristique non, consectetur nec elit. Fusce tristique lobortis vestibulum. Nam id dictum libero. Quisque eget lectus commodo nibh egestas consectetur sed vitae elit. Nulla id purus urna.
-
-Etiam hendrerit a diam nec feugiat. Praesent non ultricies est, ac pellentesque neque. Vestibulum eu libero lectus. Vestibulum id justo vitae libero consequat auctor. Mauris et posuere lorem. Etiam sed tincidunt purus. Fusce ac felis arcu. Sed sit amet mi vel enim faucibus porta. Praesent et tincidunt nulla. Nunc tincidunt ligula in lacus posuere, fermentum tempus sapien convallis. Quisque eu lectus fermentum, bibendum dui luctus, aliquet neque. Curabitur a magna fringilla, semper ligula eget, interdum dolor. Etiam aliquet dui sit amet metus faucibus, id tempor metus gravida. Vestibulum nec nibh eu elit imperdiet cursus a sed tortor.
-
-Duis congue fermentum libero vitae feugiat. Quisque vel libero sit amet magna euismod tristique. Sed luctus elit eget sem vehicula consequat. Proin vitae metus erat. Curabitur nisl nisl, ultrices vitae diam faucibus, condimentum volutpat velit. Proin semper nisi nec fringilla aliquet. Pellentesque ante ligula, tempor id placerat vel, tincidunt eget arcu. Sed facilisis accumsan felis, eu scelerisque leo consequat ac. Cras sed pellentesque urna, quis placerat neque. Vivamus rutrum, elit elementum posuere tristique, neque urna imperdiet massa, at interdum velit lorem sit amet neque. Donec fringilla nibh dui, in egestas sapien tempus non. Fusce venenatis, est in gravida dictum, sapien purus sollicitudin dui, eu porttitor nibh sem eu lacus. Mauris quis luctus massa.
-
-Sed luctus turpis nulla, ut faucibus sapien congue id. Vestibulum vestibulum neque vitae luctus consectetur. Nullam tempor non nisi sit amet dictum. Cras auctor semper tortor eget pretium. Ut eu ultrices dolor. Donec ac lectus eget dui semper rhoncus eu et tortor. Nulla eu eros vel turpis imperdiet fermentum ut pretium nisi. Sed eget nunc pretium, consequat nulla in, sagittis massa. Fusce nec dictum tellus. Fusce lobortis erat risus, in fringilla turpis molestie a. Nam commodo nulla leo, vitae semper enim dictum a. Suspendisse a suscipit purus. Quisque in metus at metus aliquet iaculis.
-
-Aliquam fermentum urna sem, at dapibus massa luctus id. Sed sit amet tincidunt nisi. Morbi tincidunt, arcu nec dapibus consequat, est lacus convallis dolor, sed euismod justo purus quis arcu. Vivamus euismod sem erat, in tincidunt sem semper sed. Quisque massa risus, euismod ut neque non, bibendum suscipit quam. Sed eget congue est, sit amet dictum odio. Praesent quam libero, tincidunt non augue sit amet, pellentesque faucibus enim. Integer pellentesque dolor et vulputate pellentesque. Nullam velit nulla, aliquet ac fringilla a, vestibulum non est. In in faucibus felis. Aenean aliquam, neque ac varius volutpat, nulla mauris rutrum mi, ut congue augue justo eu tortor. Nulla eget nisi tempor, sagittis urna eget, iaculis turpis. Nunc malesuada justo mauris, vel tristique magna sodales a. Fusce et massa sit amet urna fringilla interdum. Nulla id augue sit amet sem laoreet iaculis. Nullam id ornare nisl.
-
-Etiam vel urna tellus. Mauris viverra nulla vitae tellus dapibus, sit amet pulvinar nisl luctus. Nunc porttitor diam massa, ut blandit lectus ultrices at. Sed consectetur venenatis turpis interdum ullamcorper. Quisque orci tortor, malesuada vel placerat ac, rutrum non mauris. Phasellus leo neque, venenatis sit amet tellus id, interdum placerat turpis. Mauris ullamcorper volutpat arcu, eu mollis lorem pellentesque elementum.
-
-Integer eget nisl bibendum, tristique turpis vitae, interdum nulla. Quisque sit amet lobortis nulla. Nulla lobortis diam nec luctus aliquet. Suspendisse eleifend sed arcu vitae consequat. Praesent quis ipsum quis nulla varius malesuada. Cras sit amet mi blandit, auctor felis lobortis, feugiat odio. In mattis sodales ligula sit amet porttitor. Quisque quam leo, ullamcorper ut tempus id, venenatis non justo. Suspendisse potenti. Pellentesque dapibus dui sed mauris tristique auctor. Phasellus sed semper nunc. Donec posuere urna ac dictum ultricies. Quisque placerat dui magna, sed faucibus quam posuere sit amet.
-
-Aenean egestas tellus sit amet felis bibendum hendrerit. Aenean eleifend at erat sed mollis. Quisque ac malesuada arcu, id accumsan velit. Morbi a orci ut elit porta eleifend. Fusce metus arcu, sodales vel aliquam eget, semper in odio. Sed fermentum aliquam mauris, ullamcorper auctor ante blandit vitae. Aenean eu massa mauris. Etiam vitae dignissim elit. Phasellus volutpat massa vitae tortor porttitor vestibulum. Pellentesque pulvinar elit sed augue aliquam, in aliquet mauris tristique. Nam eleifend molestie nulla et commodo. Fusce lobortis ligula sed feugiat condimentum. Vestibulum eget tristique arcu. Duis porttitor ac metus vel ullamcorper.
-
-Aliquam dui nibh, egestas et odio quis, auctor tempus dui. Nullam sed convallis nisl. Sed eu vulputate dui. Suspendisse sodales ipsum ut adipiscing suscipit. Phasellus vel diam ornare, placerat lorem quis, posuere odio. Sed id arcu ut ante ultrices laoreet. Sed mattis euismod urna vitae porta. Aenean vel urna eu augue molestie ultricies. Sed molestie ipsum sem, in venenatis nulla facilisis quis. Pellentesque lorem odio, ornare at libero quis, vehicula dignissim nisl. Nam facilisis, elit at mattis vulputate, nisl ipsum molestie purus, ut consequat leo tellus quis diam. Vestibulum volutpat consequat lectus et porta. Phasellus mollis libero quis scelerisque accumsan. Duis a ipsum ultricies, imperdiet nulla tempor, pellentesque arcu.
-
-Proin vel quam feugiat, elementum sem id, vestibulum urna. Pellentesque congue odio at consequat pharetra. Integer quis varius arcu, ac malesuada turpis. In lacus risus, sagittis in arcu at, tincidunt consequat turpis. Ut eget magna accumsan, adipiscing est vel, posuere nunc. Maecenas laoreet aliquam varius. Fusce dictum, sapien tincidunt pretium tempus, lectus nibh fermentum est, sit amet ornare dolor dolor eu nunc.
-
-Aliquam eros quam, lobortis quis faucibus convallis, iaculis bibendum velit. Sed in lectus ut nibh bibendum suscipit id ac justo. Aenean turpis tortor, mollis nec libero id, ultrices hendrerit orci. Nullam eu nulla ut dolor pretium vehicula. Cras auctor nisi vitae eros aliquet, quis pulvinar risus tristique. Praesent nisi arcu, consequat quis tempus quis, porttitor at justo. Curabitur ut mauris vitae massa feugiat congue. Aenean vulputate felis at euismod ultricies. Aliquam at fringilla dui, nec gravida metus. Nunc vulputate bibendum felis ut mollis. Maecenas imperdiet pellentesque erat, quis pellentesque quam venenatis in.
-
-Quisque aliquam ligula felis, vel auctor turpis eleifend eu. Maecenas aliquet quam et magna viverra, et suscipit mi tempus. Fusce sit amet lectus magna. Quisque dignissim porttitor neque, quis accumsan dui gravida et. Sed lacinia quam velit. Duis vehicula neque id aliquam egestas. Phasellus molestie dolor ut posuere convallis.
-
-Donec malesuada ut augue ut mattis. In dictum mauris sapien, eu euismod purus semper in. Nunc malesuada elit erat, vel semper massa gravida et. Proin lobortis auctor condimentum. Vestibulum diam sem, adipiscing et tellus eget, iaculis pellentesque quam. Integer ac nunc eu ipsum ullamcorper blandit vitae ut nisi. Sed commodo magna nec tempor bibendum. Nam metus nisi, malesuada at magna sed, eleifend lobortis massa. Suspendisse facilisis velit vitae malesuada fringilla. Etiam augue massa, aliquam non aliquam ac, vestibulum nec orci.
-
-Vestibulum convallis, eros ut sodales mattis, sapien nisl sodales lectus, vitae blandit lectus mi vel justo. Cras mollis lacinia bibendum. Morbi tristique sem in egestas gravida. Duis hendrerit massa sit amet elit tincidunt, et vestibulum metus condimentum. Donec venenatis luctus est, tempus iaculis orci consequat non. Sed in tortor accumsan urna luctus pulvinar. Nunc velit mi, interdum et turpis eu, porttitor convallis ligula. Curabitur dui augue, commodo sed lacus at, molestie tincidunt enim. In facilisis sapien eget nisi blandit, in fermentum sem viverra. Vestibulum viverra ac lectus vitae vehicula. Quisque condimentum vel mi vitae convallis. Integer convallis suscipit elit a varius. Proin sollicitudin sapien eget nibh cursus viverra. Ut placerat nulla ac nulla suscipit, in posuere enim consequat. Nulla posuere mauris vel ligula eleifend, sit amet condimentum odio pulvinar.
-
-Nullam posuere libero sed lectus ultricies congue. Nam accumsan justo ac ultricies euismod. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Proin leo urna, ultricies quis lacus quis, pulvinar suscipit purus. Cras elementum sed nisl at condimentum. Nulla et porttitor sapien. Proin a gravida leo, vel iaculis turpis. Vivamus lacinia, nunc eu lacinia fermentum, neque felis tempor massa, scelerisque rhoncus lorem quam vitae nulla. Vivamus volutpat erat vitae lacinia congue.
-
-Maecenas scelerisque in ante nec interdum. Integer ullamcorper nulla ac neque iaculis, sit amet semper quam varius. Vivamus sollicitudin imperdiet nunc, sed adipiscing mi. Etiam sed est ipsum. Nullam adipiscing vitae erat nec tincidunt. Donec a tortor sed arcu luctus consectetur. Vivamus viverra mauris eget sollicitudin consectetur.
-
-In aliquet massa in venenatis elementum. Etiam in nibh non leo dictum dignissim. Aliquam in tortor magna. Aliquam dolor nisi, aliquet eu ipsum vel, malesuada volutpat velit. Sed a dui a augue pulvinar ornare id ac urna. Sed fringilla odio at leo rutrum, sit amet imperdiet odio mollis. Nam at velit et sem molestie pellentesque. Curabitur dignissim ipsum fringilla, ullamcorper quam vel, pellentesque dolor. Vivamus imperdiet ultricies mauris, non porta libero pharetra id. Pellentesque vitae sapien sed metus porta elementum non non tellus. Morbi congue tortor turpis, et cursus sapien elementum quis. Duis posuere euismod lacus, quis eleifend urna euismod eget. Aenean sollicitudin odio eget pellentesque luctus. Quisque condimentum, nisi a commodo aliquet, erat arcu tempor nisi, et ullamcorper enim massa ac tortor. Suspendisse porttitor viverra orci sit amet viverra. Donec dolor ipsum, ultrices quis enim eget, molestie imperdiet nisl.
-
-Ut erat velit, auctor quis nulla ac, mattis fermentum leo. Nulla ultrices arcu vitae mattis rutrum. In gravida sapien in dapibus aliquam. Proin luctus mollis dui nec vehicula. Cras ut elit eu mauris luctus lacinia. Vestibulum quis lectus laoreet, tincidunt massa vel, venenatis leo. Aliquam augue tellus, lacinia sit amet nibh ut, dictum rutrum metus. Cras ut risus lorem. Nam eget mi elit. Curabitur eget ipsum enim. Etiam sed iaculis diam, eget fermentum lectus.
-
-Vestibulum quis nunc eget urna lobortis aliquam a id odio. Morbi vehicula dui ac adipiscing suscipit. In hac habitasse platea dictumst. Pellentesque dapibus sagittis erat. Ut fermentum tincidunt volutpat. Integer nec hendrerit erat. Quisque rutrum id elit et vehicula. Vivamus gravida eros rhoncus sollicitudin elementum. In hac habitasse platea dictumst. Curabitur condimentum placerat odio, non feugiat metus vulputate non. Nulla eros leo, aliquet a posuere eget, dictum malesuada lorem. Morbi varius lectus tortor, in tincidunt orci congue in. Ut rhoncus ultricies scelerisque. Phasellus sodales nisi in elit condimentum volutpat. Pellentesque dignissim, orci vitae rhoncus sodales, risus diam rutrum nibh, vitae aliquet ligula urna eu diam. Integer dignissim eros sed dolor pulvinar, non congue elit hendrerit.
-
-Proin tempor adipiscing lobortis. Duis in sapien nibh. Aliquam vel mauris sem. Vestibulum iaculis eleifend neque ac sagittis. Sed quis purus risus. Ut justo purus, vestibulum ac malesuada vitae, pellentesque blandit tellus. Donec elementum turpis ante, vitae dignissim augue tempor eu. Integer gravida erat ut neque fermentum, vel adipiscing mauris consectetur. Cras a ligula lacinia, hendrerit dolor quis, lobortis magna. Sed placerat cursus erat in pretium. Etiam est sapien, cursus interdum interdum dictum, facilisis quis augue. Phasellus feugiat, neque ut placerat facilisis, nunc odio molestie ligula, eu convallis nisl enim sit amet mauris.
-
 
 
 % if have a single appendix:
