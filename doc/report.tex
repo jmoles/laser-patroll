@@ -127,7 +127,7 @@
 
 \author{Eric~Krause,~\IEEEmembership{Griddle~Master,~Breakfast~Confectionery~Guild,}
         Josh~Moles,~\IEEEmembership{Waffle~Stomper,~Breakfast~Confectionery~Guild,}
-        and~Erik~Rhodes,~\IEEEmembership{Eggtravagent~Chef,~Breakfast~Confectionery~Guild}% <-this % stops a space
+        and~Erik~Rhodes,~\IEEEmembership{Eggtravagant~Chef,~Breakfast~Confectionery~Guild}% <-this % stops a space
 \thanks{E. Krause is a master of the arts of pancake capture at the Guild.}% <-this % stops a space
 \thanks{J. Moles enjoys the art of waffle design.}% <-this % stops a space
 \thanks{E. Rhodes does not understand why eggs are not more common in everyone's daily life.}%
@@ -149,7 +149,7 @@ This work discusses a benchmarking of four sort algorithms tested against each o
 \end{abstract}
 
 \begin{IEEEkeywords}
-soting, Bitonic sort, Quicksort, Merge sort, class.
+sorting, Bitonic sort, Quicksort, Merge sort, class.
 \end{IEEEkeywords}
 
 \IEEEpeerreviewmaketitle
@@ -157,10 +157,10 @@ soting, Bitonic sort, Quicksort, Merge sort, class.
 
 
 \section{Introduction}
-\IEEEPARstart{S}{orting} data is a task in computer science that is highly important because it is a very common operation. This report discusses the work done by Laser Patroll [sic] for a team project at Portland State University for the ECE 588 course taught in Fall 2013. The focus of this project was twofold: 
+\IEEEPARstart{S}{orting} data is a task in computer science that is highly important because it is a very common operation. This report discusses the work done by Laser Patroll [sic] for a team project at Portland State University for the ECE 588 Advanced Computer Architecture II course taught in Fall 2013. The focus of this project was twofold: 
 \begin{itemize}
 \item First, to either identify parallel sorting algorithms and implement them, or parallelize existing serial (single-threaded) algorithms. 
-\item Second, benchmark each of the selected algorithms against each other.  This involved sorting lists of varying lengths using varying numbers of threads, while measuring the relative performance and behavior of the selected algorithms against a known, highly optimized sort, the C++ \texttt{std::sort}.
+\item Second, benchmark each of the selected algorithms against each other.  This involved sorting lists of different lengths using varying numbers of threads, while measuring the relative performance and behavior of the selected algorithms against the known, highly optimized C++ \texttt{std::sort}.
 \end{itemize}
 
 The four algorithms benchmarked and discussed in this report are the C++ \texttt{std::sort}, Quicksort~\cite{Hoare1961}~\cite{Hoare1962}, Merge sort~\cite{Knuth:1998:ACP:280635}, and Bitonic sort~\cite{Batcher1968}. In this report, we first present an overview of these sorting algorithms in Section~\ref{sec:sorting}, then cover the C++ testing framework designed to check the sorted data and gather results in Section~\ref{sec:testing}, and finally present the results of the four algorithms in Section~\ref{sec:results}.
